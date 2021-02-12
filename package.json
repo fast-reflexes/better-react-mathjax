@@ -1,6 +1,6 @@
 {
   "name": "better-react-mathjax",
-  "version": "0.0.4-beta",
+  "version": "0.0.4",
   "description": "React MathJax component supporting both MathJax version 2 and 3 as well as othr configuration options to make MathJax an enjoable experience in a dynamic React world.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -12,11 +12,11 @@
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "lint": "tslint -p tsconfig.json",
-    "prepublishOnly" : "npm test && npm run lint",
-    "prepare" : "npm run build",
-    "preversion" : "npm run lint",
-    "version" : "npm run format && git add -A",
-    "postversion" : "git push && git push --tags"
+    "prepublishOnly": "npm test && npm run lint",
+    "prepare": "npm run build",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
