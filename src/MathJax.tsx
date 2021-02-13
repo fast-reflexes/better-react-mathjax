@@ -3,7 +3,7 @@ import { MathJaxBaseContext, MathJaxOverrideableProps } from "./MathJaxContext"
 
 interface MathJaxProps extends MathJaxOverrideableProps {
     inline?: boolean
-    onInitLoad?: () => void
+    onInitTypeset?: () => void
     text?: string
 }
 
@@ -32,7 +32,7 @@ interface MathJaxProps extends MathJaxOverrideableProps {
 const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     inline = false,
     hideUntilTypeset,
-    onInitLoad,
+    onInitTypeset,
     text,
     conversionOptions,
     renderMode,
@@ -66,7 +66,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
             if (usedHideUntilTypeset === "first" && ref.current !== null) {
                 ref.current.style.visibility = "visible"
             }
-            if (onInitLoad) onInitLoad()
+            if (onInitTypeset) onInitTypeset()
             initLoad.current = true
         }
     }

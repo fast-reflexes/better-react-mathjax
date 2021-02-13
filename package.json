@@ -1,21 +1,20 @@
 {
   "name": "better-react-mathjax",
-  "version": "0.0.5-beta",
+  "version": "0.0.6-beta",
   "description": "React MathJax component supporting both MathJax version 2 and 3 as well as othr configuration options to make MathJax an enjoable experience in a dynamic React world.",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "prebuild": "rm -rf ./build",
     "build": "tsc",
-    "postbuild": "cp package.json README.md ./build",
-    "upload": "npm publish ./build --access public",
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "lint": "tslint -p tsconfig.json",
-    "prepublishOnly": "npm test && npm run lint",
-    "prepare": "npm run build",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A",
+    "prebuild": "rm -rf ./build",
+    "postbuild": "cp package.json README.md ./build",
+    "preupload": "npm run build",
+    "upload": "npm publish ./build --access public",
+    "preversion": "npm run lint && npm run format && npm test",
+    "version": "git add -A",
     "postversion": "git push && git push --tags"
   },
   "repository": {
