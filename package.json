@@ -1,6 +1,6 @@
 {
   "name": "better-react-mathjax",
-  "version": "0.0.10-beta",
+  "version": "0.0.10",
   "description": "React MathJax component supporting both MathJax version 2 and 3 as well as othr configuration options to make MathJax an enjoable experience in a dynamic React world.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -14,7 +14,7 @@
     "preupload": "npm run build",
     "upload": "npm publish ./build --access public",
     "preversion": "npm run lint && npm run format && npm test",
-    "version": "git add -A && npm version -f",
+    "release": "git add -A && npm version -f",
     "postversion": "git push && git push --tags"
   },
   "repository": {
