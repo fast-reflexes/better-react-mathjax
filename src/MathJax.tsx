@@ -34,7 +34,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     hideUntilTypeset,
     onInitTypeset,
     text,
-    conversionOptions,
+    typesettingOptions,
     renderMode,
     children,
     id,
@@ -52,7 +52,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     // allow context values to steer this component for some props if they are undefined
     const usedHideUntilTypeset = hideUntilTypeset === undefined ? mjPromise?.hideUntilTypeset : hideUntilTypeset
     const usedRenderMode = renderMode === undefined ? mjPromise?.renderMode : renderMode
-    const usedConversionOptions = conversionOptions === undefined ? mjPromise?.conversionOptions : conversionOptions
+    const usedConversionOptions = typesettingOptions === undefined ? mjPromise?.typesettingOptions : typesettingOptions
 
     // whether initial typesetting of this element has been done or not
     const initLoad = useRef(false)
@@ -109,9 +109,9 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                         throw Error(
                             `Render mode 'pre' requires text prop to be set and non-empty, which was currently "${text}"`
                         )
-                    if (!conversionOptions || !conversionOptions.fn)
+                    if (!typesettingOptions || !typesettingOptions.fn)
                         throw Error(
-                            "Render mode 'pre' requires 'conversionOptions' prop with 'fn' property to be set on MathJax element or in the MathJaxContext"
+                            "Render mode 'pre' requires 'typesettingOptions' prop with 'fn' property to be set on MathJax element or in the MathJaxContext"
                         )
                     if (mjPromise.version === 2)
                         throw Error(
@@ -131,7 +131,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                         if (ref.current !== null) ref.current.innerHTML = output.outerHTML
                                         onTypesetDone()
                                     }
-                                    if (conversionOptions!.fn.endsWith("Promise"))
+                                    if (typesettingOptions!.fn.endsWith("Promise"))
                                         mathJax.startup.promise
                                             .then(() =>
                                                 mathJax[usedConversionOptions!.fn](text, {

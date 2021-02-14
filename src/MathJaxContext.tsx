@@ -2,7 +2,7 @@ import React, { createContext, FC, useContext, useRef } from "react"
 
 export interface MathJaxOverrideableProps {
     hideUntilTypeset?: "first" | "every" | null
-    conversionOptions?: {
+    typesettingOptions?: {
         fn:
             | "tex2chtml"
             | "tex2chtmlPromise"
@@ -53,7 +53,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     onStartup,
     onLoad,
     onError,
-    conversionOptions,
+    typesettingOptions,
     renderMode = "post",
     hideUntilTypeset,
     children
@@ -64,7 +64,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     if (mjPromise.current === undefined) {
         mjPromise.current = {
             version,
-            conversionOptions,
+            typesettingOptions: typesettingOptions,
             renderMode,
             hideUntilTypeset,
             promise:
