@@ -1,6 +1,6 @@
 {
   "name": "better-react-mathjax",
-  "version": "0.0.12-beta",
+  "version": "0.0.13-beta",
   "description": "React MathJax component supporting both MathJax version 2 and 3 as well as othr configuration options to make MathJax an enjoable experience in a dynamic React world.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/fast-reflexes/better-react-mathjax#readme",
   "peerDependencies": {
-    "react": "^17.0.1"
+    "react": ">=16.8"
   },
   "devDependencies": {
     "@types/react": "^17.0.1",
