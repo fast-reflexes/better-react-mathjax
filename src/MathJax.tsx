@@ -5,6 +5,7 @@ export interface MathJaxProps extends MathJaxOverrideableProps {
     inline?: boolean
     onInitTypeset?: () => void
     text?: string
+    dynamic?: boolean
 }
 
 /**
@@ -27,6 +28,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     hideUntilTypeset,
     onInitTypeset,
     text,
+    dynamic,
     typesettingOptions,
     renderMode,
     children,
@@ -80,8 +82,9 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     if (
         !typesetting.current &&
         ref.current !== null &&
+        dynamic &&
         usedHideUntilTypeset === "every" &&
-        (usedRenderMode === "post" || (usedRenderMode === "pre" && text !== lastChildren.current && validText(text)))
+        (usedRenderMode === "post")
     ) {
         ref.current.style.visibility = "hidden"
     }
@@ -95,94 +98,97 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
      * (which happens on SSR) on server.
      */
     useEffect(() => {
-        if (ref.current !== null) {
-            if (mjPromise) {
-                if (usedRenderMode === "pre") {
-                    if (!validText(text))
-                        throw Error(
-                            `Render mode 'pre' requires text prop to be set and non-empty, which was currently "${text}"`
-                        )
-                    if (!typesettingOptions || !typesettingOptions.fn)
-                        throw Error(
-                            "Render mode 'pre' requires 'typesettingOptions' prop with 'fn' property to be set on MathJax element or in the MathJaxContext"
-                        )
-                    if (mjPromise.version === 2)
-                        throw Error(
-                            "Render mode 'pre' only available with MathJax 3, and version 2 is currently in use"
-                        )
-                }
-                if (usedRenderMode === "post" || text !== lastChildren.current) {
-                    if (!typesetting.current) {
-                        typesetting.current = true
-                        mjPromise.promise
-                            .then((mathJax) => {
-                                if (mjPromise.version === 3) {
-                                    if (usedRenderMode === "pre") {
-                                        const updateFn = (output: HTMLElement) => {
-                                            lastChildren.current = text!
-                                            mathJax.startup.document.clear()
-                                            mathJax.startup.document.updateDocument()
-                                            if (ref.current !== null) ref.current.innerHTML = output.outerHTML
-                                            onTypesetDone()
-                                        }
-                                        if (typesettingOptions!.fn.endsWith("Promise"))
-                                            mathJax.startup.promise
-                                                .then(() =>
-                                                    mathJax[usedConversionOptions!.fn](text, {
-                                                        ...(usedConversionOptions?.options || {}),
-                                                        display: !inline
+        if(dynamic || !initLoad.current) {
+            if (ref.current !== null) {
+                if (mjPromise) {
+                    if (usedRenderMode === "pre") {
+                        if (!validText(text))
+                            throw Error(
+                                `Render mode 'pre' requires text prop to be set and non-empty, which was currently "${text}"`
+                            )
+                        if (!typesettingOptions || !typesettingOptions.fn)
+                            throw Error(
+                                "Render mode 'pre' requires 'typesettingOptions' prop with 'fn' property to be set on MathJax element or in the MathJaxContext"
+                            )
+                        if (mjPromise.version === 2)
+                            throw Error(
+                                "Render mode 'pre' only available with MathJax 3, and version 2 is currently in use"
+                            )
+                    }
+                    if (usedRenderMode === "post" || text !== lastChildren.current) {
+                        if (!typesetting.current) {
+                            typesetting.current = true
+                            mjPromise.promise
+                                .then((mathJax) => {
+                                    if (mjPromise.version === 3) {
+                                        if (usedRenderMode === "pre") {
+                                            const updateFn = (output: HTMLElement) => {
+                                                lastChildren.current = text!
+                                                mathJax.startup.document.clear()
+                                                mathJax.startup.document.updateDocument()
+                                                if (ref.current !== null) ref.current.innerHTML = output.outerHTML
+                                                onTypesetDone()
+                                            }
+                                            if (typesettingOptions!.fn.endsWith("Promise"))
+                                                mathJax.startup.promise
+                                                    .then(() =>
+                                                        mathJax[usedConversionOptions!.fn](text, {
+                                                            ...(usedConversionOptions?.options || {}),
+                                                            display: !inline
+                                                        })
+                                                    )
+                                                    .then(updateFn)
+                                                    .catch((err: any) => {
+                                                        onTypesetDone()
+                                                        throw Error(`Typesetting failed: ${err.message}`)
                                                     })
-                                                )
-                                                .then(updateFn)
-                                                .catch((err: any) => {
-                                                    onTypesetDone()
-                                                    throw Error(`Typesetting failed: ${err.message}`)
-                                                })
-                                        else
+                                            else
+                                                mathJax.startup.promise
+                                                    .then(() => {
+                                                        const output = mathJax[usedConversionOptions!.fn](text, {
+                                                            ...(usedConversionOptions?.options || {}),
+                                                            display: !inline
+                                                        })
+                                                        updateFn(output)
+                                                    })
+                                                    .catch((err: any) => {
+                                                        onTypesetDone()
+                                                        throw Error(`Typesetting failed: ${err.message}`)
+                                                    })
+                                        } else {
+                                            // renderMode "post"
                                             mathJax.startup.promise
                                                 .then(() => {
-                                                    const output = mathJax[usedConversionOptions!.fn](text, {
-                                                        ...(usedConversionOptions?.options || {}),
-                                                        display: !inline
-                                                    })
-                                                    updateFn(output)
+                                                    mathJax.typesetClear([ref.current])
+                                                    // mathJax.typeset([ref.current])
+                                                    return mathJax.typesetPromise([ref.current])
                                                 })
+                                                .then(onTypesetDone)
                                                 .catch((err: any) => {
                                                     onTypesetDone()
                                                     throw Error(`Typesetting failed: ${err.message}`)
                                                 })
+                                        }
                                     } else {
-                                        // renderMode "post"
-                                        mathJax.startup.promise
-                                            .then(() => {
-                                                mathJax.typesetClear([ref.current])
-                                                // mathJax.typeset([ref.current])
-                                                return mathJax.typesetPromise([ref.current])
-                                            })
-                                            .then(onTypesetDone)
-                                            .catch((err: any) => {
-                                                onTypesetDone()
-                                                throw Error(`Typesetting failed: ${err.message}`)
-                                            })
+                                        // version 2
+                                        mathJax.Hub.Queue(["Typeset", mathJax.Hub, ref.current])
+                                        mathJax.Hub.Queue(onTypesetDone)
                                     }
-                                } else {
-                                    // version 2
-                                    mathJax.Hub.Queue(["Typeset", mathJax.Hub, ref.current])
-                                    mathJax.Hub.Queue(onTypesetDone)
-                                }
-                            })
-                            .catch((err) => {
-                                throw Error(`Typesetting failed: ${err.message}`)
-                            })
+                                })
+                                .catch((err) => {
+                                    throw Error(`Typesetting failed: ${err.message}`)
+                                })
+                        }
                     }
-                }
-            } else throw Error("MathJax was not loaded, did you use the MathJax component outside of a MathJaxContext?")
+                } else throw Error("MathJax was not loaded, did you use the MathJax component outside of a MathJaxContext?")
+            }
         }
     })
 
     return (
         <span
             {...rest}
+            id={id}
             style={{
                 display: inline ? "inline" : "block",
                 ...rest.style,

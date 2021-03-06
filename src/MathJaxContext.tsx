@@ -1,34 +1,35 @@
 import React, { createContext, FC, useContext, useRef } from "react"
 
+export type TypeSettingFunction = "tex2chtml"
+    | "tex2chtmlPromise"
+    | "tex2svg"
+    | "tex2svgPromise"
+    | "tex2mml"
+    | "tex2mmlPromise"
+    | "mml2chtml"
+    | "mml2chtmlPromise"
+    | "mml2svg"
+    | "mml2svgPromise"
+    | "mml2mml"
+    | "mml2mmlPromise"
+    | "asciimath2chtml"
+    | "asciimath2chtmlPromise"
+    | "asciimath2svg"
+    | "asciimath2svgPromise"
+    | "asciimath2mml"
+    | "asciimath2mmlPromise"
+
 export interface MathJaxOverrideableProps {
     hideUntilTypeset?: "first" | "every" | null
     typesettingOptions?: {
-        fn:
-            | "tex2chtml"
-            | "tex2chtmlPromise"
-            | "tex2svg"
-            | "tex2svgPromise"
-            | "tex2mml"
-            | "tex2mmlPromise"
-            | "mml2chtml"
-            | "mml2chtmlPromise"
-            | "mml2svg"
-            | "mml2svgPromise"
-            | "mml2mml"
-            | "mml2mmlPromise"
-            | "ascii2chtml"
-            | "ascii2chtmlPromise"
-            | "ascii2svg"
-            | "ascii2svgPromise"
-            | "ascii2mml"
-            | "ascii2mmlPromise"
+        fn: TypeSettingFunction
         options?: object
     }
     renderMode?: "pre" | "post"
 }
 
 type MathJaxSubscriberProps = (
-    | {
+    {
           version: 2
           promise: Promise<any> // TODO: replace any with type for MathJax object in version 2
       }
@@ -48,14 +49,14 @@ interface MathJaxContextStaticProps extends MathJaxOverrideableProps {
 }
 
 export type MathJaxContextProps = (
-    | {
-          // TODO replace occurrences with type for MathJax and config for respective versions
-          config?: any
+    {
+          // TODO replace occurrences with type for MathJax respective versions
+          config?: object
           version: 2
           onStartup?: (mathJax: any) => void
       }
     | {
-          config?: any
+          config?: object
           version?: 3
           onStartup?: (mathJax: any) => void
       }
@@ -101,8 +102,6 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
                               const mathJax = (window as any).MathJax
                               if (onStartup) onStartup(mathJax)
                               res(mathJax)
-                              // setMjPromise((window as any).MathJax.startup.promise)
-                              // (window as any).MathJax.Hub.Queue(["Typeset",(window as any).MathJax.Hub]);
                               if (onLoad) onLoad()
                           })
                           script.addEventListener("error", (e) => {

@@ -24,7 +24,7 @@ afterEach(() => {
 
 it("only fetches MathJax once despite nested contexts", async () => {
     const addFn = jest.fn()
-    const originalgetElementsByTagName = document.getElementsByTagName
+    const originalGetElementsByTagName = document.getElementsByTagName
     document.getElementsByTagName = (tagName: string) => [{ appendChild: addFn }] as any
     render(
         <MathJaxContext version={3}>
@@ -36,7 +36,7 @@ it("only fetches MathJax once despite nested contexts", async () => {
         </MathJaxContext>
     )
     expect(addFn).toHaveBeenCalledTimes(1)
-    document.getElementsByTagName = originalgetElementsByTagName
+    document.getElementsByTagName = originalGetElementsByTagName
 }, 15000)
 
 it("first context determines version if context are nested", async () => {
