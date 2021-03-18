@@ -84,7 +84,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
         ref.current !== null &&
         dynamic &&
         usedHideUntilTypeset === "every" &&
-        (usedRenderMode === "post")
+        usedRenderMode === "post"
     ) {
         ref.current.style.visibility = "hidden"
     }
@@ -98,7 +98,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
      * (which happens on SSR) on server.
      */
     useEffect(() => {
-        if(dynamic || !initLoad.current) {
+        if (dynamic || !initLoad.current) {
             if (ref.current !== null) {
                 if (mjPromise) {
                     if (usedRenderMode === "pre") {
@@ -180,7 +180,10 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                 })
                         }
                     }
-                } else throw Error("MathJax was not loaded, did you use the MathJax component outside of a MathJaxContext?")
+                } else
+                    throw Error(
+                        "MathJax was not loaded, did you use the MathJax component outside of a MathJaxContext?"
+                    )
             }
         }
     })

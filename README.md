@@ -42,7 +42,7 @@ Standard setup using MathJax version 3 with default MathJax config and no extra 
             </MathJaxContext>
         );
 
-https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
+Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
 
 ### Example 2: Basic example with AsciiMath ####
 
@@ -61,7 +61,7 @@ Using AsciiMath requires importing a specific loader (see [MathJax](http://docs.
         );
     }
 
-https://codesandbox.io/s/better-react-mathjax-basic-example-asciimath-ddy4r
+Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-asciimath-ddy4r
 
 ### Example 3: Basic example with MathML ####
 
@@ -95,16 +95,22 @@ MathML included in this package).
         );
     }
 
-https://codesandbox.io/s/better-react-mathjax-basic-example-mathml-20vv6
+Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-mathml-20vv6
 
 ### Example 4: Elaborate example with Latex ###
-https://codesandbox.io/s/better-react-mathjax-example-latex-3vsr5
+Sandbox: https://codesandbox.io/s/better-react-mathjax-example-latex-3vsr5
 
 ### Example 5: Elaborate example with AsciiMath ###
-https://codesandbox.io/s/better-react-mathjax-example-asciimath-p0uf1
+Sandbox: https://codesandbox.io/s/better-react-mathjax-example-asciimath-p0uf1
 
 ### Example 6: Elaborate example with MathML ###
-Sandbox link: https://codesandbox.io/s/better-mathjax-example-1-3vsr5
+Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-mathml-nprxz
+
+Make sure to study the comments in this file as MathML processing is a little bit different from the others.
+
+### Example 7: Elaborate example with optimal settings for dynamic updates with Latex ###
+Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-latex-optimal-8nn9n
+
 
 
 
@@ -345,6 +351,10 @@ hierarchy they are kept. You can always replace a larger (more complex) componen
   but with it, a document can be typeset with only a `MathJaxContext` component. This, however, is not the intended use
   of this library and removes many of the additional options.
   
+* React doesn't translate all HTML5 entities which can cause problems with MathJax. 
+  There are often multiple entities for the same symbol and if your chosen entity gives you problems in MathML, 
+  try another one.
+  
 * The documented API above is only the additional functionality offered in the layer provided by this library. Most 
   other options and behaviours are properties of the MathJax library itself and thus configurable with the `config` 
   object. 
@@ -375,10 +385,13 @@ This project is licensed under the terms of the
 
 
 Uppdtaeing
+-https://www.freeformatter.com/html-entities.html#math-symbols bra mathml
+-https://math-it.org/Publikationen/MathML.html
 -lägg till exempel med optimal config
 -skriv klart examples (elaborate)
+-clarify examples in donts (med variabel)
+-kolla ieno formattering i readme (frmst storleken på bullets)
 -testa i olika browsrar
--förstå exemplen om mixed content
 - Ta bort utkommenterad kod
 - vilka browsrar det är testat med etc...
 
