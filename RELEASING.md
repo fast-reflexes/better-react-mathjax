@@ -3,7 +3,7 @@
 <!-- prettier-ignore-start -->
 ## To make a new version ##
 
-`npm run release <VERSION>`
+`npm run release <VERSION on form MAJOR.MINOR.PATCH(-beta)?>`
 
 ## To release a new version ##
 

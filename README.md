@@ -387,8 +387,6 @@ This project is licensed under the terms of the
 Uppdtaeing
 -https://www.freeformatter.com/html-entities.html#math-symbols bra mathml
 -https://math-it.org/Publikationen/MathML.html
--lägg till exempel med optimal config
--skriv klart examples (elaborate)
 -clarify examples in donts (med variabel)
 -kolla ieno formattering i readme (frmst storleken på bullets)
 -testa i olika browsrar
