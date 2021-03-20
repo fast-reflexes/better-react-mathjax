@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, FC, useContext, useEffect, useRef } from "react"
+import React, {ComponentPropsWithoutRef, FC, useContext, useLayoutEffect, useRef} from "react"
 import { MathJaxBaseContext, MathJaxOverrideableProps } from "./MathJaxContext"
 
 export interface MathJaxProps extends MathJaxOverrideableProps {
@@ -97,7 +97,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
      * Note: useEffect does not run on SSR so no extra care taken of not running with Promise.resolve() from context
      * (which happens on SSR) on server.
      */
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (dynamic || !initLoad.current) {
             if (ref.current !== null) {
                 if (mjPromise) {

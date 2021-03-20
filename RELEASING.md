@@ -11,6 +11,6 @@
 
 ## To remove an existing release
 
-`npm unversion <PACKAGE>@<VERSION>`
+`npm unpublish <PACKAGE>@<VERSION>`
 
 <!-- prettier-ignore-end -->

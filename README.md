@@ -73,7 +73,7 @@ MathML included in this package).
             <MathJaxContext>
                 <h2>Basic MathJax example with MathML</h2>
                 <MathJax>
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <math>
                         <mrow>
                             <mrow>
                                 <mfrac>
@@ -392,5 +392,7 @@ Uppdtaeing
 -testa i olika browsrar
 - Ta bort utkommenterad kod
 - vilka browsrar det är testat med etc...
+-försök lägga till typning
+  -visa hur man kan använda context också
 
 <!-- prettier-ignore-end -->
