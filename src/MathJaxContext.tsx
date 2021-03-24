@@ -1,18 +1,17 @@
 import React, { createContext, FC, useContext, useRef } from "react"
 
-export type TypeSettingFunction =
-    "tex2chtml"
+export type TypeSettingFunction = "tex2chtml"
     | "tex2chtmlPromise"
     | "tex2svg"
     | "tex2svgPromise"
     | "tex2mml"
     | "tex2mmlPromise"
-    | "mml2chtml"
-    | "mml2chtmlPromise"
-    | "mml2svg"
-    | "mml2svgPromise"
-    | "mml2mml"
-    | "mml2mmlPromise"
+    | "mathml2chtml"
+    | "mathml2chtmlPromise"
+    | "mathml2svg"
+    | "mathml2svgPromise"
+    | "mathml2mml"
+    | "mathml2mmlPromise"
     | "asciimath2chtml"
     | "asciimath2chtmlPromise"
     | "asciimath2svg"
@@ -21,7 +20,7 @@ export type TypeSettingFunction =
     | "asciimath2mmlPromise"
 
 export interface MathJaxOverrideableProps {
-    hideUntilTypeset?: "first" | "every" | null
+    hideUntilTypeset?: "first" | "every"
     typesettingOptions?: {
         fn: TypeSettingFunction
         options?: object
@@ -29,8 +28,7 @@ export interface MathJaxOverrideableProps {
     renderMode?: "pre" | "post"
 }
 
-type MathJaxSubscriberProps = (
-    {
+type MathJaxSubscriberProps = ({
           version: 2
           promise: Promise<any> // TODO: replace any with type for MathJax object in version 2
       }
@@ -49,8 +47,7 @@ interface MathJaxContextStaticProps extends MathJaxOverrideableProps {
     onError?: (error: any) => void
 }
 
-export type MathJaxContextProps = (
-    {
+export type MathJaxContextProps = ({
           // TODO replace occurrences with type for MathJax respective versions
           config?: object
           version: 2

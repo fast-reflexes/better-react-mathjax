@@ -1,4 +1,4 @@
-import React, {ComponentPropsWithoutRef, FC, useContext, useLayoutEffect, useRef} from "react"
+import React, {ComponentPropsWithoutRef, FC, useContext, useEffect, useLayoutEffect, useRef} from "react"
 import { MathJaxBaseContext, MathJaxOverrideableProps } from "./MathJaxContext"
 
 export interface MathJaxProps extends MathJaxOverrideableProps {
@@ -91,13 +91,16 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
 
     /**
      * Effect for typesetting, important that this does not trigger a new render and runs as seldom as possible (only
-     * when needed). It is good that it is in an effect because then we are sure that the DOM has finished updating and
-     * thus, we don't have to use a custom timeout to accommodate for this (otherwise we might see a FOUC).
+     * when needed). It is good that it is in an effect because then we are sure that the DOM to be is ready and
+     * thus, we don't have to use a custom timeout to accommodate for this. Layout effects runs on the DOM to be before
+     * the browser has a chance to paint. Thereby, we reduce the chance of ugly FOUCs.
      *
-     * Note: useEffect does not run on SSR so no extra care taken of not running with Promise.resolve() from context
-     * (which happens on SSR) on server.
+     * Note: useLayoutEffect causes an ugly warning in the server console with SSR so we make sure to use useEffect if
+     * we are in the backend instead. Neither of them run in the backend so no extra care needs to be taken of not
+     * running with Promise.resolve() from context (which happens on SSR) on server.
      */
-    useLayoutEffect(() => {
+    const effectToUse = typeof window !== 'undefined' ? useLayoutEffect : useEffect
+    effectToUse(() => {
         if (dynamic || !initLoad.current) {
             if (ref.current !== null) {
                 if (mjPromise) {
@@ -160,7 +163,6 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                             mathJax.startup.promise
                                                 .then(() => {
                                                     mathJax.typesetClear([ref.current])
-                                                    // mathJax.typeset([ref.current])
                                                     return mathJax.typesetPromise([ref.current])
                                                 })
                                                 .then(onTypesetDone)
