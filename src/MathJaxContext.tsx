@@ -128,15 +128,13 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
                 if (typeof window !== "undefined") {
                     v2Promise = new Promise<MathJax2Object>(scriptInjector)
                     v2Promise.catch((e) => {
-                        if(onError)
-                            onError(e)
-                        else
-                            throw Error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${e}`)
+                        if (onError) onError(e)
+                        else throw Error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${e}`)
                     })
                 } else {
                     // for server side rendering
                     v2Promise = Promise.reject()
-                    v2Promise.catch((_) => {})
+                    v2Promise.catch((_) => undefined)
                 }
             }
         } else {
@@ -144,15 +142,13 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
                 if (typeof window !== "undefined") {
                     v3Promise = new Promise<MathJax3Object>(scriptInjector)
                     v3Promise.catch((e) => {
-                        if(onError)
-                            onError(e)
-                        else
-                            throw Error(`Failed to download MathJax version 3 from '${usedSrc}' due to: ${e}`)
+                        if (onError) onError(e)
+                        else throw Error(`Failed to download MathJax version 3 from '${usedSrc}' due to: ${e}`)
                     })
                 } else {
                     // for server side rendering
                     v3Promise = Promise.reject()
-                    v3Promise.catch((_) => {})
+                    v3Promise.catch((_) => undefined)
                 }
             }
         }
