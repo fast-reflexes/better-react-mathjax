@@ -1,6 +1,6 @@
 {
   "name": "better-react-mathjax",
-  "version": "0.0.20-beta",
+  "version": "0.0.21-beta",
   "description": "React MathJax component supporting both MathJax version 2 and 3 as well as othr configuration options to make MathJax an enjoable experience in a dynamic React world.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -38,6 +38,9 @@
     "react": ">=16.8"
   },
   "devDependencies": {
+    "@types/mathjax": "^0.0.36",
+    "mathjax": "2.7.9",
+    "mathjax-full": "3.1.2",
     "@types/react": "^17.0.1",
     "typescript": "^4.1.4",
     "tslint": "^6.1.3",

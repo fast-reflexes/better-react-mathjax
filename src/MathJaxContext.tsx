@@ -1,6 +1,12 @@
 import React, { createContext, FC, useContext, useRef } from "react"
+import {MathJaxConfig as MathJax3Config} from "mathjax-full/js/components/startup";
+import {OptionList} from "mathjax-full/js/util/Options";
+import {MathJaxObject as MathJax3Object} from "mathjax-full/js/components/startup";
+type MathJax2Config = MathJax.Config;
+type MathJax2Object = typeof MathJax
 
-export type TypeSettingFunction = "tex2chtml"
+export type TypeSettingFunction =
+    | "tex2chtml"
     | "tex2chtmlPromise"
     | "tex2svg"
     | "tex2svgPromise"
@@ -23,19 +29,13 @@ export interface MathJaxOverrideableProps {
     hideUntilTypeset?: "first" | "every"
     typesettingOptions?: {
         fn: TypeSettingFunction
-        options?: object
+        options?: OptionList
     }
     renderMode?: "pre" | "post"
 }
 
-type MathJaxSubscriberProps = ({
-          version: 2
-          promise: Promise<any> // TODO: replace any with type for MathJax object in version 2
-      }
-    | {
-          version: 3
-          promise: Promise<any> // TODO: replace any with type for MathJax object in version 3
-      }
+type MathJaxSubscriberProps = (
+    { version: 2, promise: Promise<MathJax2Object> } | { version: 3, promise: Promise<MathJax3Object> }
 ) &
     MathJaxOverrideableProps
 
@@ -48,22 +48,22 @@ interface MathJaxContextStaticProps extends MathJaxOverrideableProps {
 }
 
 export type MathJaxContextProps = ({
-          // TODO replace occurrences with type for MathJax respective versions
-          config?: object
+          config?: MathJax2Config
           version: 2
-          onStartup?: (mathJax: any) => void
+          onStartup?: (mathJax: MathJax2Object) => void
       }
     | {
-          config?: object
+          config?: MathJax3Config
           version?: 3
-          onStartup?: (mathJax: any) => void
+          onStartup?: (mathJax: MathJax3Object) => void
       }
 ) &
     MathJaxContextStaticProps
 
 const DEFAULT_V2_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"
 const DEFAULT_V3_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"
-let promise: Promise<any>
+let v2Promise: Promise<MathJax2Object>
+let v3Promise: Promise<MathJax3Object>
 
 const MathJaxContext: FC<MathJaxContextProps> = ({
     config,
@@ -77,49 +77,82 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     hideUntilTypeset,
     children
 }) => {
-    const ctxPromise = useContext(MathJaxBaseContext)
-    const mjPromise = useRef(ctxPromise)
+    const previousContext = useContext(MathJaxBaseContext)
+    if(previousContext?.version !== undefined && previousContext?.version !== version)
+        throw Error("Cannot nest MathJaxContexts with different versions. MathJaxContexts should not be nested at all but if they are, they inherit several properties. If you need different versions, then use multiple, non-nested, MathJaxContexts in your app.")
+    const mjContext = useRef(previousContext)
+    const initVersion = useRef<2 | 3 | null>(previousContext?.version || null)
+    if(initVersion.current === null)
+        initVersion.current = version
+    else if(initVersion.current !== version)
+        throw Error("Cannot change version of MathJax in a MathJaxContext after component has mounted. Either reload the page with a new setting when this should happen or use multiple, non-nested, MathJaxContexts in your app.")
 
-    if (mjPromise.current === undefined) {
-        if (promise === undefined)
-            promise =
-                typeof window !== "undefined"
-                    ? new Promise<Promise<any>>((res, rej) => {
-                          if (config) (window as any).MathJax = config
-                          const script = document.createElement("script")
-                          script.type = "text/javascript"
-                          script.src = src || (version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC)
-                          script.async = false
+    const usedSrc = src || (version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC)
 
-                          // if ((window as any).opera)
-                          //    script.innerHTML = config
-                          // else
-                          //    script.text = config
+    function scriptInjector<T>(res: (mathJax: T) => void, rej: (error: any) => void) {
+        if (config) (window as any).MathJax = config
+        const script = document.createElement("script")
+        script.type = "text/javascript"
+        script.src = src || (version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC)
+        script.async = false
 
-                          script.addEventListener("load", () => {
-                              const mathJax = (window as any).MathJax
-                              if (onStartup) onStartup(mathJax)
-                              res(mathJax)
-                              if (onLoad) onLoad()
-                          })
-                          script.addEventListener("error", (e) => {
-                              if (onError) onError(e)
-                              rej(e)
-                          })
+        // if ((window as any).opera)
+        //    script.innerHTML = config
+        // else
+        //    script.text = config
 
-                          document.getElementsByTagName("head")[0].appendChild(script)
-                      })
-                    : Promise.resolve()
-        mjPromise.current = {
-            version,
+        script.addEventListener("load", () => {
+            const mathJax = (window as any).MathJax
+            if (onStartup) onStartup(mathJax)
+            res(mathJax)
+            if (onLoad) onLoad()
+        })
+        script.addEventListener("error", (e) => {
+            if (onError) onError(e)
+            rej(e)
+        })
+
+        document.getElementsByTagName("head")[0].appendChild(script)
+    }
+
+    if (mjContext.current === undefined) {
+        const baseContext = {
             typesettingOptions,
             renderMode,
-            hideUntilTypeset,
-            promise
+            hideUntilTypeset
+        }
+        if(version === 2) {
+            if (v2Promise === undefined) {
+                if(typeof window !== "undefined") {
+                    v2Promise = new Promise<MathJax2Object>(scriptInjector)
+                    v2Promise.catch(e => console.error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${e}`))
+                }
+                else {
+                    // for server side rendering
+                    v2Promise = Promise.reject()
+                    v2Promise.catch(_ => {})
+                }
+            }
+        } else {
+            if (v3Promise === undefined) {
+                if(typeof window !== "undefined") {
+                    v3Promise = new Promise<MathJax3Object>(scriptInjector)
+                    v3Promise.catch(e => console.error(`Failed to download MathJax version 3 from '${usedSrc}' due to: ${e}`))
+                }
+                else {
+                    // for server side rendering
+                    v3Promise = Promise.reject()
+                    v3Promise.catch(_ => {})
+                }
+            }
+        }
+        mjContext.current = {
+            ...baseContext,
+            ...( version === 2 ? {version: 2, promise: v2Promise} : {version: 3, promise: v3Promise})
         }
     }
 
-    return <MathJaxBaseContext.Provider value={mjPromise.current}>{children}</MathJaxBaseContext.Provider>
+    return <MathJaxBaseContext.Provider value={mjContext.current}>{children}</MathJaxBaseContext.Provider>
 }
 
 export default MathJaxContext

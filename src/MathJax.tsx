@@ -1,4 +1,4 @@
-import React, {ComponentPropsWithoutRef, FC, useContext, useEffect, useLayoutEffect, useRef} from "react"
+import React, { ComponentPropsWithoutRef, FC, useContext, useEffect, useLayoutEffect, useRef } from "react"
 import { MathJaxBaseContext, MathJaxOverrideableProps } from "./MathJaxContext"
 
 export interface MathJaxProps extends MathJaxOverrideableProps {
@@ -99,7 +99,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
      * we are in the backend instead. Neither of them run in the backend so no extra care needs to be taken of not
      * running with Promise.resolve() from context (which happens on SSR) on server.
      */
-    const effectToUse = typeof window !== 'undefined' ? useLayoutEffect : useEffect
+    const effectToUse = typeof window !== "undefined" ? useLayoutEffect : useEffect
     effectToUse(() => {
         if (dynamic || !initLoad.current) {
             if (ref.current !== null) {
@@ -121,9 +121,9 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                     if (usedRenderMode === "post" || text !== lastChildren.current) {
                         if (!typesetting.current) {
                             typesetting.current = true
-                            mjPromise.promise
-                                .then((mathJax) => {
-                                    if (mjPromise.version === 3) {
+                            if(mjPromise.version === 3) {
+                                mjPromise.promise
+                                    .then(mathJax => {
                                         if (usedRenderMode === "pre") {
                                             const updateFn = (output: HTMLElement) => {
                                                 lastChildren.current = text!
@@ -141,7 +141,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                     )
                                                     .then(updateFn)
-                                                    .catch((err: any) => {
+                                                    .catch(err => {
                                                         onTypesetDone()
                                                         throw Error(`Typesetting failed: ${err.message}`)
                                                     })
@@ -154,7 +154,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                         updateFn(output)
                                                     })
-                                                    .catch((err: any) => {
+                                                    .catch(err => {
                                                         onTypesetDone()
                                                         throw Error(`Typesetting failed: ${err.message}`)
                                                     })
@@ -166,20 +166,25 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                     return mathJax.typesetPromise([ref.current])
                                                 })
                                                 .then(onTypesetDone)
-                                                .catch((err: any) => {
+                                                .catch(err => {
                                                     onTypesetDone()
                                                     throw Error(`Typesetting failed: ${err.message}`)
                                                 })
                                         }
-                                    } else {
-                                        // version 2
+                                    })
+                                    .catch((err) => {
+                                        throw Error(`Typesetting failed: ${err.message}`)
+                                    })
+                            } else { // version 2
+                                mjPromise.promise
+                                    .then(mathJax => {
                                         mathJax.Hub.Queue(["Typeset", mathJax.Hub, ref.current])
                                         mathJax.Hub.Queue(onTypesetDone)
-                                    }
-                                })
-                                .catch((err) => {
-                                    throw Error(`Typesetting failed: ${err.message}`)
-                                })
+                                    })
+                                    .catch(err => {
+                                        throw Error(`Typesetting failed: ${err.message}`)
+                                    })
+                            }
                         }
                     }
                 } else

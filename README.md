@@ -109,7 +109,7 @@ Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-mathml-nprxz
 
 Make sure to study the comments in this file as MathML processing is a little bit different from the others.
 
-### <a name="example7"></a>Example 7: Elaborate example with optimal settings for dynamic updates with Latex ###
+### Example 7: Elaborate example with optimal settings for dynamic updates with Latex ###
 Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-latex-optimal-8nn9n
 
 # Under the hood #
@@ -292,7 +292,7 @@ set to `inline` when the `inline` property is set to `true`, otherwise `block`. 
 as this functionality is used by the `MathJax` component itself.***
 
 ## Custom use of MathJax directly ##
-You can use the underlying MathJax object directly (not through the `MatthJax` component) if you want as well. The
+You can use the underlying MathJax object directly (not through the `MathJax` component) if you want as well. The
 following snippet illustrates this.
 
     const {version, hideUntilTypeset, renderMode, typesettingOptions, mjPromise} = useContext(MathJaxContext)
@@ -344,7 +344,7 @@ to it; manual fine-tuning might be necessary even though this is not always the 
   `fast-preview` and `processSectionDelay` set to `0` for a smooth experience. This is done by including 
   `"fast-preview": { disabled: true }` in the MathJax config object given to the `MathJaxContext` and adding 
   `mathJax => mathJax.Hub.processSectionDelay = 0` as the `onStartup` callback to the same. Coordinate initial typesetting 
-  with `hideUntilTypeset` set to `first`  and / or `onInitTypeset` callbacks. Feel free to check out [Example 7](#example7)
+  with `hideUntilTypeset` set to `first`  and / or `onInitTypeset` callbacks. Feel free to check out Example 7
   above where this is shown.
 
 ## General Considerations (don't skip) ##
@@ -357,12 +357,12 @@ to it; manual fine-tuning might be necessary even though this is not always the 
   DOM manipulation via refs. For this reason, when the `dynamic` property is set to `true`, always make sure that the 
   expression containing math is not mixed with literal content. The following list summarizes this:
   
-  * **Don't**: `<p>An example is the equation $10x^4 = 100$</p>`
-  * **Don't**: `<p>An example is the equation { "$10x^4 = 100$" }</p>`
-  * **Don't**: `<p>An example is the equation <span>$10x^4 = 100$</span></p>`
-  * **Don't**: `<p>An example is the equation <span> { "$10x^4 = 100$" }</span></p>` (literal space inside `span`)  
-  * **Do**: `<p>{ "An example is the equation $10x^4 = 100$" }</p>`
-  * **Do**: `<p>An example is the equation <span>{ "$10x^4 = 100$" }</span></p>`
+  * **Don't**: `<p>An example is the equation ${num}x^4 = 100$</p>` (expression with math not in separate element nor expression)
+  * **Don't**: `<p>An example is the equation { "$${num}x^4 = 100$" }</p>` (expression with math not in separate element)
+  * **Don't**: `<p>An example is the equation <span>${num}x^4 = 100$</span></p>` (expression with math not in separate expression)
+  * **Don't**: `<p>An example is the equation <span> { "$${num}x^4 = 100$" }</span></p>` (expression with math not in separate element - note the space in the beginning of the `span`)  
+  * **Do**: `<p>{ "An example is the equation $${num}x^4 = 100$" }</p>` (expression with math in separate element and expression)
+  * **Do**: `<p>An example is the equation <span>{ "$${num}x^4 = 100$" }</span></p>` (expression with math in separate element and expression)
     
   For static content, this does not matter since it is the interplay between how React handles updates to this content and
   the manipulation of the same via refs that causes problems.
@@ -420,12 +420,16 @@ This project is licensed under the terms of the
 Uppdtaeing
 -https://www.freeformatter.com/html-entities.html#math-symbols bra mathml
 -https://math-it.org/Publikationen/MathML.html
--clarify examples in donts (med variabel)
+
+
 -kolla ieno formattering i readme (frmst storleken på bullets)
 -testa i olika browsrar
 - Ta bort utkommenterad kod
 - vilka browsrar det är testat med etc...
 -försök lägga till typning
   -visa hur man kan använda context också
+  
+-kolla igeno alla kommentarer i kod
+-kolla refereser till foucs och nyansera att med mj3 är det oftar inte untypset content utan unstyled
 
 <!-- prettier-ignore-end -->

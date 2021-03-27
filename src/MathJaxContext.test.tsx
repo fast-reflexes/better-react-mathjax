@@ -39,16 +39,29 @@ it("only fetches MathJax once despite nested contexts", async () => {
     document.getElementsByTagName = originalGetElementsByTagName
 }, 15000)
 
-it("first context determines version if context are nested", async () => {
+it("first context determines version if contexts are nested", async () => {
     const rendered = () =>
         render(
             <MathJaxContext version={3}>
                 <MathJaxContext version={2}>
                     <MathJaxContext version={2}>
-                        <Wrapped version={2} />
                     </MathJaxContext>
                 </MathJaxContext>
             </MathJaxContext>
         )
-    expect(rendered).toThrow("Wrong version")
+    expect(rendered).toThrow(/^Cannot nest MathJaxContexts with different versions/)
+}, 15000)
+
+it("contexts with different versions allowed", async () => {
+    const rendered = () =>
+        render(
+            <>
+                <MathJaxContext version={2}>
+                    <Wrapped version={2} />
+                </MathJaxContext>
+                <MathJaxContext version={3}>
+                    <Wrapped version={3} />
+                </MathJaxContext>
+            </>
+        )
 }, 15000)
