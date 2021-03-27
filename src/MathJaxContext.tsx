@@ -1,8 +1,8 @@
 import React, { createContext, FC, useContext, useRef } from "react"
-import {MathJaxConfig as MathJax3Config} from "mathjax-full/js/components/startup";
-import {OptionList} from "mathjax-full/js/util/Options";
-import {MathJaxObject as MathJax3Object} from "mathjax-full/js/components/startup";
-type MathJax2Config = MathJax.Config;
+import { MathJaxConfig as MathJax3Config } from "mathjax-full/js/components/startup"
+import { OptionList } from "mathjax-full/js/util/Options"
+import { MathJaxObject as MathJax3Object } from "mathjax-full/js/components/startup"
+type MathJax2Config = MathJax.Config
 type MathJax2Object = typeof MathJax
 
 export type TypeSettingFunction =
@@ -35,7 +35,8 @@ export interface MathJaxOverrideableProps {
 }
 
 type MathJaxSubscriberProps = (
-    { version: 2, promise: Promise<MathJax2Object> } | { version: 3, promise: Promise<MathJax3Object> }
+    | { version: 2; promise: Promise<MathJax2Object> }
+    | { version: 3; promise: Promise<MathJax3Object> }
 ) &
     MathJaxOverrideableProps
 
@@ -47,7 +48,8 @@ interface MathJaxContextStaticProps extends MathJaxOverrideableProps {
     onError?: (error: any) => void
 }
 
-export type MathJaxContextProps = ({
+export type MathJaxContextProps = (
+    | {
           config?: MathJax2Config
           version: 2
           onStartup?: (mathJax: MathJax2Object) => void
@@ -78,14 +80,17 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     children
 }) => {
     const previousContext = useContext(MathJaxBaseContext)
-    if(previousContext?.version !== undefined && previousContext?.version !== version)
-        throw Error("Cannot nest MathJaxContexts with different versions. MathJaxContexts should not be nested at all but if they are, they inherit several properties. If you need different versions, then use multiple, non-nested, MathJaxContexts in your app.")
+    if (previousContext?.version !== undefined && previousContext?.version !== version)
+        throw Error(
+            "Cannot nest MathJaxContexts with different versions. MathJaxContexts should not be nested at all but if they are, they inherit several properties. If you need different versions, then use multiple, non-nested, MathJaxContexts in your app."
+        )
     const mjContext = useRef(previousContext)
     const initVersion = useRef<2 | 3 | null>(previousContext?.version || null)
-    if(initVersion.current === null)
-        initVersion.current = version
-    else if(initVersion.current !== version)
-        throw Error("Cannot change version of MathJax in a MathJaxContext after component has mounted. Either reload the page with a new setting when this should happen or use multiple, non-nested, MathJaxContexts in your app.")
+    if (initVersion.current === null) initVersion.current = version
+    else if (initVersion.current !== version)
+        throw Error(
+            "Cannot change version of MathJax in a MathJaxContext after component has mounted. Either reload the page with a new setting when this should happen or use multiple, non-nested, MathJaxContexts in your app."
+        )
 
     const usedSrc = src || (version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC)
 
@@ -107,10 +112,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
             res(mathJax)
             if (onLoad) onLoad()
         })
-        script.addEventListener("error", (e) => {
-            if (onError) onError(e)
-            rej(e)
-        })
+        script.addEventListener("error", (e) => rej(e))
 
         document.getElementsByTagName("head")[0].appendChild(script)
     }
@@ -121,34 +123,42 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
             renderMode,
             hideUntilTypeset
         }
-        if(version === 2) {
+        if (version === 2) {
             if (v2Promise === undefined) {
-                if(typeof window !== "undefined") {
+                if (typeof window !== "undefined") {
                     v2Promise = new Promise<MathJax2Object>(scriptInjector)
-                    v2Promise.catch(e => console.error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${e}`))
-                }
-                else {
+                    v2Promise.catch((e) => {
+                        if(onError)
+                            onError(e)
+                        else
+                            throw Error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${e}`)
+                    })
+                } else {
                     // for server side rendering
                     v2Promise = Promise.reject()
-                    v2Promise.catch(_ => {})
+                    v2Promise.catch((_) => {})
                 }
             }
         } else {
             if (v3Promise === undefined) {
-                if(typeof window !== "undefined") {
+                if (typeof window !== "undefined") {
                     v3Promise = new Promise<MathJax3Object>(scriptInjector)
-                    v3Promise.catch(e => console.error(`Failed to download MathJax version 3 from '${usedSrc}' due to: ${e}`))
-                }
-                else {
+                    v3Promise.catch((e) => {
+                        if(onError)
+                            onError(e)
+                        else
+                            throw Error(`Failed to download MathJax version 3 from '${usedSrc}' due to: ${e}`)
+                    })
+                } else {
                     // for server side rendering
                     v3Promise = Promise.reject()
-                    v3Promise.catch(_ => {})
+                    v3Promise.catch((_) => {})
                 }
             }
         }
         mjContext.current = {
             ...baseContext,
-            ...( version === 2 ? {version: 2, promise: v2Promise} : {version: 3, promise: v3Promise})
+            ...(version === 2 ? { version: 2, promise: v2Promise } : { version: 3, promise: v3Promise })
         }
     }
 

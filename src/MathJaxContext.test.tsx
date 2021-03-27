@@ -44,8 +44,7 @@ it("first context determines version if contexts are nested", async () => {
         render(
             <MathJaxContext version={3}>
                 <MathJaxContext version={2}>
-                    <MathJaxContext version={2}>
-                    </MathJaxContext>
+                    <MathJaxContext version={2}></MathJaxContext>
                 </MathJaxContext>
             </MathJaxContext>
         )

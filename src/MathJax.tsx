@@ -121,9 +121,9 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                     if (usedRenderMode === "post" || text !== lastChildren.current) {
                         if (!typesetting.current) {
                             typesetting.current = true
-                            if(mjPromise.version === 3) {
+                            if (mjPromise.version === 3) {
                                 mjPromise.promise
-                                    .then(mathJax => {
+                                    .then((mathJax) => {
                                         if (usedRenderMode === "pre") {
                                             const updateFn = (output: HTMLElement) => {
                                                 lastChildren.current = text!
@@ -141,7 +141,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                     )
                                                     .then(updateFn)
-                                                    .catch(err => {
+                                                    .catch((err) => {
                                                         onTypesetDone()
                                                         throw Error(`Typesetting failed: ${err.message}`)
                                                     })
@@ -154,7 +154,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                         updateFn(output)
                                                     })
-                                                    .catch(err => {
+                                                    .catch((err) => {
                                                         onTypesetDone()
                                                         throw Error(`Typesetting failed: ${err.message}`)
                                                     })
@@ -166,7 +166,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                     return mathJax.typesetPromise([ref.current])
                                                 })
                                                 .then(onTypesetDone)
-                                                .catch(err => {
+                                                .catch((err) => {
                                                     onTypesetDone()
                                                     throw Error(`Typesetting failed: ${err.message}`)
                                                 })
@@ -175,13 +175,14 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                     .catch((err) => {
                                         throw Error(`Typesetting failed: ${err.message}`)
                                     })
-                            } else { // version 2
+                            } else {
+                                // version 2
                                 mjPromise.promise
-                                    .then(mathJax => {
+                                    .then((mathJax) => {
                                         mathJax.Hub.Queue(["Typeset", mathJax.Hub, ref.current])
                                         mathJax.Hub.Queue(onTypesetDone)
                                     })
-                                    .catch(err => {
+                                    .catch((err) => {
                                         throw Error(`Typesetting failed: ${err.message}`)
                                     })
                             }
