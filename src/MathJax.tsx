@@ -4,29 +4,16 @@ import { MathJaxBaseContext, MathJaxOverrideableProps } from "./MathJaxContext"
 export interface MathJaxProps extends MathJaxOverrideableProps {
     inline?: boolean
     onInitTypeset?: () => void
+    onTypeset?: () => void
     text?: string
     dynamic?: boolean
 }
-
-/**
- *
- * This component wraps an inline or block element with content that should be typeset by MathJax. It will, with
- * renderMode = "post" attempt to typeset after every render and thus a few things are important:
- *
- *    - The wrapped component must only be rerendered after higher-hierarchy state changes, it must not be able to
- *      trigger a rerender of itself only, as this will NOT trigger a rerender of the MathJax wrapper and thus, any
- *      content in the wrapped component will NOT be processed by MathJax. If you have such a situation, wrap a smaller
- *      portion of the initially wrapped component instead and put the state in a higher-hierarchy component.
- *      Introducing several MathJax components may be done to solve the problem as well.
- *
- *      -Don't nest MathJax components as this will introduce unnecessary work (several components typeset the same math).
- *
- */
 
 const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     inline = false,
     hideUntilTypeset,
     onInitTypeset,
+    onTypeset,
     text,
     dynamic,
     typesettingOptions,
@@ -52,7 +39,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     // whether initial typesetting of this element has been done or not
     const initLoad = useRef(false)
 
-    // mutex to signal when typesetting is ongoing
+    // mutex to signal when typesetting is ongoing (without it we may have race conditions)
     const typesetting = useRef(false)
 
     // handler for initial loading
@@ -68,10 +55,11 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
 
     // callback for when typesetting is done
     const onTypesetDone = () => {
-        if (usedHideUntilTypeset === "every" && ref.current !== null) {
+        if (usedHideUntilTypeset === "every" && dynamic && usedRenderMode === "post" && ref.current !== null) {
             ref.current.style.visibility = "visible"
         }
         checkInitLoad()
+        if(onTypeset) onTypeset()
         typesetting.current = false
     }
 
@@ -93,11 +81,11 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
      * Effect for typesetting, important that this does not trigger a new render and runs as seldom as possible (only
      * when needed). It is good that it is in an effect because then we are sure that the DOM to be is ready and
      * thus, we don't have to use a custom timeout to accommodate for this. Layout effects runs on the DOM to be before
-     * the browser has a chance to paint. Thereby, we reduce the chance of ugly FOUCs.
+     * the browser has a chance to paint. Thereby, we reduce the chance of ugly flashes of non-typeset content.
      *
      * Note: useLayoutEffect causes an ugly warning in the server console with SSR so we make sure to use useEffect if
-     * we are in the backend instead. Neither of them run in the backend so no extra care needs to be taken of not
-     * running with Promise.resolve() from context (which happens on SSR) on server.
+     * we are in the backend instead. Neither of them run in the backend so no extra care needs to be taken of the
+     * Promise.reject() passed from context (which happens on SSR) on server.
      */
     const effectToUse = typeof window !== "undefined" ? useLayoutEffect : useEffect
     effectToUse(() => {

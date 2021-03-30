@@ -5,7 +5,7 @@ import { MathJaxObject as MathJax3Object } from "mathjax-full/js/components/star
 type MathJax2Config = MathJax.Config
 type MathJax2Object = typeof MathJax
 
-export type TypeSettingFunction =
+export type TypesettingFunction =
     | "tex2chtml"
     | "tex2chtmlPromise"
     | "tex2svg"
@@ -28,7 +28,7 @@ export type TypeSettingFunction =
 export interface MathJaxOverrideableProps {
     hideUntilTypeset?: "first" | "every"
     typesettingOptions?: {
-        fn: TypeSettingFunction
+        fn: TypesettingFunction
         options?: OptionList
     }
     renderMode?: "pre" | "post"
@@ -100,11 +100,6 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
         script.type = "text/javascript"
         script.src = src || (version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC)
         script.async = false
-
-        // if ((window as any).opera)
-        //    script.innerHTML = config
-        // else
-        //    script.text = config
 
         script.addEventListener("load", () => {
             const mathJax = (window as any).MathJax
