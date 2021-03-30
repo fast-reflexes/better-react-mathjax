@@ -59,7 +59,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
             ref.current.style.visibility = "visible"
         }
         checkInitLoad()
-        if(onTypeset) onTypeset()
+        if (onTypeset) onTypeset()
         typesetting.current = false
     }
 

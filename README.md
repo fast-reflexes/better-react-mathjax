@@ -19,7 +19,7 @@ and providing it to all wrapped `MathJax` components that typeset math.
 * Supports both MathJax version 2 and 3.
 * Supports local copy of MathJax or copy supplied via CDN.
 * Built in a modular fashion on top of MathJax with direct access to MathJax via the MathJax configuration.
-* Use MathJax functionality either through the `MathJax` component or by yourself through the `MathJaxContext`.
+* Use MathJax functionality either through the `MathJax` component or by yourself through the `MathJaxBaseContext`.
 * Either put your math into the DOM with React first and let MathJax typeset afterwards (v. 2 and 3), or typeset with MathJax 
   first and add it to the DOM afterwards (v. 3 only).
 * Hide your components before they are typeset to avoid flashes of non-typeset content and make the use of MathJax a 
@@ -116,7 +116,7 @@ Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-latex-optima
 
 # Under the hood #
 
-The `MathJaxContext` component downloads MathJax and provides it to all users of the context, which includes
+The `MathJaxContext` component downloads MathJax and provides it to all users of the `MathJaxBaseContext`, which includes
 `MathJax` components. A `MathJax` component typesets its content only once initially, if the `dynamic` flag
 is not set, in which case the content is typeset every time a change might have occurred. To avoid showing the
 user flashes of non-typeset content, MathJax does its work in a [layout effect](https://reactjs.org/docs/hooks-reference.html#uselayouteffect), 
@@ -312,13 +312,17 @@ as this functionality is used by the `MathJax` component itself.***
 
 ## Custom use of MathJax directly ##
 You can use the underlying MathJax object directly (not through the `MathJax` component) if you want as well. The
-following snippet illustrates this.
+following snippet illustrates how to use `MathJaxBaseContext` to accomplish this.
 
-    const {version, hideUntilTypeset, renderMode, typesettingOptions, mjPromise} = useContext(MathJaxContext)
-    mjPromise.then(mathJax => { // do work with the MathJax object here })
+    // undefined or MathJaxSubscriberProps with properties version, hideUntilTypeset, renderMode, typesettingOptions and promise
+    const mjContext = useContext(MathJaxBaseContext)
+    if(mjContext)
+      mjContext.promise.then(mathJaxObject => { // do work with the MathJax object here })
 
-This requires only a `MathJaxContext` to be in the hierarchy. The object passed is the MathJax object for the version
-in use.
+This requires only a `MathJaxContext`, supplying the `MathJaxBaseContext`, to be in the hierarchy. The object passed from the `promise` property is the MathJax 
+object for the version in use.
+
+Sandbox example: https://codesandbox.io/s/better-react-mathjax-custom-example-latex-e5kym
 
 ## Fighting flashes of non-typeset content ##
 Using MathJax, as is, is as seen from the basic examples above fairly simple, but the real challenge is to use it in a way
@@ -382,7 +386,7 @@ to it; manual fine-tuning might be necessary even though this is not always the 
   
   * **Don't**: `<p>An example is the equation ${num}x^4 = 100$</p>` (expression with math not in separate element nor expression)
   * **Don't**: `<p>An example is the equation { "$${num}x^4 = 100$" }</p>` (expression with math not in separate element)
-  * **Don't**: `<p>An example is the equation <span>${num}x^4 = 100$</span></p>` (expression with math not in separate expression)
+  * **Don't**: `<p>An example is the equation <span>${num}x^4 = 100$</span></p>` (expression with math not in separate expression - mixed inside `span`)
   * **Don't**: `<p>An example is the equation <span> { "$${num}x^4 = 100$" }</span></p>` (expression with math not in separate element - note the space in the beginning of the `span`)  
   * **Do**: `<p>{ "An example is the equation $${num}x^4 = 100$" }</p>` (expression with math in separate element and expression)
   * **Do**: `<p>An example is the equation <span>{ "$${num}x^4 = 100$" }</span></p>` (expression with math in separate element and expression)
@@ -472,10 +476,6 @@ This project is licensed under the terms of the
 Uppdtaeing
 -https://www.freeformatter.com/html-entities.html#math-symbols bra mathml
 -https://math-it.org/Publikationen/MathML.html
-
--ladda upp ny version och testa custom use
--ändra beskrivningen av custo use
--ändra expression / element i exempel
 -Slutför genomgång av mobilversioner
 
 <!-- prettier-ignore-end -->
