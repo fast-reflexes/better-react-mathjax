@@ -3,6 +3,7 @@ import React, { ReactElement } from "react"
 import { render } from "@testing-library/react"
 import { MathJaxBaseContext } from "./MathJaxContext"
 import MathJax from "./MathJax"
+import {OptionList} from "mathjax-full/js/util/Options";
 
 let originalConsoleError: (data: any[]) => void
 const math = "\\frac{10}{5}"
@@ -20,14 +21,16 @@ const getComponent = (
     version: 2 | 3,
     renderMode?: "pre" | "post",
     text?: string,
-    typeSettingOptions?: { fn: "tex2chtml"; options?: object },
+    typeSettingOptions?: { fn: "tex2chtml"; options?: OptionList },
     content?: ReactElement
 ) => (
     <MathJaxBaseContext.Provider
-        value={{
-            version,
-            promise: Promise.resolve({ Hub: { Queue: jest.fn() } })
-        }}
+        value={
+            version === 2 ?
+                { version: 2, promise: Promise.resolve({ Hub: { Queue: jest.fn() } } as any) }
+                :
+                { version: 3, promise: Promise.resolve({ startup: { promise: Promise.resolve() } } as any) }
+        }
     >
         <MathJax renderMode={renderMode} text={text} typesettingOptions={typeSettingOptions}>
             {content}
