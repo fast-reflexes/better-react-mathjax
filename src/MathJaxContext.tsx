@@ -34,7 +34,7 @@ export interface MathJaxOverrideableProps {
     renderMode?: "pre" | "post"
 }
 
-type MathJaxSubscriberProps = (
+export type MathJaxSubscriberProps = (
     | { version: 2; promise: Promise<MathJax2Object> }
     | { version: 3; promise: Promise<MathJax3Object> }
 ) &
