@@ -1,7 +1,7 @@
 {
   "name": "better-react-mathjax",
-  "version": "0.0.28-beta",
-  "description": "React MathJax component supporting both MathJax version 2 and 3 as well as othr configuration options to make MathJax an enjoable experience in a dynamic React world.",
+  "version": "0.0.30-beta",
+  "description": "Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as well as dynamic updates. Simple to use but with many configuration options.",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
@@ -9,8 +9,9 @@
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "lint": "tslint -p tsconfig.json",
-    "prebuild": "rm -rf ./build",
-    "postbuild": "cp package.json README.md ./build",
+    "prebuild": "rm -rf ./build && rm -rf package-min.json",
+    "minify": "find ./build -iname \"*.js\" -exec uglifyjs --compress --mangle -o {} -- {} \\;",
+    "postbuild": " cat package.json | json -e \"delete this.scripts;delete this.devDependencies\" > package-min.json && cp package-min.json ./build/package.json && cp README-min.md ./build/README.md && npm run minify",
     "preupload": "npm run build",
     "upload": "npm publish ./build --access public",
     "preversion": "npm run lint && npm run format && npm test",
@@ -38,6 +39,7 @@
     "react": ">=16.8"
   },
   "devDependencies": {
+    "uglify-js": "^3.13.3",
     "@types/mathjax": "^0.0.36",
     "mathjax": "2.7.9",
     "mathjax-full": "3.1.2",
@@ -51,6 +53,7 @@
     "@types/jest": "^26.0.20",
     "@testing-library/react": "^11.2.5",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "json": "^10.0.0"
   }
 }
