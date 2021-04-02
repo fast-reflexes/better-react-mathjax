@@ -3,7 +3,7 @@
 
 # A simple React component for MathJax #
 
-#### *Note*: The full documentation is available at https://github.com/fast-reflexes/better-react-mathjax to keep down package size ####
+#### Note: The full documentation is available at https://github.com/fast-reflexes/better-react-mathjax to keep down package size ####
 
 Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in
 React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as

@@ -441,9 +441,8 @@ Tested with:
   *  Samsung Internet 13.2.3.2
   
 * iOS:
-  *  Firefox
-  *  Chrome
-  *  Safari
+  *  Chrome 87.4280.77
+  *  Safari 14.4.1
   
 * Windows
   *  Firefox 87.0.(64-bit)
@@ -471,16 +470,5 @@ v. 1.0 - Initial Release
 
 This project is licensed under the terms of the
 [MIT license](/LICENSE).
-
-
-Uppdtaeing
--https://www.freeformatter.com/html-entities.html#math-symbols bra mathml
--https://math-it.org/Publikationen/MathML.html
--Slutför genomgång av mobilversioner
--releasa slutgiltig beta
--kolla i exempel samt i bdayprob
--release version 1.0
--uppdatera i alla sandboxes
--freeze sandboxes
 
 <!-- prettier-ignore-end -->
