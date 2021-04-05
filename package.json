@@ -1,6 +1,6 @@
 {
   "name": "better-react-mathjax",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.1",
   "description": "Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as well as dynamic updates. Simple to use but with many configuration options.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -38,15 +38,8 @@
   "peerDependencies": {
     "react": ">=16.8"
   },
-  "dependencies": {
-    "@types/mathjax": "^0.0.36",
-    "mathjax-full": "3.1.2"
-  },
   "devDependencies": {
     "uglify-js": "^3.13.3",
-    "@types/mathjax": "^0.0.36",
-    "mathjax": "2.7.9",
-    "mathjax-full": "3.1.2",
     "@types/react": "^17.0.1",
     "typescript": "^4.1.4",
     "tslint": "^6.1.3",

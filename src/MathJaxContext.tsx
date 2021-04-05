@@ -1,10 +1,4 @@
 import React, { createContext, FC, useContext, useRef } from "react"
-import type { MathJaxConfig, MathJaxObject } from "mathjax-full/js/components/startup"
-import type { OptionList } from "mathjax-full/js/util/Options"
-export type MathJax2Config = MathJax.Config
-export type MathJax2Object = typeof MathJax
-export type MathJax3Config = MathJaxConfig
-export type MathJax3Object = MathJaxObject
 
 export type TypesettingFunction =
     | "tex2chtml"
@@ -30,14 +24,14 @@ export interface MathJaxOverrideableProps {
     hideUntilTypeset?: "first" | "every"
     typesettingOptions?: {
         fn: TypesettingFunction
-        options?: OptionList
+        options?: object // TODO add proper type
     }
     renderMode?: "pre" | "post"
 }
 
 export type MathJaxSubscriberProps = (
-    | { version: 2; promise: Promise<MathJax2Object> }
-    | { version: 3; promise: Promise<MathJax3Object> }
+    | { version: 2; promise: Promise<any> } // TODO add proper type
+    | { version: 3; promise: Promise<any> } // TODO add proper type
 ) &
     MathJaxOverrideableProps
 
@@ -51,22 +45,22 @@ interface MathJaxContextStaticProps extends MathJaxOverrideableProps {
 
 export type MathJaxContextProps = (
     | {
-          config?: MathJax2Config
+          config?: object // TODO add proper type
           version: 2
-          onStartup?: (mathJax: MathJax2Object) => void
+          onStartup?: (mathJax: any) => void // TODO add proper type
       }
     | {
-          config?: MathJax3Config
+          config?: object // TODO add proper type
           version?: 3
-          onStartup?: (mathJax: MathJax3Object) => void
+          onStartup?: (mathJax: any) => void // TODO add proper type
       }
 ) &
     MathJaxContextStaticProps
 
 const DEFAULT_V2_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"
 const DEFAULT_V3_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"
-let v2Promise: Promise<MathJax2Object>
-let v3Promise: Promise<MathJax3Object>
+let v2Promise: Promise<any> // TODO add proper type
+let v3Promise: Promise<any> // TODO add proper type
 
 const MathJaxContext: FC<MathJaxContextProps> = ({
     config,
@@ -122,7 +116,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
         if (version === 2) {
             if (v2Promise === undefined) {
                 if (typeof window !== "undefined") {
-                    v2Promise = new Promise<MathJax2Object>(scriptInjector)
+                    v2Promise = new Promise<any>(scriptInjector) // TODO add proper type
                     v2Promise.catch((e) => {
                         if (onError) onError(e)
                         else throw Error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${e}`)
@@ -136,7 +130,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
         } else {
             if (v3Promise === undefined) {
                 if (typeof window !== "undefined") {
-                    v3Promise = new Promise<MathJax3Object>(scriptInjector)
+                    v3Promise = new Promise<any>(scriptInjector) // TODO add proper type
                     v3Promise.catch((e) => {
                         if (onError) onError(e)
                         else throw Error(`Failed to download MathJax version 3 from '${usedSrc}' due to: ${e}`)

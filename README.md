@@ -125,8 +125,9 @@ because the MathJax library needs to be downloaded but also because MathJax *sho
 the UI if it has a lot to typeset, the typesetting taking place before the browser paints the updates cannot be guaranteed.
 In most situations however, it should.
 
-This project uses MathJax 2 types from [@types/mathjax](https://www.npmjs.com/package/@types/mathjax) and MathJax 3 types 
-from [mathjax-full](https://www.npmjs.com/package/mathjax-full).
+This project currently has no TypeScript types for MathJax objects and configurations. Types from [@types/mathjax](https://www.npmjs.com/package/@types/mathjax) and 
+[mathjax-full](https://www.npmjs.com/package/mathjax-full) have been attempted but not found suitable. Types will be
+added soon.
 
 # API #
 
@@ -178,7 +179,7 @@ it might be desirable to use `pre` for performance reasons or to handle very spe
   be done via the optional `options` object of the `typesettingOptions` property. **Note**: The `pre` value can only be 
   used with MathJax version 3.
 
-### `typesettingOptions: { fn: TypesettingFunction, options: OptionList | undefined } | undefined` ###
+### `typesettingOptions: { fn: TypesettingFunction, options: object | undefined } | undefined` ###
 
 Used to control typesetting when `renderMode` is set to `pre`. Controls which typesetting function to use and an optional
 object with typesetting details.
@@ -203,7 +204,7 @@ object with typesetting details.
 ## `MathJaxContext` component ##
 
 ---
-### `config: MathJax.Config | MathJaxConfig | undefined` ###
+### `config: object | undefined` ###
 
 Controls MathJax and is passed to MathJax as its config.
 
@@ -231,7 +232,7 @@ MathJax version to use. Must be synced with any `config` passed.
 Version of MathJax to use. If set, make sure that any configuration and url to MathJax uses the same version. If `src`
 is not specified, setting `src`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.1.2.
 
-### `onStartUp((mathJax: MathJax | MathJaxObject) => void) | undefined` ###
+### `onStartUp((mathJax: any) => void) | undefined` ###
 
 Callback to be called when MathJax has loaded successfully but before the MathJax object has been made available
 to wrapped `MathJax` components. The MathJax object is handed as an argument to this callback which is a good place
@@ -452,7 +453,12 @@ Tested with:
   
 
 ## Wish list ##
-(Empty at the moment... Yay!)
+
+* Proper types for MathJax 2 and 3 config objects and MathJax objects. The types exported from `mathjax-full`
+are not as helpful as they could be because many objects have the property `[name: string]: any` added. Version 2
+  types from `@types/mathjax` are incomplete and also bloats the global namespace. Ideally, the API described in the
+  docs should be turned into type declarations and any particular use of undocumented features outside of this could
+  be used by casting to `any`.
 
 ## MathJax documentation ##
 * Version 3: https://docs.mathjax.org/en/latest/
@@ -470,6 +476,7 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
 
 ## Changelog ##
 v. 1.0.0 - Initial Release
+v. 1.0.1 - Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
 
 ## License
 

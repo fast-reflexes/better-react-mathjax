@@ -119,8 +119,9 @@ Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-latex-optima
 
 # Under the hood #
 
-This project uses MathJax 2 types from [@types/mathjax](https://www.npmjs.com/package/@types/mathjax) and MathJax 3 types
-from [mathjax-full](https://www.npmjs.com/package/mathjax-full).
+This project currently has no TypeScript types for MathJax objects and configurations. Types from [@types/mathjax](https://www.npmjs.com/package/@types/mathjax) and
+[mathjax-full](https://www.npmjs.com/package/mathjax-full) have been attempted but not found suitable. Types will be
+added soon.
 
 # API #
 
@@ -143,7 +144,7 @@ it might be desirable to use `pre` for performance reasons or to handle very spe
 
 **Default**: `post`
 
-### `typesettingOptions: { fn: TypesettingFunction, options: OptionList | undefined } | undefined` ###
+### `typesettingOptions: { fn: TypesettingFunction, options: object | undefined } | undefined` ###
 
 Used to control typesetting when `renderMode` is set to `pre`. Controls which typesetting function to use and an optional
 object with typesetting details.
@@ -153,7 +154,7 @@ object with typesetting details.
 ## `MathJaxContext` component ##
 
 ---
-### `config: MathJax.Config | MathJaxConfig | undefined` ###
+### `config: object | undefined` ###
 
 Controls MathJax and is passed to MathJax as its config.
 
@@ -181,7 +182,7 @@ MathJax version to use. Must be synced with any `config` passed.
 Version of MathJax to use. If set, make sure that any configuration and url to MathJax uses the same version. If `src`
 is not specified, setting `src`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.1.2.
 
-### `onStartUp((mathJax: MathJax | MathJaxObject) => void) | undefined` ###
+### `onStartUp((mathJax: any) => void) | undefined` ###
 
 Callback to be called when MathJax has loaded successfully but before the MathJax object has been made available
 to wrapped `MathJax` components. The MathJax object is handed as an argument to this callback which is a good place

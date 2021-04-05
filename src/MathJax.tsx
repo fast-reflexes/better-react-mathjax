@@ -129,7 +129,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                     )
                                                     .then(updateFn)
-                                                    .catch((err) => {
+                                                    .catch((err: any) => { // TODO remove type after types are added
                                                         onTypesetDone()
                                                         throw Error(`Typesetting failed: ${err.message}`)
                                                     })
@@ -142,7 +142,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                         updateFn(output)
                                                     })
-                                                    .catch((err) => {
+                                                    .catch((err: any) => { // TODO remove type after types are added
                                                         onTypesetDone()
                                                         throw Error(`Typesetting failed: ${err.message}`)
                                                     })
@@ -154,7 +154,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                     return mathJax.typesetPromise([ref.current])
                                                 })
                                                 .then(onTypesetDone)
-                                                .catch((err) => {
+                                                .catch((err: any) => { // TODO remove type after types are added
                                                     onTypesetDone()
                                                     throw Error(`Typesetting failed: ${err.message}`)
                                                 })
