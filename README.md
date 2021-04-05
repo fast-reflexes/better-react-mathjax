@@ -459,12 +459,17 @@ Tested with:
 
 * Version 2: https://docs.mathjax.org/en/v2.7-latest/ 
 
+## Useful links ##
+
+* Good primer on MathML: https://math-it.org/Publikationen/MathML.html
+* On HTML math entities: https://www.freeformatter.com/html-entities.html#math-symbols bra mathml
+
 ## Github ##
 
 File problems or contribute on Github: https://github.com/fast-reflexes/better-react-mathjax
 
 ## Changelog ##
-v. 1.0 - Initial Release
+v. 1.0.0 - Initial Release
 
 ## License
 

@@ -271,7 +271,7 @@ Sandbox example: https://codesandbox.io/s/better-react-mathjax-custom-example-la
 Read full documentation, file problems or contribute on Github: https://github.com/fast-reflexes/better-react-mathjax
 
 ## Changelog ##
-v. 1.0 - Initial Release
+v. 1.0.0 - Initial Release
 
 ## License
 

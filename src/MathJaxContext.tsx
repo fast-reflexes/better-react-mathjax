@@ -1,9 +1,10 @@
 import React, { createContext, FC, useContext, useRef } from "react"
-import { MathJaxConfig as MathJax3Config } from "mathjax-full/js/components/startup"
-import { OptionList } from "mathjax-full/js/util/Options"
-import { MathJaxObject as MathJax3Object } from "mathjax-full/js/components/startup"
-type MathJax2Config = MathJax.Config
-type MathJax2Object = typeof MathJax
+import type { MathJaxConfig, MathJaxObject } from "mathjax-full/js/components/startup"
+import type { OptionList } from "mathjax-full/js/util/Options"
+export type MathJax2Config = MathJax.Config
+export type MathJax2Object = typeof MathJax
+export type MathJax3Config = MathJaxConfig
+export type MathJax3Object = MathJaxObject
 
 export type TypesettingFunction =
     | "tex2chtml"
