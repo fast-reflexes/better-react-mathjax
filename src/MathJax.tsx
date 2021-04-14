@@ -9,6 +9,9 @@ export interface MathJaxProps extends MathJaxOverrideableProps {
     dynamic?: boolean
 }
 
+const typesettingFailed = (err: any) =>
+    `Typesetting failed: ${typeof err.message !== "undefined" ? err.message : err.toString()}`
+
 const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     inline = false,
     hideUntilTypeset,
@@ -129,9 +132,9 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                     )
                                                     .then(updateFn)
-                                                    .catch((err: any) => { // TODO remove type after types are added
+                                                    .catch(err => {
                                                         onTypesetDone()
-                                                        throw Error(`Typesetting failed: ${err.message}`)
+                                                        throw Error(typesettingFailed(err))
                                                     })
                                             else
                                                 mathJax.startup.promise
@@ -142,9 +145,9 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                         updateFn(output)
                                                     })
-                                                    .catch((err: any) => { // TODO remove type after types are added
+                                                    .catch(err => {
                                                         onTypesetDone()
-                                                        throw Error(`Typesetting failed: ${err.message}`)
+                                                        throw Error(typesettingFailed(err))
                                                     })
                                         } else {
                                             // renderMode "post"
@@ -154,14 +157,14 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                     return mathJax.typesetPromise([ref.current])
                                                 })
                                                 .then(onTypesetDone)
-                                                .catch((err: any) => { // TODO remove type after types are added
+                                                .catch(err => {
                                                     onTypesetDone()
-                                                    throw Error(`Typesetting failed: ${err.message}`)
+                                                    throw Error(typesettingFailed(err))
                                                 })
                                         }
                                     })
-                                    .catch((err) => {
-                                        throw Error(`Typesetting failed: ${err.message}`)
+                                    .catch(err => {
+                                        throw Error(typesettingFailed(err))
                                     })
                             } else {
                                 // version 2
@@ -170,16 +173,14 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                         mathJax.Hub.Queue(["Typeset", mathJax.Hub, ref.current])
                                         mathJax.Hub.Queue(onTypesetDone)
                                     })
-                                    .catch((err) => {
-                                        throw Error(`Typesetting failed: ${err.message}`)
+                                    .catch(err => {
+                                        throw Error(typesettingFailed(err))
                                     })
                             }
                         }
                     }
                 } else
-                    throw Error(
-                        "MathJax was not loaded, did you use the MathJax component outside of a MathJaxContext?"
-                    )
+                    throw Error("MathJax was not loaded, did you use the MathJax component outside of a MathJaxContext?")
             }
         }
     })

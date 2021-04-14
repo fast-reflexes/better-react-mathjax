@@ -3,7 +3,7 @@
 
 # A simple React component for MathJax #
 
-#### Note: The full documentation is available at https://github.com/fast-reflexes/better-react-mathjax to keep down package size ####
+#### Note: The full documentation is available at https://github.com/fast-reflexes/better-react-mathjax ####
 
 Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in
 React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as
@@ -273,6 +273,7 @@ Read full documentation, file problems or contribute on Github: https://github.c
 
 ## Changelog ##
 v. 1.0.0 - Initial Release
+v. 1.0.1 - Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
 
 ## License
 
