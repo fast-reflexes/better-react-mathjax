@@ -7,7 +7,6 @@ React a pleasant experience without flashes of non-typeset content, both with re
 well as dynamic updates. Simple to use but with many configuration options.
 
 ## Basic workflow ##
-
 `better-react-mathjax` introduces two React components - `MathJaxContext` and `MathJax`. For MathJax to work with React, 
 wrap the outermost component containing math (or the entire app) in a `MathJaxContext` component. Then simply use `MathJax` components at 
 different levels for the actual math. In the typical case, the content of a `MathJax` component can be everything from a 
@@ -125,9 +124,23 @@ because the MathJax library needs to be downloaded but also because MathJax *sho
 the UI if it has a lot to typeset, the typesetting taking place before the browser paints the updates cannot be guaranteed.
 In most situations however, it should.
 
-This project currently has no TypeScript types for MathJax objects and configurations. Types from [@types/mathjax](https://www.npmjs.com/package/@types/mathjax) and 
-[mathjax-full](https://www.npmjs.com/package/mathjax-full) have been attempted but not found suitable. Types will be
-added soon.
+# TypeScript types #
+This project has both its own types and MathJax types included in the package. For MathJax version 2, a refactored and updated
+version of [`@types/mathjax`](https://www.npmjs.com/package/@types/mathjax) is used whereas for MathJax version 3, this package 
+depends on the types from [`mathjax-full`](https://www.npmjs.com/package/mathjax-full). Issues with the former can be addressed
+and updated within this project whereas the types from `mathjax-full` are used unaltered.
+
+The MathJax types are not always helpful and the user should pay attention even if the compiler does not
+complain. First of all, several of the types from `mathjax-full` contain catch-all properties of the form
+`[s: string]: any` which effectively allows any props to be passed in. Hence, adding a MathJax 2 configuration to a `MathJaxContext`
+using MathJax version 3 will not result in a compile error but instead be accepted even though most of the props won't
+have the desired effect in MathJax 3. 
+
+Also, due to [how TypeScript handles excess properties](https://www.typescriptlang.org/docs/handbook/interfaces.html#excess-property-checks),
+if a configuration is given in a variable (as opposed to in a literal) where any property matches a property of the required type, 
+the remining props will be silently ignored. Since MathJax versions share a few configuration properties, it is therefore
+also possible that a MathJax 3 configuration may be given to a `MathJaxContext` using MathJax 2 without compiler errors. This
+can however be avoided by always using literals in which case excess properties are handled differently.
 
 # API #
 
@@ -179,7 +192,7 @@ it might be desirable to use `pre` for performance reasons or to handle very spe
   be done via the optional `options` object of the `typesettingOptions` property. **Note**: The `pre` value can only be 
   used with MathJax version 3.
 
-### `typesettingOptions: { fn: TypesettingFunction, options: object | undefined } | undefined` ###
+### `typesettingOptions: { fn: TypesettingFunction, options: OptionList | undefined } | undefined` ###
 
 Used to control typesetting when `renderMode` is set to `pre`. Controls which typesetting function to use and an optional
 object with typesetting details.
@@ -204,7 +217,7 @@ object with typesetting details.
 ## `MathJaxContext` component ##
 
 ---
-### `config: object | undefined` ###
+### `config: MathJax2Config | MathJax3Config | undefined` ###
 
 Controls MathJax and is passed to MathJax as its config.
 
@@ -232,7 +245,7 @@ MathJax version to use. Must be synced with any `config` passed.
 Version of MathJax to use. If set, make sure that any configuration and url to MathJax uses the same version. If `src`
 is not specified, setting `src`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.1.2.
 
-### `onStartUp((mathJax: any) => void) | undefined` ###
+### `onStartUp((mathJax: MathJax2Object | MathJax3Object) => void) | undefined` ###
 
 Callback to be called when MathJax has loaded successfully but before the MathJax object has been made available
 to wrapped `MathJax` components. The MathJax object is handed as an argument to this callback which is a good place
@@ -453,12 +466,7 @@ Tested with:
   
 
 ## Wish list ##
-
-* Proper types for MathJax 2 and 3 config objects and MathJax objects. The types exported from `mathjax-full`
-are not as helpful as they could be because many objects have the property `[name: string]: any` added. Version 2
-  types from `@types/mathjax` are incomplete and also bloats the global namespace. Ideally, the API described in the
-  docs should be turned into type declarations and any particular use of undocumented features outside of this could
-  be used by casting to `any`.
+(Empty at the moment... Yay!)
 
 ## MathJax documentation ##
 * Version 3: https://docs.mathjax.org/en/latest/
@@ -475,8 +483,9 @@ are not as helpful as they could be because many objects have the property `[nam
 File problems or contribute on Github: https://github.com/fast-reflexes/better-react-mathjax
 
 ## Changelog ##
-v. 1.0.0 - Initial Release
-v. 1.0.1 - Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
+* v. 1.0.0 - Initial Release
+* v. 1.0.1 - Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
+* v. 1.0.2 - Readded types with custom types for MathJax2 based on `@types/mathjax` and types from `mathjax-full` for MathJax3.
 
 ## License
 
