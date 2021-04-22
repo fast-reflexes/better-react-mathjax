@@ -16,7 +16,7 @@ and providing it to all wrapped `MathJax` components that typeset math.
 
 ### Features ###
 
-* Supports both MathJax version 2 and 3.
+* Supports both MathJax version 2 and 3. 
 * Supports local copy of MathJax or copy supplied via CDN.
 * Small imprint on production bundle with dependencies only for types (image shows a size of 7.32 KB and 2.37 KB gzipped in a NextJS project analyzed with their bundle analyzer).
 
