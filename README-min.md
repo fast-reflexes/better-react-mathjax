@@ -21,6 +21,12 @@ and providing it to all wrapped `MathJax` components that typeset math.
 
 * Supports both MathJax version 2 and 3.
 * Supports local copy of MathJax or copy supplied via CDN.
+* Small imprint on production bundle with dependencies only for types (image shows a size of 7.32 KB and 2.37 KB gzipped in a NextJS project analyzed with their bundle analyzer).
+
+<p align="center" width="100%">
+  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/image/bundle_imprint.png" width="75%">
+</p>
+
 * Built in a modular fashion on top of MathJax with direct access to MathJax via the MathJax configuration.
 * Use MathJax functionality either through the `MathJax` component or by yourself through the `MathJaxBaseContext`.
 * Either put your math into the DOM with React first and let MathJax typeset afterwards (v. 2 and 3), or typeset with MathJax
