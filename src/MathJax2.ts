@@ -4,6 +4,10 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // Refactored and updated by: Elias Lousseief <https://github.com/fast-reflexes>
 
+/* to take care of use of Function in the original types which is advised against by lint rules,
+typing it to a function type that matches almost any function */
+type GeneralFunction = (...args: any[]) => void
+
 export interface MathJax2Object {
     Hub: Hub
     Ajax: Ajax
@@ -16,11 +20,7 @@ export interface MathJax2Object {
 }
 
 export interface Callback {
-    (fn: Function): CallbackObject
-    (fns: Function[]): CallbackObject
-    (objs: any[]): CallbackObject
-    (obj: any): CallbackObject
-    (code: string): CallbackObject
+    (arg: GeneralFunction | GeneralFunction[] | any[] | any | string): CallbackObject
     Delay(time: number, callback: any): CallbackObject
     Queue(...args: any[]): Queue
     Signal(name: string): Signal
@@ -42,7 +42,7 @@ export interface Queue {
     Process(): void
     Suspend(): void
     Resume(): void
-    wait(callback: Function): Function
+    wait(callback: GeneralFunction): GeneralFunction
     call(): void
 }
 
@@ -50,12 +50,9 @@ export interface Signal {
     name: string
     posted: any[]
     listeners: CallbackObject[]
-    Post(message: string): CallbackObject
-    Post(message: string, callback: CallbackObject): CallbackObject
-    Clear(): CallbackObject
-    Clear(callback: CallbackObject): CallbackObject
-    Interest(callback: CallbackObject): CallbackObject
-    Interest(callback: CallbackObject, ignorePast: boolean): CallbackObject
+    Post(message: string, callback?: CallbackObject): CallbackObject
+    Clear(callback?: CallbackObject): CallbackObject
+    Interest(callback: CallbackObject, ignorePast?: boolean): CallbackObject
     NoInterest(callback: CallbackObject): void
     MessageHook(message: string, callback: CallbackObject): CallbackObject
     ExecuteHook(message: string): void
@@ -104,7 +101,7 @@ export interface Register {
     PreProcessor(callBack: any): void
     MessageHook(type: string, callBack: any): void
     StartupHook(type: string, callBack: any): void
-    LoadHook(file: string, callBack: Function): void
+    LoadHook(file: string, callBack: GeneralFunction): void
 }
 
 export interface BrowserInfo {
@@ -167,8 +164,7 @@ export interface Cookie {
     prefix?: string
     expires?: number
     Set(name: string, data: any): void
-    Get(name: string): any
-    Get(name: string, obj: any): any
+    Get(name: string, obj?: any): any
 }
 
 export interface MenuSettings {
@@ -502,8 +498,7 @@ export interface Localization {
     fontDirection(): string
     plural(value: any): number
     number(value: number): string
-    loadDomain(domain: string): CallbackObject
-    loadDomain(domain: string, callback: CallbackObject): CallbackObject
+    loadDomain(domain: string, callback?: CallbackObject): CallbackObject
     Try(spec: any): void
 }
 
@@ -534,7 +529,6 @@ export interface OutputJax {
     Zoom(jax: any, span: any, math: any, Mw: number, Mh: number): ZoomStruct
 }
 
-
 export interface ZoomStruct {
     Y: number
     mW: number
@@ -552,8 +546,7 @@ export interface ElementJax {
     inputID: string
     originalText: string
     mimeType: string
-    Text(text: string): CallbackObject
-    Text(text: string, callback: any): CallbackObject
+    Text(text: string, callback?: any): CallbackObject
     Rerender(callback: any): CallbackObject
     Reprocess(callback: any): CallbackObject
     Remove(): void

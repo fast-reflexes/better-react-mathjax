@@ -8,5 +8,4 @@ export {
     MathJax3Config,
     OptionList
 } from "./MathJaxContext"
-export { MathJax2Config, MathJax2Object} from "./MathJax2"
-
+export { MathJax2Config, MathJax2Object } from "./MathJax2"

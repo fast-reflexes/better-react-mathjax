@@ -132,7 +132,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                     )
                                                     .then(updateFn)
-                                                    .catch(err => {
+                                                    .catch((err) => {
                                                         onTypesetDone()
                                                         throw Error(typesettingFailed(err))
                                                     })
@@ -145,7 +145,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                         })
                                                         updateFn(output)
                                                     })
-                                                    .catch(err => {
+                                                    .catch((err) => {
                                                         onTypesetDone()
                                                         throw Error(typesettingFailed(err))
                                                     })
@@ -157,13 +157,13 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                                     return mathJax.typesetPromise([ref.current])
                                                 })
                                                 .then(onTypesetDone)
-                                                .catch(err => {
+                                                .catch((err) => {
                                                     onTypesetDone()
                                                     throw Error(typesettingFailed(err))
                                                 })
                                         }
                                     })
-                                    .catch(err => {
+                                    .catch((err) => {
                                         throw Error(typesettingFailed(err))
                                     })
                             } else {
@@ -173,7 +173,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                                         mathJax.Hub.Queue(["Typeset", mathJax.Hub, ref.current])
                                         mathJax.Hub.Queue(onTypesetDone)
                                     })
-                                    .catch(err => {
+                                    .catch((err) => {
                                         throw Error(typesettingFailed(err))
                                     })
                             }
