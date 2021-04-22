@@ -18,6 +18,12 @@ and providing it to all wrapped `MathJax` components that typeset math.
 
 * Supports both MathJax version 2 and 3.
 * Supports local copy of MathJax or copy supplied via CDN.
+* Small imprint on production bundle with dependencies only for types (image shows a size of 7.32 KB and 2.37 KB gzipped in a NextJS project analyzed with their bundle analyzer) 
+
+<div style="text-align: center">
+  <img src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/bundle_imprint.png" height="100">
+</div>  
+
 * Built in a modular fashion on top of MathJax with direct access to MathJax via the MathJax configuration.
 * Use MathJax functionality either through the `MathJax` component or by yourself through the `MathJaxBaseContext`.
 * Either put your math into the DOM with React first and let MathJax typeset afterwards (v. 2 and 3), or typeset with MathJax 
@@ -128,8 +134,11 @@ In most situations however, it should.
 # TypeScript types #
 This project has both its own types and MathJax types included in the package. For MathJax version 2, a refactored and updated
 version of [`@types/mathjax`](https://www.npmjs.com/package/@types/mathjax) is used whereas for MathJax version 3, this package 
-depends on the types from [`mathjax-full`](https://www.npmjs.com/package/mathjax-full). Issues with the former can be addressed
-and updated within this project whereas the types from `mathjax-full` are used unaltered.
+depends on the types from [`mathjax-full`](https://www.npmjs.com/package/mathjax-full). Nonetheless, none of the logic from
+these are used in this project so after building production code and tree-shaking, these dependencies will not affect the
+size of the final bundle. If you would prefer a separate `@types` package for this project, please make a suggestion about this in an issue on the
+project Github page. Note also that issues with the MathJax 2 types can be addressed and updated within this project whereas 
+the types from `mathjax-full` are used unaltered.
 
 The MathJax types are not always helpful and the user should pay attention even if the compiler does not
 complain. First of all, several of the types from `mathjax-full` contain catch-all properties of the form
@@ -139,7 +148,7 @@ have the desired effect in MathJax 3.
 
 Also, due to [how TypeScript handles excess properties](https://www.typescriptlang.org/docs/handbook/interfaces.html#excess-property-checks),
 if a configuration is given in a variable (as opposed to in a literal) where any property matches a property of the required type, 
-the remining props will be silently ignored. Since MathJax versions share a few configuration properties, it is therefore
+the remaining props will be silently ignored. Since MathJax versions share a few configuration properties, it is therefore
 also possible that a MathJax 3 configuration may be given to a `MathJaxContext` using MathJax 2 without compiler errors. This
 can however be avoided by always using literals in which case excess properties are handled differently.
 
@@ -148,6 +157,9 @@ can however be avoided by always using literals in which case excess properties 
 The following three properties can be set on **both** the `MathJaxContext` and `MathJax` components. When set on a 
 `MathJaxContext` component, they apply to all wrapped `MathJax` components except those on which the property in 
 question is set on the individual `MathJax` component, which then takes precedence.
+
+**Note**: `MathJax3Object` and `MathJax3Config` are aliases for `MathJaxObject` and `MathJaxConfig`
+as exported by `mathjax-full`.
 
 ---
 
@@ -473,11 +485,6 @@ Tested with:
 * Version 3: https://docs.mathjax.org/en/latest/
 
 * Version 2: https://docs.mathjax.org/en/v2.7-latest/ 
-
-## Useful links ##
-
-* Good primer on MathML: https://math-it.org/Publikationen/MathML.html
-* On HTML math entities: https://www.freeformatter.com/html-entities.html#math-symbols bra mathml
 
 ## Github ##
 

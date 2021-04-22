@@ -117,17 +117,23 @@ Make sure to study the comments in this file as MathML processing is a little bi
 ### Example 7: Elaborate example with optimal settings for dynamic updates with Latex ###
 Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-latex-optimal-8nn9n
 
-# Under the hood #
-
-This project currently has no TypeScript types for MathJax objects and configurations. Types from [@types/mathjax](https://www.npmjs.com/package/@types/mathjax) and
-[mathjax-full](https://www.npmjs.com/package/mathjax-full) have been attempted but not found suitable. Types will be
-added soon.
+# TypeScript types #
+This project has both its own types and MathJax types included in the package. For MathJax version 2, a refactored and updated
+version of [`@types/mathjax`](https://www.npmjs.com/package/@types/mathjax) is used whereas for MathJax version 3, this package
+depends on the types from [`mathjax-full`](https://www.npmjs.com/package/mathjax-full). Nonetheless, none of the logic from
+these are used in this project so after building production code and tree-shaking, these dependencies will not affect the
+size of the final bundle. If you would prefer a separate `@types` package for this project, please make a suggestion about this in an issue on the
+project Github page. Note also that issues with the MathJax 2 types can be addressed and updated within this project whereas
+the types from `mathjax-full` are used unaltered.
 
 # API #
 
 The following three properties can be set on **both** the `MathJaxContext` and `MathJax` components. When set on a
 `MathJaxContext` component, they apply to all wrapped `MathJax` components except those on which the property in
 question is set on the individual `MathJax` component, which then takes precedence.
+
+**Note**: `MathJax3Object` and `MathJax3Config` are aliases for `MathJaxObject` and `MathJaxConfig`
+as exported by `mathjax-full`.
 
 ---
 
@@ -144,7 +150,7 @@ it might be desirable to use `pre` for performance reasons or to handle very spe
 
 **Default**: `post`
 
-### `typesettingOptions: { fn: TypesettingFunction, options: object | undefined } | undefined` ###
+### `typesettingOptions: { fn: TypesettingFunction, options: OptionList | undefined } | undefined` ###
 
 Used to control typesetting when `renderMode` is set to `pre`. Controls which typesetting function to use and an optional
 object with typesetting details.
@@ -154,7 +160,7 @@ object with typesetting details.
 ## `MathJaxContext` component ##
 
 ---
-### `config: object | undefined` ###
+### `config: MathJax2Config | MathJax3Config | undefined` ###
 
 Controls MathJax and is passed to MathJax as its config.
 
@@ -182,7 +188,7 @@ MathJax version to use. Must be synced with any `config` passed.
 Version of MathJax to use. If set, make sure that any configuration and url to MathJax uses the same version. If `src`
 is not specified, setting `src`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.1.2.
 
-### `onStartUp((mathJax: any) => void) | undefined` ###
+### `onStartUp((mathJax: MathJax2Object | MathJax3Object) => void) | undefined` ###
 
 Callback to be called when MathJax has loaded successfully but before the MathJax object has been made available
 to wrapped `MathJax` components. The MathJax object is handed as an argument to this callback which is a good place
@@ -272,8 +278,9 @@ Sandbox example: https://codesandbox.io/s/better-react-mathjax-custom-example-la
 Read full documentation, file problems or contribute on Github: https://github.com/fast-reflexes/better-react-mathjax
 
 ## Changelog ##
-v. 1.0.0 - Initial Release
-v. 1.0.1 - Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
+* v. 1.0.0 - Initial Release
+* v. 1.0.1 - Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
+* v. 1.0.2 - Readded types with custom types for MathJax2 based on `@types/mathjax` and types from `mathjax-full` for MathJax3.
 
 ## License
 

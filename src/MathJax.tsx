@@ -180,7 +180,9 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
                         }
                     }
                 } else
-                    throw Error("MathJax was not loaded, did you use the MathJax component outside of a MathJaxContext?")
+                    throw Error(
+                        "MathJax was not loaded, did you use the MathJax component outside of a MathJaxContext?"
+                    )
             }
         }
     })
