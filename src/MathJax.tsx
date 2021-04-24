@@ -12,7 +12,7 @@ export interface MathJaxProps extends MathJaxOverrideableProps {
 const typesettingFailed = (err: any) =>
     `Typesetting failed: ${typeof err.message !== "undefined" ? err.message : err.toString()}`
 
-const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
+const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     inline = false,
     hideUntilTypeset,
     onInitTypeset,
@@ -22,7 +22,6 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     typesettingOptions,
     renderMode,
     children,
-    id,
     ...rest
 }) => {
     // in render mode "pre", this keeps track of the last value on text to determine when we need to run typesetting
@@ -190,7 +189,6 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"div" | "span">> = ({
     return (
         <span
             {...rest}
-            id={id}
             style={{
                 display: inline ? "inline" : "block",
                 ...rest.style,
