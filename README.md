@@ -2,16 +2,16 @@
 <!-- prettier-ignore-start -->
 # A simple React component for MathJax #
 
-Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in 
-React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as 
+Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in
+React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as
 well as dynamic updates. Simple to use but with many configuration options.
 
 ## Basic workflow ##
 
-`better-react-mathjax` introduces two React components - `MathJaxContext` and `MathJax`. For MathJax to work with React, 
-wrap the outermost component containing math (or the entire app) in a `MathJaxContext` component. Then simply use `MathJax` components at 
-different levels for the actual math. In the typical case, the content of a `MathJax` component can be everything from a 
-subtree of the DOM to a portion of text in a long paragraph. The `MathJaxContext` is responsible for downloading MathJax 
+`better-react-mathjax` introduces two React components - `MathJaxContext` and `MathJax`. For MathJax to work with React,
+wrap the outermost component containing math (or the entire app) in a `MathJaxContext` component. Then simply use `MathJax` components at
+different levels for the actual math. In the typical case, the content of a `MathJax` component can be everything from a
+subtree of the DOM to a portion of text in a long paragraph. The `MathJaxContext` is responsible for downloading MathJax
 and providing it to all wrapped `MathJax` components that typeset math.
 
 ### Features ###
@@ -26,9 +26,9 @@ and providing it to all wrapped `MathJax` components that typeset math.
 
 * Built in a modular fashion on top of MathJax with direct access to MathJax via the MathJax configuration.
 * Use MathJax functionality either through the `MathJax` component or by yourself through the `MathJaxBaseContext`.
-* Either put your math into the DOM with React first and let MathJax typeset afterwards (v. 2 and 3), or typeset with MathJax 
+* Either put your math into the DOM with React first and let MathJax typeset afterwards (v. 2 and 3), or typeset with MathJax
   first and add it to the DOM afterwards (v. 3 only).
-* Hide your components before they are typeset to avoid flashes of non-typeset content and make the use of MathJax a 
+* Hide your components before they are typeset to avoid flashes of non-typeset content and make the use of MathJax a
   pleasant experience.
   
 ### Installation ###
@@ -50,7 +50,7 @@ chosen to use:
 
 ## Examples ##
 
-The first 3 are basic examples with zero configuration standard setup using MathJax version 3 with default MathJax config 
+The first 3 are basic examples with zero configuration standard setup using MathJax version 3 with default MathJax config
 and no extra options. Note that sandboxes tend to be slower than use in a real environment.
 
 ### Example 1: Basic example with Latex ####
@@ -72,10 +72,7 @@ Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
 
 Using AsciiMath requires importing a specific loader (see the [MathJax documentation](http://docs.mathjax.org/en/latest/input/asciimath.html) for further information).
 AsciiMath uses the same display mode on the entire page, which is display math by default. 
-It can be changed to inline by adding `asciimath: { displaystyle: false }` to the input config. 
-In contrast to Latex, the display mode doesn't control the HTML display of the rendered element 
-(block or inline) which has to be managed manually either with the `inline` property on the 
-`MathJax` component or by wrapping the math content in an appropriate container.
+It can be changed to inline math by adding `asciimath: { displaystyle: false }` to the input config.
 
     export default function App() {
         const config = {
@@ -153,11 +150,11 @@ In most situations however, it should.
 
 # TypeScript types #
 This project has both its own types and MathJax types included in the package. For MathJax version 2, a refactored and updated
-version of [`@types/mathjax`](https://www.npmjs.com/package/@types/mathjax) is used whereas for MathJax version 3, this package 
+version of [`@types/mathjax`](https://www.npmjs.com/package/@types/mathjax) is used whereas for MathJax version 3, this package
 depends on the types from [`mathjax-full`](https://www.npmjs.com/package/mathjax-full). Nonetheless, none of the logic from
 these are used in this project so after building production code and tree-shaking, these dependencies will not affect the
 size of the final bundle. If you would prefer a separate `@types` package for this project, please make a suggestion about this in an issue on the
-project Github page. Note also that issues with the MathJax 2 types can be addressed and updated within this project whereas 
+project Github page. Note also that issues with the MathJax 2 types can be addressed and updated within this project whereas
 the types from `mathjax-full` are used unaltered.
 
 The MathJax types are not always helpful and the user should pay attention even if the compiler does not
@@ -174,8 +171,8 @@ can however be avoided by always using literals in which case excess properties 
 
 # API #
 
-The following three properties can be set on **both** the `MathJaxContext` and `MathJax` components. When set on a 
-`MathJaxContext` component, they apply to all wrapped `MathJax` components except those on which the property in 
+The following three properties can be set on **both** the `MathJaxContext` and `MathJax` components. When set on a
+`MathJaxContext` component, they apply to all wrapped `MathJax` components except those on which the property in
 question is set on the individual `MathJax` component, which then takes precedence.
 
 **Note**: `MathJax3Object` and `MathJax3Config` are aliases for `MathJaxObject` and `MathJaxConfig`
@@ -206,7 +203,7 @@ non-typeset content might be shown to the user; in this case the setting of `eve
 ### `renderMode: "pre" | "post" | undefined` ###
 
 Controls how typesetting by MathJax is done in the DOM. Typically, using the setting of `post` works well but in rare cases
-it might be desirable to use `pre` for performance reasons or to handle very special cases of flashes of non-typeset content. 
+it might be desirable to use `pre` for performance reasons or to handle very special cases of flashes of non-typeset content.
 
 **Default**: `post`
 
@@ -256,7 +253,7 @@ Controls MathJax and is passed to MathJax as its config.
 
 **Default**: `undefined` (default MathJax configuration is used)
 
-MathJax configuration object. Make sure it corresponds to the version used. More information can be found in 
+MathJax configuration object. Make sure it corresponds to the version used. More information can be found in
 [the docs](http://docs.mathjax.org/en/latest/web/configuration.html).
 
 ### `src: string | undefined` ###
@@ -267,10 +264,10 @@ The location of MathJax.
 **Default**: `undefined` (default CDN `https://cdnjs.cloudflare.com` is used)
 
 Local or remote url to fetch MathJax from. More information about hosting your own copy of MathJax can be found
-[in the MathJax documentation](http://docs.mathjax.org/en/latest/web/hosting.html) and more in particular on 
+[in the MathJax documentation](http://docs.mathjax.org/en/latest/web/hosting.html) and more in particular on
 [the `better-react-mathjax` Github page](https://github.com/fast-reflexes/better-react-mathjax/issues/1#issuecomment-873537018).
 
-A source url typically contains both a file and some query parameters corresponding to a configuration which, in turn, govern
+A source url may contain both some specific file and some query parameters corresponding to a configuration which, in turn, governs
 which additional assets MathJax fetches. The default sources used when this property is omitted are the same as those 
 listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN). These correspond 
 to some typical and broad use of MathJax. If you have a use case where you, using standalone MathJax, would have to use a different
@@ -364,7 +361,7 @@ take place and any changes of the content will not get typeset.
 
 ***Any additional props will be spread to the root element of the `MathJax` component which is a `span` with `display`
 set to `inline` when the `inline` property is set to `true`, otherwise `block`. The `display` can be overriden via
-`style` or `className` props if needed (then the `inline` property does not affect the wrapper). A ref is not possible to set 
+`style` or `className` props if needed (then the `inline` property does not affect the wrapper). A ref is not possible to set
 as this functionality is used by the `MathJax` component itself.***
 
 ## Custom use of MathJax directly ##
@@ -376,7 +373,7 @@ following snippet illustrates how to use `MathJaxBaseContext` to accomplish this
     if(mjContext)
       mjContext.promise.then(mathJaxObject => { // do work with the MathJax object here })
 
-This requires only a `MathJaxContext`, supplying the `MathJaxBaseContext`, to be in the hierarchy. The object passed from the `promise` property is the MathJax 
+This requires only a `MathJaxContext`, supplying the `MathJaxBaseContext`, to be in the hierarchy. The object passed from the `promise` property is the MathJax
 object for the version in use.
 
 Sandbox example: https://codesandbox.io/s/better-react-mathjax-custom-example-latex-e5kym
@@ -510,12 +507,11 @@ Tested with:
 
 ## Wish list ##
 (Empty at the moment... Yay!)
-*verify file name differences between recommended and what I use for mathjax 2
 
 ## MathJax documentation ##
 * Version 3: https://docs.mathjax.org/en/latest/
 
-* Version 2: https://docs.mathjax.org/en/v2.7-latest/ 
+* Version 2: https://docs.mathjax.org/en/v2.7-latest/
 
 ## Github ##
 
