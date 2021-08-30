@@ -2,6 +2,11 @@
 
 <!-- prettier-ignore-start -->
 
+## Create a branch with the exact same name as the version you're releasing and set it to follow the origin ##
+
+`git checkout -b <VERSION>`
+`git push -u origin <VERSION>` (creates a new origin branch)
+
 ## To make a new build ##
 
 `npm run build`
