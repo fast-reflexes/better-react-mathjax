@@ -71,8 +71,11 @@ Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
 ### Example 2: Basic example with AsciiMath ####
 
 Using AsciiMath requires importing a specific loader (see the [MathJax documentation](http://docs.mathjax.org/en/latest/input/asciimath.html) for further information).
-AsciiMath uses the same display mode on the entire page, which is math mode by default. It can be changed to inline by
-adding `asciimath: { displaystyle: false }` to the input config.
+AsciiMath uses the same display mode on the entire page, which is display math by default. 
+It can be changed to inline by adding `asciimath: { displaystyle: false }` to the input config. 
+In contrast to Latex, the display mode doesn't control the HTML display of the rendered element 
+(block or inline) which has to be managed manually either with the `inline` property on the 
+`MathJax` component or by wrapping the math content in an appropriate container.
 
     export default function App() {
         const config = {
@@ -267,11 +270,14 @@ Local or remote url to fetch MathJax from. More information about hosting your o
 [in the MathJax documentation](http://docs.mathjax.org/en/latest/web/hosting.html) and more in particular on 
 [the `better-react-mathjax` Github page](https://github.com/fast-reflexes/better-react-mathjax/issues/1#issuecomment-873537018).
 
-Note that the default files imported when this property is omitted are the same as those listed in the 
-[MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN). If you have a use case 
-where you, using standalone MathJax, would have to download a different initialization file, then you have to manually 
-supply a url (local or remote) to that file here. This, analogous to how you would alter the script import to adjust to 
-your needs in a plain HTML environment with direct use of MathJax.
+A source url typically contains both a file and some query parameters corresponding to a configuration which, in turn, govern
+which additional assets MathJax fetches. The default sources used when this property is omitted are the same as those 
+listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN). These correspond 
+to some typical and broad use of MathJax. If you have a use case where you, using standalone MathJax, would have to use a different
+source url, then you have to manually supply such a url (local or remote) here. This, in analogy to how you would modify 
+the script import to adjust to your needs in a plain HTML environment with direct use of MathJax. Read more about different
+configurations [here](https://docs.mathjax.org/en/latest/web/components/combined.html) (for MathJax 3) and 
+[here](https://docs.mathjax.org/en/v2.7-latest/config-files.html#common-configurations) (for MathJax 2).
 
 ### `version: 2 | 3 | undefined` ###
 
@@ -394,7 +400,7 @@ component is mounted. With this goal, the `dynamic` property should be set to `t
 be attempted repeatedly (after every render if `renderMode` is set to `post` and when the `text` property changes
 if `renderMode` is set to `pre`). If not handled correctly, updates might look bad to the user if the content is
 visible before typesetting. As indicated above in the "Under the hood" section, this should usually not happen since MathJax 
-typesets the content in a layout effect. However, MathJax updates typesets content asynchronously and there might be occasions 
+typesets the content in a layout effect. However, MathJax typesets content asynchronously and there might be occasions 
 where the typesetting takes place after the browsers has already updated. This might happen if you have a lot of math on 
 a page for example. Apart from the general considerations below, there are a few strategies to try in order to solve 
 this problem. 
@@ -504,6 +510,7 @@ Tested with:
 
 ## Wish list ##
 (Empty at the moment... Yay!)
+*verify file name differences between recommended and what I use for mathjax 2
 
 ## MathJax documentation ##
 * Version 3: https://docs.mathjax.org/en/latest/
@@ -524,10 +531,12 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
 * v. 1.0.3
   * Fixed missing license. 
   * Corrected function signature on `MathJax` component. 
+  * Corrected default MathJax 2 version provided by CDN to use the config recommended in the [docs](https://www.mathjax.org/#gettingstarted).
   * Updated default MathJax 3 version provided by CDN to using v. 3.2.0. 
   * Updated MathJax 3 types used to v. 3.2.0. 
   * Added content to API documentation on property `src`. 
-  * Added installation instructions. 
+  * Added installation instructions.
+  * Added information about AsciiMath display mode.
   * Corrected typo in API documentation on `version` property.
 
 ## License
