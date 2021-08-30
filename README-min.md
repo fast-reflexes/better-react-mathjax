@@ -319,8 +319,7 @@ Read full documentation, file problems or contribute on Github: https://github.c
   * Readded types with custom types for MathJax2 based on `@types/mathjax` and types from `mathjax-full` for MathJax3.
 * v. 1.0.3
   * Fixed missing license. 
-  * Corrected function signature on `MathJax` component. 
-  * Corrected default MathJax 2 version provided by CDN to use the config recommended in the [docs](https://www.mathjax.org/#gettingstarted).
+  * Corrected function signature on `MathJax` component.
   * Updated default MathJax 3 version provided by CDN to using v. 3.2.0. 
   * Updated MathJax 3 types used to v. 3.2.0. 
   * Added content to API documentation on property `src`. 
