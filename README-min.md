@@ -33,6 +33,23 @@ and providing it to all wrapped `MathJax` components that typeset math.
   first and add it to the DOM afterwards (v. 3 only).
 * Hide your components before they are typeset to avoid flashes of non-typeset content and make the use of MathJax a
   pleasant experience.
+  
+### Installation ###
+
+Add this library manually as a dependency to `package.json`...
+
+    dependencies: {
+        "better-react-mathjax": "^1.0.3"
+    }
+
+... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have 
+chosen to use:
+    
+    # npm
+    npm install better-react-mathjax
+
+    # yarn
+    yarn add better-react-mathjax
 
 ## Examples ##
 
@@ -57,8 +74,8 @@ Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
 ### Example 2: Basic example with AsciiMath ####
 
 Using AsciiMath requires importing a specific loader (see the [MathJax documentation](http://docs.mathjax.org/en/latest/input/asciimath.html) for further information).
-AsciiMath uses the same display mode on the entire page, which is math mode by default. It can be changed to inline by
-adding `asciimath: { displaystyle: false }` to the input config.
+AsciiMath uses the same display mode on the entire page, which is display math by default. 
+It can be changed to inline math by adding `asciimath: { displaystyle: false }` to the input config.
 
     export default function App() {
         const config = {
@@ -183,7 +200,17 @@ The location of MathJax.
 **Default**: `undefined` (default CDN `https://cdnjs.cloudflare.com` is used)
 
 Local or remote url to fetch MathJax from. More information about hosting your own copy of MathJax can be found
-[here](http://docs.mathjax.org/en/latest/web/hosting.html).
+[in the MathJax documentation](http://docs.mathjax.org/en/latest/web/hosting.html) and more in particular on
+[the `better-react-mathjax` Github page](https://github.com/fast-reflexes/better-react-mathjax/issues/1#issuecomment-873537018).
+
+A source url may contain both some specific file and some query parameters corresponding to a configuration which, in turn, governs
+which additional assets MathJax fetches. The default sources used when this property is omitted are the same as those 
+listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN). These correspond 
+to some typical and broad use of MathJax. If you have a use case where you, using standalone MathJax, would have to use a different
+source url, then you have to manually supply such a url (local or remote) here. This, in analogy to how you would modify 
+the script import to adjust to your needs in a plain HTML environment with direct use of MathJax. Read more about different
+configurations [here](https://docs.mathjax.org/en/latest/web/components/combined.html) (for MathJax 3) and 
+[here](https://docs.mathjax.org/en/v2.7-latest/config-files.html#common-configurations) (for MathJax 2).
 
 ### `version: 2 | 3 | undefined` ###
 
@@ -192,7 +219,7 @@ MathJax version to use. Must be synced with any `config` passed.
 **Default**: `3`
 
 Version of MathJax to use. If set, make sure that any configuration and url to MathJax uses the same version. If `src`
-is not specified, setting `src`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.1.2.
+is not specified, setting `version`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.2.0.
 
 ### `onStartUp((mathJax: MathJax2Object | MathJax3Object) => void) | undefined` ###
 
@@ -284,13 +311,25 @@ Sandbox example: https://codesandbox.io/s/better-react-mathjax-custom-example-la
 Read full documentation, file problems or contribute on Github: https://github.com/fast-reflexes/better-react-mathjax
 
 ## Changelog ##
-* v. 1.0.0 - Initial Release
-* v. 1.0.1 - Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
-* v. 1.0.2 - Readded types with custom types for MathJax2 based on `@types/mathjax` and types from `mathjax-full` for MathJax3.
+* v. 1.0.0
+  * Initial Release
+* v. 1.0.1
+  * Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
+* v. 1.0.2
+  * Readded types with custom types for MathJax2 based on `@types/mathjax` and types from `mathjax-full` for MathJax3.
+* v. 1.0.3
+  * Fixed missing license. 
+  * Corrected function signature on `MathJax` component.
+  * Updated default MathJax 3 version provided by CDN to using v. 3.2.0. 
+  * Updated MathJax 3 types used to v. 3.2.0. 
+  * Added content to API documentation on property `src`. 
+  * Added installation instructions.
+  * Added information about AsciiMath display mode.
+  * Corrected typo in API documentation on `version` property.
 
 ## License
 
 This project is licensed under the terms of the
-[MIT license](/LICENSE).
+[MIT license](https://github.com/fast-reflexes/better-react-mathjax/blob/master/LICENSE).
 
 <!-- prettier-ignore-end -->

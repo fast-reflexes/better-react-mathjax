@@ -64,8 +64,11 @@ export type MathJaxContextProps = (
 ) &
     MathJaxContextStaticProps
 
+/* below is not the same URL as presented on https://www.mathjax.org/#gettingstarted because that config is not
+even listed in the docs. The below config is the same config as the default CDN sends for the non-existing TeX-AMS-MML_CHTML
+parameter */
 const DEFAULT_V2_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"
-const DEFAULT_V3_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.min.js"
+const DEFAULT_V3_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
 let v2Promise: Promise<MathJax2Object>
 let v3Promise: Promise<MathJax3Object>
 
