@@ -37,6 +37,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     const usedHideUntilTypeset = hideUntilTypeset === undefined ? mjPromise?.hideUntilTypeset : hideUntilTypeset
     const usedRenderMode = renderMode === undefined ? mjPromise?.renderMode : renderMode
     const usedConversionOptions = typesettingOptions === undefined ? mjPromise?.typesettingOptions : typesettingOptions
+    const usedDynamic = dynamic === false ? false : (dynamic || process.env.NODE_ENV !== "production")
 
     // whether initial typesetting of this element has been done or not
     const initLoad = useRef(false)
@@ -57,8 +58,8 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
 
     // callback for when typesetting is done
     const onTypesetDone = () => {
-        if (usedHideUntilTypeset === "every" && dynamic && usedRenderMode === "post" && ref.current !== null) {
-            ref.current.style.visibility = "visible"
+        if (usedHideUntilTypeset === "every" && usedDynamic && usedRenderMode === "post" && ref.current !== null) {
+            ref.current.style.visibility = rest.style?.visibility ?? "visible"
         }
         checkInitLoad()
         if (onTypeset) onTypeset()
@@ -72,7 +73,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     if (
         !typesetting.current &&
         ref.current !== null &&
-        dynamic &&
+        usedDynamic &&
         usedHideUntilTypeset === "every" &&
         usedRenderMode === "post"
     ) {
@@ -91,7 +92,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
      */
     const effectToUse = typeof window !== "undefined" ? useLayoutEffect : useEffect
     effectToUse(() => {
-        if (dynamic || !initLoad.current) {
+        if (usedDynamic || !initLoad.current) {
             if (ref.current !== null) {
                 if (mjPromise) {
                     if (usedRenderMode === "pre") {
@@ -194,7 +195,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
             style={{
                 display: inline ? "inline" : "block",
                 ...rest.style,
-                visibility: usedHideUntilTypeset ? "hidden" : undefined
+                visibility: usedHideUntilTypeset ? "hidden" : rest.style?.visibility
             }}
             ref={ref}
         >

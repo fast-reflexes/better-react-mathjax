@@ -1,13 +1,15 @@
 {
   "name": "better-react-mathjax",
-  "version": "1.0.3",
+  "version": "2.0.0-alpha",
   "description": "Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as well as dynamic updates. Simple to use but with many configuration options.",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "types": "cjs/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build-esm": "tsc --module es6 --outDir ./build/esm --declaration false",
+    "build-tsc": "tsc --outDir ./build/cjs",
+    "build": "npm run build-esm && npm run build-tsc && cp ./src/MathJax2.d.ts ./build/cjs",
     "test": "jest --config jestconfig.json",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "lint": "tslint -p tsconfig.json",
     "prebuild": "rm -rf ./build",
     "minify-with-source-maps": "find ./build -iname \"*.js\" -execdir uglifyjs --source-map \"includeSources,content='{}.map',url='{}.map'\" --compress --mangle -o {} -- {} \\;",
@@ -43,18 +45,16 @@
     "mathjax-full": "^3.2.0"
   },
   "devDependencies": {
-    "uglify-js": "^3.13.3",
-    "@types/react": "^17.0.1",
-    "typescript": "^4.1.4",
+    "uglify-js": "^3.15.2",
+    "@types/react": "^17.0.39",
+    "typescript": "^4.6.2",
     "tslint": "^6.1.3",
-    "tslint-config-prettier": "^1.18.0",
-    "prettier": "^2.2.1",
-    "jest": "^26.6.3",
-    "ts-jest": "^26.5.1",
-    "@types/jest": "^26.0.20",
-    "@testing-library/react": "^11.2.5",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "json": "^10.0.0"
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.3",
+    "@types/jest": "^27.4.1",
+    "@testing-library/react": "^12.1.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "json": "^11.0.0"
   }
 }

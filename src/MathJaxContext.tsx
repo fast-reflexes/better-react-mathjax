@@ -1,10 +1,8 @@
 import React, { createContext, FC, useContext, useRef } from "react"
 import type { MathJax2Config, MathJax2Object } from "./MathJax2"
-import type {
-    MathJaxObject as MathJax3Object,
-    MathJaxConfig as MathJax3Config
-} from "mathjax-full/js/components/startup"
+import type { MathJaxConfig as MathJax3Config, MathJaxObject as MathJax3Object } from "mathjax-full/js/components/startup"
 import type { OptionList } from "mathjax-full/js/util/Options"
+
 export type { MathJax3Object, MathJax3Config, OptionList }
 
 export type TypesettingFunction =
@@ -84,10 +82,20 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     hideUntilTypeset,
     children
 }) => {
+    console.log("using ")
     const previousContext = useContext(MathJaxBaseContext)
     if (previousContext?.version !== undefined && previousContext?.version !== version)
         throw Error(
-            "Cannot nest MathJaxContexts with different versions. MathJaxContexts should not be nested at all but if they are, they inherit several properties. If you need different versions, then use multiple, non-nested, MathJaxContexts in your app."
+            "Cannot nest MathJaxContexts with different versions. MathJaxContexts should not be nested at all but if " +
+            "they are, they cannot have different versions. Stick with one version of MathJax in your app and avoid " +
+            "using more than one MathJaxContext."
+        )
+    if((version === 2 && v3Promise !== undefined ) || (version === 3 && v2Promise !== undefined))
+        throw Error(
+            "Cannot use MathJax versions 2 and 3 simultaneously in the same app due to how MathJax is set up in the " +
+            "browser; either you have multiple MathJaxContexts with different versions or you have mounted and " +
+            "unmounted MathJaxContexts with different versions. Please stick with one version of MathJax in your app. " +
+            "File an issue in the project Github page if you need this feature."
         )
     const mjContext = useRef(previousContext)
     const initVersion = useRef<2 | 3 | null>(previousContext?.version || null)
@@ -103,7 +111,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
         if (config) (window as any).MathJax = config
         const script = document.createElement("script")
         script.type = "text/javascript"
-        script.src = src || (version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC)
+        script.src = usedSrc
         script.async = false
 
         script.addEventListener("load", () => {
