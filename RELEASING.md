@@ -1,7 +1,4 @@
 
-
-<!-- prettier-ignore-start -->
-
 ## Create a branch with the exact same name as the version you're releasing and set it to follow the origin ##
 
 `git checkout -b <VERSION>`
@@ -28,8 +25,6 @@
 ## To remove an existing release
 
 `npm unpublish <PACKAGE>@<VERSION>`
-
-<!-- prettier-ignore-end -->
 
 ## Useful links ##
 

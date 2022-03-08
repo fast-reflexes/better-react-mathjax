@@ -1,12 +1,14 @@
 import React, { createContext, FC, useContext, useRef } from "react"
 import type { MathJax2Config, MathJax2Object } from "./MathJax2"
-import type { MathJaxConfig as MathJax3Config, MathJaxObject as MathJax3Object } from "mathjax-full/js/components/startup"
+import type {
+    MathJaxConfig as MathJax3Config,
+    MathJaxObject as MathJax3Object
+} from "mathjax-full/js/components/startup"
 import type { OptionList } from "mathjax-full/js/util/Options"
 
 export type { MathJax3Object, MathJax3Config, OptionList }
 
-export type TypesettingFunction =
-    | "tex2chtml"
+export type TypesettingFunction = "tex2chtml"
     | "tex2chtmlPromise"
     | "tex2svg"
     | "tex2svgPromise"
@@ -34,11 +36,11 @@ export interface MathJaxOverrideableProps {
     renderMode?: "pre" | "post"
 }
 
-export type MathJaxSubscriberProps = (
-    | { version: 2; promise: Promise<MathJax2Object> }
-    | { version: 3; promise: Promise<MathJax3Object> }
-) &
-    MathJaxOverrideableProps
+export type MathJaxSubscriberProps = ({
+    version: 2; promise: Promise<MathJax2Object>
+} | {
+    version: 3; promise: Promise<MathJax3Object>
+}) & MathJaxOverrideableProps
 
 export const MathJaxBaseContext = createContext<MathJaxSubscriberProps | undefined>(undefined)
 
@@ -48,19 +50,15 @@ interface MathJaxContextStaticProps extends MathJaxOverrideableProps {
     onError?: (error: any) => void
 }
 
-export type MathJaxContextProps = (
-    | {
-          config?: MathJax2Config
-          version: 2
-          onStartup?: (mathJax: MathJax2Object) => void
-      }
-    | {
-          config?: MathJax3Config
-          version?: 3
-          onStartup?: (mathJax: MathJax3Object) => void
-      }
-) &
-    MathJaxContextStaticProps
+export type MathJaxContextProps = ({
+    config?: MathJax2Config
+    version: 2
+    onStartup?: (mathJax: MathJax2Object) => void
+} | {
+    config?: MathJax3Config
+    version?: 3
+    onStartup?: (mathJax: MathJax3Object) => void
+}) & MathJaxContextStaticProps
 
 /* below is not the same URL as presented on https://www.mathjax.org/#gettingstarted because that config is not
 even listed in the docs. The below config is the same config as the default CDN sends for the non-existing TeX-AMS-MML_CHTML
@@ -84,13 +82,13 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
 }) => {
     console.log("using ")
     const previousContext = useContext(MathJaxBaseContext)
-    if (previousContext?.version !== undefined && previousContext?.version !== version)
+    if(previousContext?.version !== undefined && previousContext?.version !== version)
         throw Error(
             "Cannot nest MathJaxContexts with different versions. MathJaxContexts should not be nested at all but if " +
             "they are, they cannot have different versions. Stick with one version of MathJax in your app and avoid " +
             "using more than one MathJaxContext."
         )
-    if((version === 2 && v3Promise !== undefined ) || (version === 3 && v2Promise !== undefined))
+    if((version === 2 && v3Promise !== undefined) || (version === 3 && v2Promise !== undefined))
         throw Error(
             "Cannot use MathJax versions 2 and 3 simultaneously in the same app due to how MathJax is set up in the " +
             "browser; either you have multiple MathJaxContexts with different versions or you have mounted and " +
@@ -99,8 +97,8 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
         )
     const mjContext = useRef(previousContext)
     const initVersion = useRef<2 | 3 | null>(previousContext?.version || null)
-    if (initVersion.current === null) initVersion.current = version
-    else if (initVersion.current !== version)
+    if(initVersion.current === null) initVersion.current = version
+    else if(initVersion.current !== version)
         throw Error(
             "Cannot change version of MathJax in a MathJaxContext after component has mounted. Either reload the page with a new setting when this should happen or use multiple, non-nested, MathJaxContexts in your app."
         )
@@ -108,7 +106,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     const usedSrc = src || (version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC)
 
     function scriptInjector<T>(res: (mathJax: T) => void, rej: (error: any) => void) {
-        if (config) (window as any).MathJax = config
+        if(config) (window as any).MathJax = config
         const script = document.createElement("script")
         script.type = "text/javascript"
         script.src = usedSrc
@@ -116,27 +114,27 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
 
         script.addEventListener("load", () => {
             const mathJax = (window as any).MathJax
-            if (onStartup) onStartup(mathJax)
+            if(onStartup) onStartup(mathJax)
             res(mathJax)
-            if (onLoad) onLoad()
+            if(onLoad) onLoad()
         })
         script.addEventListener("error", (e) => rej(e))
 
         document.getElementsByTagName("head")[0].appendChild(script)
     }
 
-    if (mjContext.current === undefined) {
+    if(mjContext.current === undefined) {
         const baseContext = {
             typesettingOptions,
             renderMode,
             hideUntilTypeset
         }
-        if (version === 2) {
-            if (v2Promise === undefined) {
-                if (typeof window !== "undefined") {
+        if(version === 2) {
+            if(v2Promise === undefined) {
+                if(typeof window !== "undefined") {
                     v2Promise = new Promise<MathJax2Object>(scriptInjector)
                     v2Promise.catch((e) => {
-                        if (onError) onError(e)
+                        if(onError) onError(e)
                         else throw Error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${e}`)
                     })
                 } else {
@@ -146,11 +144,11 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
                 }
             }
         } else {
-            if (v3Promise === undefined) {
-                if (typeof window !== "undefined") {
+            if(v3Promise === undefined) {
+                if(typeof window !== "undefined") {
                     v3Promise = new Promise<MathJax3Object>(scriptInjector)
                     v3Promise.catch((e) => {
-                        if (onError) onError(e)
+                        if(onError) onError(e)
                         else throw Error(`Failed to download MathJax version 3 from '${usedSrc}' due to: ${e}`)
                     })
                 } else {

@@ -1,6 +1,4 @@
 
-<!-- prettier-ignore-start -->
-
 # A simple React component for MathJax #
 
 #### Note: The full documentation is available at https://github.com/fast-reflexes/better-react-mathjax ####
@@ -331,5 +329,3 @@ Read full documentation, file problems or contribute on Github: https://github.c
 
 This project is licensed under the terms of the
 [MIT license](https://github.com/fast-reflexes/better-react-mathjax/blob/master/LICENSE).
-
-<!-- prettier-ignore-end -->

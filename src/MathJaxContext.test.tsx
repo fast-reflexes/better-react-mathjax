@@ -11,7 +11,7 @@ let originalConsoleError: (data: any[]) => void
 
 const Wrapped: FC<{ version: 2 | 3 }> = ({ version }) => {
     const mjPromise = useContext(MathJaxBaseContext)
-    if (mjPromise && mjPromise.version !== version) throw Error("Wrong version")
+    if(mjPromise && mjPromise.version !== version) throw Error("Wrong version")
     return <></>
 }
 
@@ -46,11 +46,11 @@ afterEach(() => {
 it("only fetches MathJax once despite nested contexts", () => {
     new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
-            const {default: MathJaxContext} = require("./MathJaxContext")
-            const {default: MathJax} = require("./MathJax")
+            const { default: MathJaxContext } = require("./MathJaxContext")
+            const { default: MathJax } = require("./MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
-            document.getElementsByTagName = (_tagName: string) => [{appendChild: addFn}] as any
+            document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
             render(
                 <MathJaxContext version={3}>
                     <MathJaxContext version={3}>
@@ -77,11 +77,11 @@ it("only fetches MathJax once despite nested contexts", () => {
 it("only fetches MathJax once despite mounting and unmounting several times", () => {
     return new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
-            const {default: MathJaxContext} = require("./MathJaxContext")
-            const {default: MathJax} = require("./MathJax")
+            const { default: MathJaxContext } = require("./MathJaxContext")
+            const { default: MathJax } = require("./MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
-            document.getElementsByTagName = (_tagName: string) => [{appendChild: addFn}] as any
+            document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
             const renderedFirst = render(
                 <MathJaxContext version={3}>
                     <MathJax>{`\\$${math}$`}</MathJax>
@@ -110,11 +110,11 @@ it("only fetches MathJax once despite mounting and unmounting several times", ()
 it("mounting with one version, unmounting and then mounting with a different version throws", () => {
     return new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
-            const {default: MathJaxContext} = require("./MathJaxContext")
-            const {default: MathJax} = require("./MathJax")
+            const { default: MathJaxContext } = require("./MathJaxContext")
+            const { default: MathJax } = require("./MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
-            document.getElementsByTagName = (_tagName: string) => [{appendChild: addFn}] as any
+            document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
             const renderedFirst = render(
                 <MathJaxContext version={3}>
                     <MathJax>{`\\$${math}$`}</MathJax>
@@ -147,7 +147,7 @@ it("first context determines version if contexts are nested", async () => {
         render(
             <MathJaxContext version={3}>
                 <MathJaxContext version={2}>
-                    <MathJaxContext version={2}/>
+                    <MathJaxContext version={2} />
                 </MathJaxContext>
             </MathJaxContext>
         )

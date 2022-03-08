@@ -47,22 +47,22 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
 
     // handler for initial loading
     const checkInitLoad = () => {
-        if (!initLoad.current) {
-            if (usedHideUntilTypeset === "first" && ref.current !== null) {
+        if(!initLoad.current) {
+            if(usedHideUntilTypeset === "first" && ref.current !== null) {
                 ref.current.style.visibility = "visible"
             }
-            if (onInitTypeset) onInitTypeset()
+            if(onInitTypeset) onInitTypeset()
             initLoad.current = true
         }
     }
 
     // callback for when typesetting is done
     const onTypesetDone = () => {
-        if (usedHideUntilTypeset === "every" && usedDynamic && usedRenderMode === "post" && ref.current !== null) {
+        if(usedHideUntilTypeset === "every" && usedDynamic && usedRenderMode === "post" && ref.current !== null) {
             ref.current.style.visibility = rest.style?.visibility ?? "visible"
         }
         checkInitLoad()
-        if (onTypeset) onTypeset()
+        if(onTypeset) onTypeset()
         typesetting.current = false
     }
 
@@ -70,7 +70,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     const validText = (inputText?: string) => typeof inputText === "string" && inputText.length > 0
 
     // guard which resets the visibility to hidden when hiding the content between every typesetting
-    if (
+    if(
         !typesetting.current &&
         ref.current !== null &&
         usedDynamic &&
@@ -92,38 +92,38 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
      */
     const effectToUse = typeof window !== "undefined" ? useLayoutEffect : useEffect
     effectToUse(() => {
-        if (usedDynamic || !initLoad.current) {
-            if (ref.current !== null) {
-                if (mjPromise) {
-                    if (usedRenderMode === "pre") {
-                        if (!validText(text))
+        if(usedDynamic || !initLoad.current) {
+            if(ref.current !== null) {
+                if(mjPromise) {
+                    if(usedRenderMode === "pre") {
+                        if(!validText(text))
                             throw Error(
                                 `Render mode 'pre' requires text prop to be set and non-empty, which was currently "${text}"`
                             )
-                        if (!typesettingOptions || !typesettingOptions.fn)
+                        if(!typesettingOptions || !typesettingOptions.fn)
                             throw Error(
                                 "Render mode 'pre' requires 'typesettingOptions' prop with 'fn' property to be set on MathJax element or in the MathJaxContext"
                             )
-                        if (mjPromise.version === 2)
+                        if(mjPromise.version === 2)
                             throw Error(
                                 "Render mode 'pre' only available with MathJax 3, and version 2 is currently in use"
                             )
                     }
-                    if (usedRenderMode === "post" || text !== lastChildren.current) {
-                        if (!typesetting.current) {
+                    if(usedRenderMode === "post" || text !== lastChildren.current) {
+                        if(!typesetting.current) {
                             typesetting.current = true
-                            if (mjPromise.version === 3) {
+                            if(mjPromise.version === 3) {
                                 mjPromise.promise
                                     .then((mathJax) => {
-                                        if (usedRenderMode === "pre") {
+                                        if(usedRenderMode === "pre") {
                                             const updateFn = (output: HTMLElement) => {
                                                 lastChildren.current = text!
                                                 mathJax.startup.document.clear()
                                                 mathJax.startup.document.updateDocument()
-                                                if (ref.current !== null) ref.current.innerHTML = output.outerHTML
+                                                if(ref.current !== null) ref.current.innerHTML = output.outerHTML
                                                 onTypesetDone()
                                             }
-                                            if (typesettingOptions!.fn.endsWith("Promise"))
+                                            if(typesettingOptions!.fn.endsWith("Promise"))
                                                 mathJax.startup.promise
                                                     .then(() =>
                                                         mathJax[usedConversionOptions!.fn](text, {

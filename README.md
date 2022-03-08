@@ -1,5 +1,4 @@
 
-<!-- prettier-ignore-start -->
 # A simple React component for MathJax #
 
 Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in
@@ -12,9 +11,11 @@ well as dynamic updates. Simple to use but with many configuration options.
 * Supports local copy of MathJax or copy supplied via CDN.
 * Small imprint on production bundle with dependencies only for types (image shows a size of 7.32 KB and 2.37 KB gzipped in a NextJS project analyzed with their bundle analyzer).
 
+<br/>
 <p align="center" width="100%">
   <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/2.0.0-next/images/bundle_imprint.png" width="75%">
 </p>
+<br/>
 
 * Built in a modular fashion on top of MathJax with direct access to MathJax via the MathJax configuration.
 * Use MathJax functionality either through the `MathJax` component or by yourself through the `MathJaxBaseContext`.
@@ -698,5 +699,3 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
 
 This project is licensed under the terms of the
 [MIT license](https://github.com/fast-reflexes/better-react-mathjax/blob/master/LICENSE).
-
-<!-- prettier-ignore-end -->
