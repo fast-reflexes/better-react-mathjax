@@ -9,11 +9,11 @@ well as dynamic updates. Simple to use but with many configuration options.
 
 * Supports both MathJax version 2 and 3.
 * Supports local copy of MathJax or copy supplied via CDN.
-* Small imprint on production bundle with dependencies only for types (image shows a size of 7.32 KB and 2.37 KB gzipped in a NextJS project analyzed with their bundle analyzer).
+* Small imprint on production bundle with dependencies only for types (image shows a size of 6.18 KB and 2.3 KB gzipped in a NextJS project analyzed with their bundle analyzer).
 
 <br/>
 <p align="center" width="100%">
-  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/2.0.0-next/images/bundle_imprint.png" width="75%">
+  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/images/bundle_imprint.png" width="75%">
 </p>
 <br/>
 
@@ -23,65 +23,67 @@ well as dynamic updates. Simple to use but with many configuration options.
   first and add it to the DOM afterwards (v. 3 only).
 * Hide your components before they are typeset to avoid flashes of non-typeset content and make the use of MathJax a
   pleasant experience.
+* Complete - no other dependencies related to MathJax are needed to enable the use of MathJax in your React app.
 
 ## Basic workflow
 
 ### Installation
 
 Add this library manually as a dependency to `package.json`...
-
-    dependencies: {
-        "better-react-mathjax": "^2.0.0"
-    }
-
+```
+dependencies: {
+    "better-react-mathjax": "^2.0.0"
+}
+```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
 chosen to use:
+```shell
+# npm
+npm install better-react-mathjax
 
-    # npm
-    npm install better-react-mathjax
-
-    # yarn
-    yarn add better-react-mathjax
+# yarn
+yarn add better-react-mathjax
+```
 
 ### Usage
 
 `better-react-mathjax` introduces two React components - `MathJaxContext` and `MathJax`. For MathJax to work with React:
 
 1. Wrap your entire app in a `MathJaxContext` component (***only use one in your app***).
+```js
+const App = () => {
 
-       const App = () => {
-
-           return (
-               <MathJaxContext>
-                   <!-- APP CONTENT -->
-               </MathJaxContext>
-           )
-       }
-
+   return (
+       <MathJaxContext>
+           <!-- APP CONTENT -->
+       </MathJaxContext>
+   )
+}
+```
 2. Then simply use `MathJax` components at different levels for the actual math. 
+```js
+const Component = () => {
 
-       const Component = () => {
-
-           return (
+   return (
+       <div>
+           <MathJax>{ /* math content */ }</MathJax>
+           <h3>This is a header</h3>
+           <MathJax>
                <div>
-                   <MathJax>{ /* math content */ }</MathJax>
-                   <h3>This is a header</h3>
-                   <MathJax>
-                       <div>
-                           <h4>This is a subheader</h4>
-                           <span>{ /* math content */ }</span>
-                           <h4>This is a second subheader</h4>
-                           <span>{ /* math content */ }</span>
-                           ...
-                       </div>
-                   </MathJax>
-                   <p>
-                       This is text which involves math <MathJax>{ /* math content */ }</MathJax> inside the paragraph.
-                   </p>
+                   <h4>This is a subheader</h4>
+                   <span>{ /* math content */ }</span>
+                   <h4>This is a second subheader</h4>
+                   <span>{ /* math content */ }</span>
+                   ...
                </div>
-           )
-       }
-
+           </MathJax>
+           <p>
+               This is text which involves math <MathJax>{ /* math content */ }</MathJax> inside the paragraph.
+           </p>
+       </div>
+   )
+}
+```
 In the typical case, the content of a `MathJax` component can be everything from a subtree of the DOM to a portion of 
 text in a long paragraph. If you have a lot of math, try to wrap as much as possible in the same `MathJax` component.
 The `MathJaxContext` is responsible for downloading MathJax and providing it to all wrapped `MathJax` components that 
@@ -98,7 +100,7 @@ font where the math is allowed to take up more space
 
 <br/>
 <p align="center" width="100%">
-  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/2.0.0-next/images/display.png" width="100%">
+  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/images/display.png" width="100%">
 </p>
 <br/>
 
@@ -107,14 +109,14 @@ style
 
 <br/>
 <p align="center" width="100%">
-  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/2.0.0-next/images/inline.png" width="25%">
+  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/images/inline.png" width="25%">
 </p>
 <br/>
 
 These styles can be set on individual instances of math in Latex and MathML by the use of different pre-configured 
 delimiters, but in AsciiMath, all the math in an app has to use the same style which is set in the configuration 
 (display math by default). On top of this, the `MathJax` component has a property `inline` which controls whether the 
-wrapper element added by the `MathJax` component uses an `inline` or `block` display. Since a `MathJax` component can 
+wrapper element added by the `MathJax` component uses `inline` or `block` display. Since a `MathJax` component can 
 contain a lot of other things than just a single portion of math, it is important to understand that the `inline` prop 
 is NOT synonymous with inline math since the former controls an element which may contain a lot of things whereas the 
 latter always controls the typesetting of a specific string of math. Therefore, always use configuration and delimiters 
@@ -123,7 +125,7 @@ and control the appearance of the `MathJax` component itself. Study the elaborat
 insights.
 
 Exceptions to the above rule is when the `MathJax` component prop `renderMode` has the value `pre` in which case one 
-`MathJax` component becomes synonymous with a single piece of math (given as the `text` prop) in which case the `inline` 
+`MathJax` component becomes synonymous with a single piece of math (given as the `text` prop) whereby the `inline` 
 property controls the math mode of the output. The impact of the `inline` prop on the wrapper element will be ignored 
 if a style that overrides `display` is added to a `MathJax` component.
 
@@ -135,16 +137,18 @@ and no extra options. Note that sandboxes tend to be slower than use in a real e
 ### Example 1: Basic example with Latex ####
 
 Standard setup using MathJax version 3 with default MathJax config and no extra options.
+```js
+export default function App() {
 
-    export default function App() {
+    return (
+        <MathJaxContext>
+              <h2>Basic MathJax example with Latex</h2>
+              <MathJax>{"\\(\\frac{10}{4x} \\approx 2^{12}\\)"}</MathJax>
+        </MathJaxContext>
+    );
     
-        return (
-            <MathJaxContext>
-                  <h2>Basic MathJax example with Latex</h2>
-                  <MathJax>{"\\(\\frac{10}{4x} \\approx 2^{12}\\)"}</MathJax>
-            </MathJaxContext>
-        );
-
+}
+```
 Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
 
 ### Example 2: Basic example with AsciiMath ####
@@ -152,19 +156,20 @@ Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
 Using AsciiMath with the default version 3 import requires adding an extra loader (see the [MathJax documentation](http://docs.mathjax.org/en/latest/input/asciimath.html) 
 for further information). AsciiMath uses the same display mode on the entire page, which is display math by default. 
 It can be changed to inline math by adding `asciimath: { displaystyle: false }` to the input config.
-
-    export default function App() {
-        const config = {
-            loader: { load: ["input/asciimath"] }
-        };
-        
-        return (
-            <MathJaxContext config={config}>
-                <h2>Basic MathJax example with AsciiMath</h2>
-                <MathJax>{"`frac(10)(4x) approx 2^(12)`"}</MathJax>
-            </MathJaxContext>
-        );
-    }
+```js
+export default function App() {
+    const config = {
+        loader: { load: ["input/asciimath"] }
+    };
+    
+    return (
+        <MathJaxContext config={config}>
+            <h2>Basic MathJax example with AsciiMath</h2>
+            <MathJax>{"`frac(10)(4x) approx 2^(12)`"}</MathJax>
+        </MathJaxContext>
+    );
+}
+```
 
 Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-asciimath-ddy4r
 
@@ -172,34 +177,34 @@ Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-asciimath-d
 
 MathML is supported natively by a few but far from all browsers. It might be problematic to use with Typescript (no types for
 MathML included in this package).
-
-    export default function App() {
-        return (
-            <MathJaxContext>
-                <h2>Basic MathJax example with MathML</h2>
-                <MathJax>
-                    <math>
+```js
+export default function App() {
+    return (
+        <MathJaxContext>
+            <h2>Basic MathJax example with MathML</h2>
+            <MathJax>
+                <math>
+                    <mrow>
                         <mrow>
-                            <mrow>
-                                <mfrac>
-                                    <mn>10</mn>
-                                    <mi>4x</mi>
-                                </mfrac>
-                            </mrow>
-                            <mo>&asymp;</mo>
-                            <mrow>
-                                <msup>
-                                    <mn>2</mn>
-                                    <mn>12</mn>
-                                </msup>
-                            </mrow>
+                            <mfrac>
+                                <mn>10</mn>
+                                <mi>4x</mi>
+                            </mfrac>
                         </mrow>
-                    </math>
-                </MathJax>
-            </MathJaxContext>
-        );
-    }
-
+                        <mo>&asymp;</mo>
+                        <mrow>
+                            <msup>
+                                <mn>2</mn>
+                                <mn>12</mn>
+                            </msup>
+                        </mrow>
+                    </mrow>
+                </math>
+            </MathJax>
+        </MathJaxContext>
+    );
+}
+```
 Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-mathml-20vv6
 
 ### Example 4: Elaborate example with Latex ###
@@ -234,6 +239,13 @@ because the MathJax library needs to be downloaded but also because MathJax *sho
 the UI if it has a lot to typeset, the typesetting taking place before the browser paints the updates cannot be guaranteed.
 In most situations however, it should.
 
+The MathJax library by default typesets the entire page when it has been downloaded, unless instructed explicitly not to 
+do so. However, given React and its dynamic nature, with existing content being rerendered and new content being added, 
+math likely needs to be typeset more often than that; at a minimum when a component is mounted and sometimes also as a 
+result of dynamic updates of an existing component. Since this does't coincide with initial page load, math rerendered 
+or added after this moment would not get typeset. This is where the `MathJax` component plays an important part by 
+explicitly typesetting its content whenever a change might have occurred.
+
 # TypeScript types #
 This project has both its own types and MathJax types included in the package. For MathJax version 2, a refactored and updated
 version of [`@types/mathjax`](https://www.npmjs.com/package/@types/mathjax) is used whereas for MathJax version 3, this package
@@ -241,7 +253,8 @@ depends on the types from [`mathjax-full`](https://www.npmjs.com/package/mathjax
 these are used in this project so after building production code and tree-shaking, these dependencies will not affect the
 size of the final bundle. If you would prefer a separate `@types` package for this project, please make a suggestion about this in an issue on the
 project Github page. Note also that issues with the MathJax 2 types can be addressed and updated within this project whereas
-the types from `mathjax-full` are used unaltered.
+the types from `mathjax-full` are used unaltered. You can import the configurations and types of the MathJax objects from 
+versions 2 and 3 as `MathJax2Config`, `MathJax2Object`, `MathJax3Config` and `MathJax3Object`.
 
 The MathJax types are not always helpful and the user should pay attention even if the compiler does not
 complain. First of all, several of the types from `mathjax-full` contain catch-all properties of the form
@@ -455,12 +468,12 @@ as this functionality is used by the `MathJax` component itself.***
 ## Custom use of MathJax directly ##
 You can use the underlying MathJax object directly (not through the `MathJax` component) if you want as well. The
 following snippet illustrates how to use `MathJaxBaseContext` to accomplish this.
-
-    // undefined or MathJaxSubscriberProps with properties version, hideUntilTypeset, renderMode, typesettingOptions and promise
-    const mjContext = useContext(MathJaxBaseContext)
-    if(mjContext)
-      mjContext.promise.then(mathJaxObject => { // do work with the MathJax object here })
-
+```js
+// undefined or MathJaxSubscriberProps with properties version, hideUntilTypeset, renderMode, typesettingOptions and promise
+const mjContext = useContext(MathJaxBaseContext)
+if(mjContext)
+  mjContext.promise.then(mathJaxObject => { /* do work with the MathJax object here */ })
+```
 This requires only a `MathJaxContext`, supplying the `MathJaxBaseContext`, to be in the hierarchy. The object passed from the `promise` property is the MathJax
 object for the version in use.
 
@@ -567,14 +580,14 @@ to it; manual fine-tuning might be necessary even though this is not always the 
   
   **A:** The `MathJaxContext` is stateful and will only download MathJax once, no matter if you use multiple instances
   or unmount and then remount it. Nonetheless, it is more clear from a coding perspective to use a single `MathJaxContext` 
-  in your app which is not unmounted during the lifetime of a visit to the application. Therefore, it is recommended to
-  wrap your entire app in a `MathJaxContext` and then not use it anywhere else.
+  in your app which is not unmounted during the lifetime of your app. Therefore, it is recommended to wrap your entire 
+  app in a `MathJaxContext` and then not use the `MathJaxContext` component anywhere else.
 * **Q:** I have a lot of math and it takes forever for the math to be typeset, what can I do?
 
   **A:** This library queues every `MathJax` component as a sequential typesetting update in MathJax. MathJax can typeset the 
   entire page in no time, but when some of the overhead of typesetting is multiplied many times over, MathJax becomes 
   slower. To solve this, consider using fewer `MathJax` components and replace many uses of `MathJax` component with a
-  single `MathJax` component wrapping a larger portion of a DOM sub-tree. Then the overhead from typesetting many times  
+  single `MathJax` component wrapping a larger portion of a DOM sub-tree. Then the overhead from typesetting many times 
   over will be less and the typesetting will be faster and smoother. The division of math into different `MathJax` 
   components is ultimately a function of app structure, what parts are updated when, where React state lies and whether
   math content is dynamic or not, but with a lot of math on a page, it is often the case that we may group expressions. 
@@ -588,7 +601,7 @@ to it; manual fine-tuning might be necessary even though this is not always the 
   you app, even if subsequent updates of parts of the page done by React will not insert new math, the old math might
   be rewritten to the page in which case it would need to be typeset again. You can always experiment with only using
   a `MathJaxContext` and rely on initial typesetting to do all the work you need but in general, it is recommended and
-  more failsafe to rely on `MathJax` components. 
+  more failsafe to rely on `MathJax` components which will explicitly typeset anew upon rendering.
 
 ## Last but not least ... ##
 MathJax was not written for use in React and React was not written with MathJax in mind so we have to massage them into
@@ -623,30 +636,14 @@ Tested with:
   
 
 ## Wish list ##
-(Empty at the moment... Yay!)
+* Investigate whether a custom adaptor (https://github.com/mathjax/MathJax-src/tree/master/ts/adaptors) that can write 
+  to React's virtual DOM is a good idea. MathJax's litedom adaptor is probably fairly close already.
+* Investigate SSR rendering with `mathjax-full`
+* Test and upgrade list of tested browsers
 
-Docs
-* Clarify how to use the MathJaxContext (should exist ONE and it should not rerender)
-* clarify how to deal with very many mathjax components (all in one instead of separate)
-  https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing
-* Fixa exemplet med asciimath där fel delimiters används ( i början av exemplet) och där det funkar ändå...?
-* What was the problem when pushing a new version? There was something with Git or was it resolved?
-* Ta bort prettier
-* Kolla om man kan ladda MathJax2 och 3 parallellt om inte, ta bort informationen i felmeddelande om att det gå samt skriv i docs
-* Skriva om varför egentligen `MathJax`-komponenten behövs
-Future
-* Make package esm modules and release both cjs and mjs, not really needed since tree-shaking is not needed here
-* Investigate custom adaptor:
-  On the one hand, I suspect creating a custom MathJax adaptor (cf. https://github.com/mathjax/MathJax-src/tree/master/ts/adaptors) 
-  that can write to react's virtual dom might help in many situations. (MathJax's litedom adaptor is probably fairly close already.)
-* Perhaps in the future change so that a hook is used instead of MathJaxContext, this is problematic because 
-  then there is no obvious place where we should add the config.
-
-
-* fix bad example in ascii elaborate example (includes wrong delimiters but works anyways)
 ## MathJax documentation ##
-* Version 3: https://docs.mathjax.org/en/latest/
 
+* Version 3: https://docs.mathjax.org/en/latest/
 * Version 2: https://docs.mathjax.org/en/v2.7-latest/
 
 ## Github ##
@@ -670,21 +667,26 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
   * Added information about AsciiMath display mode.
   * Corrected typo in API documentation on `version` property.
 * v. 2.0.0
-  * **Breaking change**: can no longer use  MathJax versions 2 and 3 side by side in different (non-nested) 
-    `MathJaxContext`s. It's unclear whether this worked as intended before as well and even though this change is
-    breaking, it should not affect many users, if any. Docs have been updated and `MathJaxContext` now throws errors
+  * **Breaking change**: can no longer use  MathJax versions 2 and 3 side by side in different
+    `MathJaxContext`s. This did typically not work as intended before either and even though this change is
+    breaking, it should not affect many users, if any. Docs have been updated and `MathJaxContext` now throws an error
     if it has been initialized with one version and another `MathJaxContext` (later or simultaneous) has a different
     value on the `version` prop.
   * Added support for hot reload by always setting `dynamic` to `true` when `dynamic` is not explicitly set to `false`
-    and process.env.NODE_ENV` is not `production`.
+    and `process.env.NODE_ENV` is not `production`.
   * Honoring possible style settings of `style.visibility` in `MathJax` component when visibility is not controlled
     by the component itself.
-  * Corrected sandbox example with AsciiMath where Latex default delimiter was erroneously used.
+  * Corrected sandbox example with AsciiMath where Latex default delimiter was used instead of AsciiMath delimiter
+    (still worked because Latex is loaded by default as well).
   * Improved documentation with clarifications:
     * The entire app should be wrapped in the only `MathJaxContext` that should exist in a project.
     * How to deal with the situation when you have a lot of math on your page.
     * The features available with the default imports from CDN.
+    * Difference between inline and display math.
   * Added Q & A section to documentation.
+  * Changed all checks for undefined to use `typeof X === "undefined"` instead of `X === undefined`.
+  * Added support for esm modules as well as the previous cjs modules.
+  * Added language tags on code samples
 
 ## Migration guides
 
@@ -692,9 +694,9 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
   * Remove all simultaneous use of MathJax version 2 and 3 in the same app and use only one version of MathJax
     per loaded page. This means that even if you unmount the `MathJaxContext` and then remount it, it must have the
     same version both times. If you load a new page context (e.g. not just change page in a SPA (single-page application))
-    the version can be determined anew. If you need to use both versions side by side, file an issue on the project  
+    the version can be determined anew. If you need to use both versions side by side, file an issue on the project 
     Github page.
-* 
+
 ## License
 
 This project is licensed under the terms of the

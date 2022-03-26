@@ -7,23 +7,17 @@ Up-to-date component for using MathJax in latest React (using functional compone
 React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as
 well as dynamic updates. Simple to use but with many configuration options.
 
-## Basic workflow ##
-
-`better-react-mathjax` introduces two React components - `MathJaxContext` and `MathJax`. For MathJax to work with React,
-wrap the outermost component containing math (or the entire app) in a `MathJaxContext` component. Then simply use `MathJax` components at
-different levels for the actual math. In the typical case, the content of a `MathJax` component can be everything from a
-subtree of the DOM to a portion of text in a long paragraph. The `MathJaxContext` is responsible for downloading MathJax
-and providing it to all wrapped `MathJax` components that typeset math.
-
-### Features ###
+## Features
 
 * Supports both MathJax version 2 and 3.
 * Supports local copy of MathJax or copy supplied via CDN.
-* Small imprint on production bundle with dependencies only for types (image shows a size of 7.32 KB and 2.37 KB gzipped in a NextJS project analyzed with their bundle analyzer).
+* Small imprint on production bundle with dependencies only for types (image shows a size of 6.18 KB and 2.3 KB gzipped in a NextJS project analyzed with their bundle analyzer).
 
+<br/>
 <p align="center" width="100%">
-  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/bundle_imprint.png" width="75%">
+  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/images/bundle_imprint.png" width="75%">
 </p>
+<br/>
 
 * Built in a modular fashion on top of MathJax with direct access to MathJax via the MathJax configuration.
 * Use MathJax functionality either through the `MathJax` component or by yourself through the `MathJaxBaseContext`.
@@ -31,25 +25,77 @@ and providing it to all wrapped `MathJax` components that typeset math.
   first and add it to the DOM afterwards (v. 3 only).
 * Hide your components before they are typeset to avoid flashes of non-typeset content and make the use of MathJax a
   pleasant experience.
-  
-### Installation ###
+* Complete - no other dependencies related to MathJax are needed to enable the use of MathJax in your React app.
+
+## Basic workflow
+
+### Installation
 
 Add this library manually as a dependency to `package.json`...
-
-    dependencies: {
-        "better-react-mathjax": "^1.0.3"
-    }
-
-... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have 
+```
+dependencies: {
+    "better-react-mathjax": "^2.0.0"
+}
+```
+... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
 chosen to use:
-    
-    # npm
-    npm install better-react-mathjax
+```shell
+# npm
+npm install better-react-mathjax
 
-    # yarn
-    yarn add better-react-mathjax
+# yarn
+yarn add better-react-mathjax
+```
 
-## Examples ##
+### Usage
+
+`better-react-mathjax` introduces two React components - `MathJaxContext` and `MathJax`. For MathJax to work with React:
+
+1. Wrap your entire app in a `MathJaxContext` component (***only use one in your app***).
+```js
+const App = () => {
+
+   return (
+       <MathJaxContext>
+           <!-- APP CONTENT -->
+       </MathJaxContext>
+   )
+}
+```
+2. Then simply use `MathJax` components at different levels for the actual math. 
+```js
+const Component = () => {
+
+   return (
+       <div>
+           <MathJax>{ /* math content */ }</MathJax>
+           <h3>This is a header</h3>
+           <MathJax>
+               <div>
+                   <h4>This is a subheader</h4>
+                   <span>{ /* math content */ }</span>
+                   <h4>This is a second subheader</h4>
+                   <span>{ /* math content */ }</span>
+                   ...
+               </div>
+           </MathJax>
+           <p>
+               This is text which involves math <MathJax>{ /* math content */ }</MathJax> inside the paragraph.
+           </p>
+       </div>
+   )
+}
+```
+In the typical case, the content of a `MathJax` component can be everything from a subtree of the DOM to a portion of 
+text in a long paragraph. If you have a lot of math, try to wrap as much as possible in the same `MathJax` component.
+The `MathJaxContext` is responsible for downloading MathJax and providing it to all wrapped `MathJax` components that 
+typeset math. By default, `MathJaxContext` imports MathJax from a CDN which allows for use of Latex, AsciiMath and MathML 
+with [MathJax version 2](https://docs.mathjax.org/en/v2.7-latest/config-files.html#the-tex-mml-am-chtml-configuration-file) and 
+Latex and MathML with the default [MathJax version 3](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
+HTML output for both. If you need something else or want to host your own copy of MathJax, read more about the `src`
+attribute of the `MathJaxContext` below.
+
+## Examples
 
 The first 3 are basic examples with zero configuration standard setup using MathJax version 3 with default MathJax config
 and no extra options. Note that sandboxes tend to be slower than use in a real environment.
@@ -57,36 +103,39 @@ and no extra options. Note that sandboxes tend to be slower than use in a real e
 ### Example 1: Basic example with Latex ####
 
 Standard setup using MathJax version 3 with default MathJax config and no extra options.
+```js
+export default function App() {
 
-    export default function App() {
+    return (
+        <MathJaxContext>
+              <h2>Basic MathJax example with Latex</h2>
+              <MathJax>{"\\(\\frac{10}{4x} \\approx 2^{12}\\)"}</MathJax>
+        </MathJaxContext>
+    );
     
-        return (
-            <MathJaxContext>
-                  <h2>Basic MathJax example with Latex</h2>
-                  <MathJax>{"\\(\\frac{10}{4x} \\approx 2^{12}\\)"}</MathJax>
-            </MathJaxContext>
-        );
-
+}
+```
 Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
 
 ### Example 2: Basic example with AsciiMath ####
 
-Using AsciiMath requires importing a specific loader (see the [MathJax documentation](http://docs.mathjax.org/en/latest/input/asciimath.html) for further information).
-AsciiMath uses the same display mode on the entire page, which is display math by default. 
+Using AsciiMath with the default version 3 import requires adding an extra loader (see the [MathJax documentation](http://docs.mathjax.org/en/latest/input/asciimath.html) 
+for further information). AsciiMath uses the same display mode on the entire page, which is display math by default. 
 It can be changed to inline math by adding `asciimath: { displaystyle: false }` to the input config.
-
-    export default function App() {
-        const config = {
-            loader: { load: ["input/asciimath"] }
-        };
-        
-        return (
-            <MathJaxContext config={config}>
-                <h2>Basic MathJax example with AsciiMath</h2>
-                <MathJax>{"`frac(10)(4x) approx 2^(12)`"}</MathJax>
-            </MathJaxContext>
-        );
-    }
+```js
+export default function App() {
+    const config = {
+        loader: { load: ["input/asciimath"] }
+    };
+    
+    return (
+        <MathJaxContext config={config}>
+            <h2>Basic MathJax example with AsciiMath</h2>
+            <MathJax>{"`frac(10)(4x) approx 2^(12)`"}</MathJax>
+        </MathJaxContext>
+    );
+}
+```
 
 Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-asciimath-ddy4r
 
@@ -94,34 +143,34 @@ Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-asciimath-d
 
 MathML is supported natively by a few but far from all browsers. It might be problematic to use with Typescript (no types for
 MathML included in this package).
-
-    export default function App() {
-        return (
-            <MathJaxContext>
-                <h2>Basic MathJax example with MathML</h2>
-                <MathJax>
-                    <math>
+```js
+export default function App() {
+    return (
+        <MathJaxContext>
+            <h2>Basic MathJax example with MathML</h2>
+            <MathJax>
+                <math>
+                    <mrow>
                         <mrow>
-                            <mrow>
-                                <mfrac>
-                                    <mn>10</mn>
-                                    <mi>4x</mi>
-                                </mfrac>
-                            </mrow>
-                            <mo>&asymp;</mo>
-                            <mrow>
-                                <msup>
-                                    <mn>2</mn>
-                                    <mn>12</mn>
-                                </msup>
-                            </mrow>
+                            <mfrac>
+                                <mn>10</mn>
+                                <mi>4x</mi>
+                            </mfrac>
                         </mrow>
-                    </math>
-                </MathJax>
-            </MathJaxContext>
-        );
-    }
-
+                        <mo>&asymp;</mo>
+                        <mrow>
+                            <msup>
+                                <mn>2</mn>
+                                <mn>12</mn>
+                            </msup>
+                        </mrow>
+                    </mrow>
+                </math>
+            </MathJax>
+        </MathJaxContext>
+    );
+}
+```
 Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-mathml-20vv6
 
 ### Example 4: Elaborate example with Latex ###
@@ -131,11 +180,18 @@ Sandbox: https://codesandbox.io/s/better-react-mathjax-example-latex-3vsr5
 Sandbox: https://codesandbox.io/s/better-react-mathjax-example-asciimath-p0uf1
 
 ### Example 6: Elaborate example with MathML ###
-Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-mathml-nprxz
 
 Make sure to study the comments in this file as MathML processing is a little bit different from Latex and AsciiMath.
 
+Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-mathml-nprxz
+
 ### Example 7: Elaborate example with optimal settings for dynamic updates with Latex ###
+
+This example shows a configuration that in some particular cases has proven to result in a very smooth experience with
+no flashes of non-typeset content. **It is by no means recommended as a first attempt and can be tried if you 
+experience problems with flashes of non-typeset content, long waiting times or other undesired behaviour**. Especially for
+those using MathJax version 2, some of the configuration options can be used as an inspiration.
+
 Sandbox link: https://codesandbox.io/s/better-react-mathjax-example-latex-optimal-8nn9n
 
 # TypeScript types #
@@ -194,7 +250,6 @@ MathJax configuration object. Make sure it corresponds to the version used. More
 
 The location of MathJax.
 
-
 **Default**: `undefined` (default CDN `https://cdnjs.cloudflare.com` is used)
 
 Local or remote url to fetch MathJax from. More information about hosting your own copy of MathJax can be found
@@ -203,11 +258,14 @@ Local or remote url to fetch MathJax from. More information about hosting your o
 
 A source url may contain both some specific file and some query parameters corresponding to a configuration which, in turn, governs
 which additional assets MathJax fetches. The default sources used when this property is omitted are the same as those 
-listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN). These correspond 
-to some typical and broad use of MathJax. If you have a use case where you, using standalone MathJax, would have to use a different
-source url, then you have to manually supply such a url (local or remote) here. This, in analogy to how you would modify 
-the script import to adjust to your needs in a plain HTML environment with direct use of MathJax. Read more about different
-configurations [here](https://docs.mathjax.org/en/latest/web/components/combined.html) (for MathJax 3) and 
+listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN). This means
+that for version 2, the fetched resource (`MathJax.js?config=TeX-MML-AM_CHTML`) includes support for Latex, MML
+and AsciiMath with HTML output by default, and for version 3, the fetched resource (`tex-mml-chtml.js`) supports
+MML and Latex with HTML output. These correspond to some typical and broad use of MathJax in the browser. If you have a 
+use case where you, using standalone MathJax, would have to use a different source url, then you have to manually supply 
+such a url (local or remote) here. This, in analogy to how you would modify the script import to adjust to your needs in 
+a plain HTML environment with direct use of MathJax. Read more about different configurations 
+[here](https://docs.mathjax.org/en/latest/web/components/combined.html) (for MathJax 3) and 
 [here](https://docs.mathjax.org/en/v2.7-latest/config-files.html#common-configurations) (for MathJax 2).
 
 ### `version: 2 | 3 | undefined` ###
@@ -288,20 +346,20 @@ as this functionality is used by the `MathJax` component itself.***
 ## Custom use of MathJax directly ##
 You can use the underlying MathJax object directly (not through the `MathJax` component) if you want as well. The
 following snippet illustrates how to use `MathJaxBaseContext` to accomplish this.
-
-    // undefined or MathJaxSubscriberProps with properties version, hideUntilTypeset, renderMode, typesettingOptions and promise
-    const mjContext = useContext(MathJaxBaseContext)
-    if(mjContext)
-      mjContext.promise.then(mathJaxObject => { // do work with the MathJax object here })
-
+```js
+// undefined or MathJaxSubscriberProps with properties version, hideUntilTypeset, renderMode, typesettingOptions and promise
+const mjContext = useContext(MathJaxBaseContext)
+if(mjContext)
+  mjContext.promise.then(mathJaxObject => { /* do work with the MathJax object here */ })
+```
 This requires only a `MathJaxContext`, supplying the `MathJaxBaseContext`, to be in the hierarchy. The object passed from the `promise` property is the MathJax
 object for the version in use.
 
 Sandbox example: https://codesandbox.io/s/better-react-mathjax-custom-example-latex-e5kym
 
 ## MathJax documentation ##
-* Version 3: https://docs.mathjax.org/en/latest/
 
+* Version 3: https://docs.mathjax.org/en/latest/
 * Version 2: https://docs.mathjax.org/en/v2.7-latest/
 
 ## Github ##
@@ -324,6 +382,36 @@ Read full documentation, file problems or contribute on Github: https://github.c
   * Added installation instructions.
   * Added information about AsciiMath display mode.
   * Corrected typo in API documentation on `version` property.
+* v. 2.0.0
+  * **Breaking change**: can no longer use  MathJax versions 2 and 3 side by side in different
+    `MathJaxContext`s. This did typically not work as intended before either and even though this change is
+    breaking, it should not affect many users, if any. Docs have been updated and `MathJaxContext` now throws an error
+    if it has been initialized with one version and another `MathJaxContext` (later or simultaneous) has a different
+    value on the `version` prop.
+  * Added support for hot reload by always setting `dynamic` to `true` when `dynamic` is not explicitly set to `false`
+    and `process.env.NODE_ENV` is not `production`.
+  * Honoring possible style settings of `style.visibility` in `MathJax` component when visibility is not controlled
+    by the component itself.
+  * Corrected sandbox example with AsciiMath where Latex default delimiter was used instead of AsciiMath delimiter
+    (still worked because Latex is loaded by default as well).
+  * Improved documentation with clarifications:
+    * The entire app should be wrapped in the only `MathJaxContext` that should exist in a project.
+    * How to deal with the situation when you have a lot of math on your page.
+    * The features available with the default imports from CDN.
+    * Difference between inline and display math.
+  * Added Q & A section to documentation.
+  * Changed all checks for undefined to use `typeof X === "undefined"` instead of `X === undefined`.
+  * Added support for esm modules as well as the previous cjs modules.
+  * Added language tags on code samples
+
+## Migration guides
+
+* v1 to v2: 
+  * Remove all simultaneous use of MathJax version 2 and 3 in the same app and use only one version of MathJax
+    per loaded page. This means that even if you unmount the `MathJaxContext` and then remount it, it must have the
+    same version both times. If you load a new page context (e.g. not just change page in a SPA (single-page application))
+    the version can be determined anew. If you need to use both versions side by side, file an issue on the project 
+    Github page.
 
 ## License
 

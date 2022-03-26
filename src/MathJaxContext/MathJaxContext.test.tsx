@@ -2,7 +2,7 @@
 import React, { FC, ReactElement, useContext } from "react"
 import { render } from "@testing-library/react"
 import MathJaxContext, { MathJaxBaseContext } from "./MathJaxContext"
-import MathJax from "./MathJax"
+import MathJax from "../MathJax"
 
 jest.mock('react', () => jest.requireActual('react'));
 
@@ -47,7 +47,7 @@ it("only fetches MathJax once despite nested contexts", () => {
     new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
             const { default: MathJaxContext } = require("./MathJaxContext")
-            const { default: MathJax } = require("./MathJax")
+            const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
             document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
@@ -78,7 +78,7 @@ it("only fetches MathJax once despite mounting and unmounting several times", ()
     return new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
             const { default: MathJaxContext } = require("./MathJaxContext")
-            const { default: MathJax } = require("./MathJax")
+            const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
             document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
@@ -111,7 +111,7 @@ it("mounting with one version, unmounting and then mounting with a different ver
     return new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
             const { default: MathJaxContext } = require("./MathJaxContext")
-            const { default: MathJax } = require("./MathJax")
+            const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
             document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any

@@ -1,12 +1,6 @@
 import React, { createContext, FC, useContext, useRef } from "react"
-import type { MathJax2Config, MathJax2Object } from "./MathJax2"
-import type {
-    MathJaxConfig as MathJax3Config,
-    MathJaxObject as MathJax3Object
-} from "mathjax-full/js/components/startup"
-import type { OptionList } from "mathjax-full/js/util/Options"
-
-export type { MathJax3Object, MathJax3Config, OptionList }
+import type { MathJax2Config, MathJax2Object } from "../MathJax2"
+import type { MathJax3Config, MathJax3Object, OptionList } from "../MathJax3"
 
 export type TypesettingFunction = "tex2chtml"
     | "tex2chtmlPromise"
@@ -80,15 +74,14 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     hideUntilTypeset,
     children
 }) => {
-    console.log("using ")
     const previousContext = useContext(MathJaxBaseContext)
-    if(previousContext?.version !== undefined && previousContext?.version !== version)
+    if(typeof previousContext?.version !== "undefined" && previousContext?.version !== version)
         throw Error(
             "Cannot nest MathJaxContexts with different versions. MathJaxContexts should not be nested at all but if " +
             "they are, they cannot have different versions. Stick with one version of MathJax in your app and avoid " +
             "using more than one MathJaxContext."
         )
-    if((version === 2 && v3Promise !== undefined) || (version === 3 && v2Promise !== undefined))
+    if((version === 2 && typeof v3Promise !== "undefined") || (version === 3 && typeof v2Promise !== "undefined"))
         throw Error(
             "Cannot use MathJax versions 2 and 3 simultaneously in the same app due to how MathJax is set up in the " +
             "browser; either you have multiple MathJaxContexts with different versions or you have mounted and " +
@@ -123,14 +116,14 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
         document.getElementsByTagName("head")[0].appendChild(script)
     }
 
-    if(mjContext.current === undefined) {
+    if(typeof mjContext.current === "undefined") {
         const baseContext = {
             typesettingOptions,
             renderMode,
             hideUntilTypeset
         }
         if(version === 2) {
-            if(v2Promise === undefined) {
+            if(typeof v2Promise === "undefined") {
                 if(typeof window !== "undefined") {
                     v2Promise = new Promise<MathJax2Object>(scriptInjector)
                     v2Promise.catch((e) => {
@@ -144,7 +137,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
                 }
             }
         } else {
-            if(v3Promise === undefined) {
+            if(typeof v3Promise === "undefined") {
                 if(typeof window !== "undefined") {
                     v3Promise = new Promise<MathJax3Object>(scriptInjector)
                     v3Promise.catch((e) => {

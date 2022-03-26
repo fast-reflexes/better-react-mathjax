@@ -1,7 +1,7 @@
 // @ts-ignore
 import React, { ReactElement } from "react"
 import { render } from "@testing-library/react"
-import { MathJaxBaseContext } from "./MathJaxContext"
+import { MathJaxBaseContext } from "../MathJaxContext"
 import MathJax from "./MathJax"
 import { OptionList } from "mathjax-full/js/util/Options"
 

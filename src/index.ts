@@ -3,9 +3,7 @@ export {
     default as MathJaxContext,
     MathJaxContextProps,
     MathJaxBaseContext,
-    MathJaxSubscriberProps,
-    MathJax3Object,
-    MathJax3Config,
-    OptionList
+    MathJaxSubscriberProps
 } from "./MathJaxContext"
 export { MathJax2Config, MathJax2Object } from "./MathJax2"
+export { MathJax3Object, MathJax3Config, OptionList } from "./MathJax3"

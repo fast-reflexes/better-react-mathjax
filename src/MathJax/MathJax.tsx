@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef, FC, useContext, useEffect, useLayoutEffect, useRef } from "react"
-import { MathJaxBaseContext, MathJaxOverrideableProps } from "./MathJaxContext"
+import { MathJaxBaseContext, MathJaxOverrideableProps } from "../MathJaxContext"
 
 export interface MathJaxProps extends MathJaxOverrideableProps {
     inline?: boolean
@@ -34,9 +34,9 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     const mjPromise = useContext(MathJaxBaseContext)
 
     // allow context values to steer this component for some props if they are undefined
-    const usedHideUntilTypeset = hideUntilTypeset === undefined ? mjPromise?.hideUntilTypeset : hideUntilTypeset
-    const usedRenderMode = renderMode === undefined ? mjPromise?.renderMode : renderMode
-    const usedConversionOptions = typesettingOptions === undefined ? mjPromise?.typesettingOptions : typesettingOptions
+    const usedHideUntilTypeset = hideUntilTypeset ?? mjPromise?.hideUntilTypeset
+    const usedRenderMode = renderMode ?? mjPromise?.renderMode
+    const usedConversionOptions = typesettingOptions ?? mjPromise?.typesettingOptions
     const usedDynamic = dynamic === false ? false : (dynamic || process.env.NODE_ENV !== "production")
 
     // whether initial typesetting of this element has been done or not
