@@ -258,15 +258,7 @@ Local or remote url to fetch MathJax from. More information about hosting your o
 
 A source url may contain both some specific file and some query parameters corresponding to a configuration which, in turn, governs
 which additional assets MathJax fetches. The default sources used when this property is omitted are the same as those 
-listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN). This means
-that for version 2, the fetched resource (`MathJax.js?config=TeX-MML-AM_CHTML`) includes support for Latex, MML
-and AsciiMath with HTML output by default, and for version 3, the fetched resource (`tex-mml-chtml.js`) supports
-MML and Latex with HTML output. These correspond to some typical and broad use of MathJax in the browser. If you have a 
-use case where you, using standalone MathJax, would have to use a different source url, then you have to manually supply 
-such a url (local or remote) here. This, in analogy to how you would modify the script import to adjust to your needs in 
-a plain HTML environment with direct use of MathJax. Read more about different configurations 
-[here](https://docs.mathjax.org/en/latest/web/components/combined.html) (for MathJax 3) and 
-[here](https://docs.mathjax.org/en/v2.7-latest/config-files.html#common-configurations) (for MathJax 2).
+listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN).
 
 ### `version: 2 | 3 | undefined` ###
 
@@ -339,8 +331,8 @@ Indicates whether the content of the `MathJax` component may change after initia
 ***
 
 ***Any additional props will be spread to the root element of the `MathJax` component which is a `span` with `display`
-set to `inline` when the `inline` property is set to `true`, otherwise `block`. The `display` can be overriden via
-`style` or `className` props if needed (then the `inline` property does not affect the wrapper). A ref is not possible to set
+set to `inline` when the `inline` property is set to `true`, otherwise `block`. The `display` can be overridden via
+`style` prop if needed (then the `inline` property does not affect the wrapper). A ref is not possible to set
 as this functionality is used by the `MathJax` component itself.***
 
 ## Custom use of MathJax directly ##
@@ -365,53 +357,6 @@ Sandbox example: https://codesandbox.io/s/better-react-mathjax-custom-example-la
 ## Github ##
 
 Read full documentation, file problems or contribute on Github: https://github.com/fast-reflexes/better-react-mathjax
-
-## Changelog ##
-* v. 1.0.0
-  * Initial Release
-* v. 1.0.1
-  * Removed types imported from `@types/mathjax` and `mathjax-full` due to several reasons. Custom type declarations will be supplied instead.
-* v. 1.0.2
-  * Readded types with custom types for MathJax2 based on `@types/mathjax` and types from `mathjax-full` for MathJax3.
-* v. 1.0.3
-  * Fixed missing license. 
-  * Corrected function signature on `MathJax` component.
-  * Updated default MathJax 3 version provided by CDN to using v. 3.2.0. 
-  * Updated MathJax 3 types used to v. 3.2.0. 
-  * Added content to API documentation on property `src`. 
-  * Added installation instructions.
-  * Added information about AsciiMath display mode.
-  * Corrected typo in API documentation on `version` property.
-* v. 2.0.0
-  * **Breaking change**: can no longer use  MathJax versions 2 and 3 side by side in different
-    `MathJaxContext`s. This did typically not work as intended before either and even though this change is
-    breaking, it should not affect many users, if any. Docs have been updated and `MathJaxContext` now throws an error
-    if it has been initialized with one version and another `MathJaxContext` (later or simultaneous) has a different
-    value on the `version` prop.
-  * Added support for hot reload by always setting `dynamic` to `true` when `dynamic` is not explicitly set to `false`
-    and `process.env.NODE_ENV` is not `production`.
-  * Honoring possible style settings of `style.visibility` in `MathJax` component when visibility is not controlled
-    by the component itself.
-  * Corrected sandbox example with AsciiMath where Latex default delimiter was used instead of AsciiMath delimiter
-    (still worked because Latex is loaded by default as well).
-  * Improved documentation with clarifications:
-    * The entire app should be wrapped in the only `MathJaxContext` that should exist in a project.
-    * How to deal with the situation when you have a lot of math on your page.
-    * The features available with the default imports from CDN.
-    * Difference between inline and display math.
-  * Added Q & A section to documentation.
-  * Changed all checks for undefined to use `typeof X === "undefined"` instead of `X === undefined`.
-  * Added support for esm modules as well as the previous cjs modules.
-  * Added language tags on code samples
-
-## Migration guides
-
-* v1 to v2: 
-  * Remove all simultaneous use of MathJax version 2 and 3 in the same app and use only one version of MathJax
-    per loaded page. This means that even if you unmount the `MathJaxContext` and then remount it, it must have the
-    same version both times. If you load a new page context (e.g. not just change page in a SPA (single-page application))
-    the version can be determined anew. If you need to use both versions side by side, file an issue on the project 
-    Github page.
 
 ## License
 

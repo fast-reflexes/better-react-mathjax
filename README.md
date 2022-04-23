@@ -100,7 +100,7 @@ font where the math is allowed to take up more space
 
 <br/>
 <p align="center" width="100%">
-  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/images/display.png" width="100%">
+  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/images/display.png" width="300px">
 </p>
 <br/>
 
@@ -109,7 +109,7 @@ style
 
 <br/>
 <p align="center" width="100%">
-  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/images/inline.png" width="25%">
+  <img align="center" src="https://github.com/fast-reflexes/better-react-mathjax/blob/master/images/inline.png" width="200px">
 </p>
 <br/>
 
@@ -461,8 +461,8 @@ take place and any changes of the content will not get typeset.
 ***
 
 ***Any additional props will be spread to the root element of the `MathJax` component which is a `span` with `display`
-set to `inline` when the `inline` property is set to `true`, otherwise `block`. The `display` can be overriden via
-`style` or `className` props if needed (then the `inline` property does not affect the wrapper). A ref is not possible to set
+set to `inline` when the `inline` property is set to `true`, otherwise `block`. The `display` can be overridden via
+`style` prop if needed (then the `inline` property does not affect the wrapper). A ref is not possible to set
 as this functionality is used by the `MathJax` component itself.***
 
 ## Custom use of MathJax directly ##
@@ -640,6 +640,7 @@ Tested with:
   to React's virtual DOM is a good idea. MathJax's litedom adaptor is probably fairly close already.
 * Investigate SSR rendering with `mathjax-full`
 * Test and upgrade list of tested browsers
+* Create some ready-configured mathjax contexts (such as Latex2SVGMathJax3Context, Latex2HTMLMathJax3Context etc..)
 
 ## MathJax documentation ##
 
@@ -687,6 +688,10 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
   * Changed all checks for undefined to use `typeof X === "undefined"` instead of `X === undefined`.
   * Added support for esm modules as well as the previous cjs modules.
   * Added language tags on code samples
+* v. 2.0.1
+  * React 18 compatibility
+  * Small fix in type for `typesettingOptions.options` which now does not accept `display` (should be set via `inline` 
+    prop instead)
 
 ## Migration guides
 

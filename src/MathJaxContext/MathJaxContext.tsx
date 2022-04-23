@@ -1,4 +1,4 @@
-import React, { createContext, FC, useContext, useRef } from "react"
+import React, { createContext, FC, ReactNode, useContext, useRef } from "react"
 import type { MathJax2Config, MathJax2Object } from "../MathJax2"
 import type { MathJax3Config, MathJax3Object, OptionList } from "../MathJax3"
 
@@ -25,7 +25,7 @@ export interface MathJaxOverrideableProps {
     hideUntilTypeset?: "first" | "every"
     typesettingOptions?: {
         fn: TypesettingFunction
-        options?: OptionList
+        options?: Omit<OptionList, "display">
     }
     renderMode?: "pre" | "post"
 }
@@ -42,6 +42,7 @@ interface MathJaxContextStaticProps extends MathJaxOverrideableProps {
     src?: string
     onLoad?: () => void
     onError?: (error: any) => void
+    children?: ReactNode
 }
 
 export type MathJaxContextProps = ({
@@ -93,7 +94,8 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     if(initVersion.current === null) initVersion.current = version
     else if(initVersion.current !== version)
         throw Error(
-            "Cannot change version of MathJax in a MathJaxContext after component has mounted. Either reload the page with a new setting when this should happen or use multiple, non-nested, MathJaxContexts in your app."
+            "Cannot change version of MathJax in a MathJaxContext after it has mounted. Reload the page with a " +
+            "new version when this must happen."
         )
 
     const usedSrc = src || (version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC)
