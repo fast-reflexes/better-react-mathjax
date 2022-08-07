@@ -32,7 +32,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 Add this library manually as a dependency to `package.json`...
 ```
 dependencies: {
-    "better-react-mathjax": "^2.0.0"
+    "better-react-mathjax": "^2.0.2"
 }
 ```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
@@ -240,11 +240,14 @@ the UI if it has a lot to typeset, the typesetting taking place before the brows
 In most situations however, it should.
 
 The MathJax library by default typesets the entire page when it has been downloaded, unless instructed explicitly not to 
-do so. However, given React and its dynamic nature, with existing content being rerendered and new content being added, 
-math likely needs to be typeset more often than that; at a minimum when a component is mounted and sometimes also as a 
-result of dynamic updates of an existing component. Since this does't coincide with initial page load, math rerendered 
-or added after this moment would not get typeset. This is where the `MathJax` component plays an important part by 
-explicitly typesetting its content whenever a change might have occurred.
+do so (check instructions on how to do this for version 2 [here](https://docs.mathjax.org/en/v2.7-latest/options/hub.html) 
+and for version 3 [here](https://docs.mathjax.org/en/latest/options/startup/startup.html)). However, given React and its 
+dynamic nature, with existing content being rerendered and new content being added, math likely needs to be typeset more 
+often than that; at a minimum when a component is mounted and sometimes also as a result of dynamic updates of an 
+existing component. Since this often doesn't coincide with initial page load, math rerendered or added after this moment 
+(for example when showing a new page or component) would not get typeset. This is where the `MathJax` component plays an 
+important part by explicitly typesetting its content whenever a change might have occurred. It is recommended to use 
+`MathJax` components and not only rely on automatic typesetting on startup.
 
 # TypeScript types #
 This project has both its own types and MathJax types included in the package. For MathJax version 2, a refactored and updated
@@ -562,9 +565,12 @@ to it; manual fine-tuning might be necessary even though this is not always the 
   hierarchy they are kept. You can always replace a larger (more complex) content wrapped in a `MathJax` component with 
   one or several smaller parts of it wrapped in several `MathJax` components.
   
-* Remember that MathJax does initial typesetting on the whole document both in version 2 and 3. This can be turned off 
-  but with it, a document can be typeset with only a `MathJaxContext` component. This, however, is not the intended use
-  of this library and removes many of the additional options.
+* Remember that MathJax automatically does initial typesetting on the whole document both in version 2 and 3. This can 
+  be turned off (check instructions on how to do this for version 2 [here](https://docs.mathjax.org/en/v2.7-latest/options/hub.html) 
+  and for version 3 [here](https://docs.mathjax.org/en/latest/options/startup/startup.html)) but with it, a document can 
+  be typeset with only a `MathJaxContext` component. This, however, is not the intended use of the `better-react-mathjax` 
+  library and removes many of the additional options as well as the possibility to typeset content that is not present 
+  on the page on initial load; it is therefore recommended to always use `MathJax` components as well.
   
 * React doesn't translate all HTML5 entities which can cause problems with MathJax. 
   There are often multiple entities for the same symbol and if your chosen entity gives you problems in MathML, 
@@ -638,9 +644,11 @@ Tested with:
 ## Wish list ##
 * Investigate whether a custom adaptor (https://github.com/mathjax/MathJax-src/tree/master/ts/adaptors) that can write 
   to React's virtual DOM is a good idea. MathJax's litedom adaptor is probably fairly close already.
-* Investigate SSR rendering with `mathjax-full`
+* Investigate SSR rendering with `mathjax-full` (e.g. send preprocessed MathJax nodes to the frontend).
 * Test and upgrade list of tested browsers
-* Create some ready-configured mathjax contexts (such as Latex2SVGMathJax3Context, Latex2HTMLMathJax3Context etc..)
+* Perhaps create some ready-configured mathjax contexts (such as Latex2SVGMathJax3Context, Latex2HTMLMathJax3Context etc..)
+* Check whether we could refrain from downloading mathjax and use the bundled mathjax instead? COULD require significant 
+  negative impact on production bundle for all other use cases.
 
 ## MathJax documentation ##
 
@@ -692,6 +700,10 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
   * React 18 compatibility
   * Small fix in type for `typesettingOptions.options` which now does not accept `display` (should be set via `inline` 
     prop instead)
+* v. 2.0.2
+  * Updated default MathJax 3 version provided by CDN to using v. 3.2.2.
+  * Project maintenance.
+  * Added documentation on how to turn off automatic typesetting on startup.
 
 ## Migration guides
 

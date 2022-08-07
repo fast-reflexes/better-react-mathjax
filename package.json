@@ -1,6 +1,6 @@
 {
     "name": "better-react-mathjax",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "description": "Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as well as dynamic updates. Simple to use but with many configuration options.",
     "main": "index.js",
     "module": "esm/index.js",
@@ -44,19 +44,20 @@
         "react": ">=16.8"
     },
     "dependencies": {
-        "mathjax-full": "^3.2.0"
+        "mathjax-full": "^3.2.2"
     },
     "devDependencies": {
-        "uglify-js": "^3.15.4",
-        "@types/react": "^18.0.5",
-        "typescript": "^4.6.3",
+        "uglify-js": "^3.16.3",
+        "@types/react": "^18.0.15",
+        "typescript": "^4.7.4",
         "tslint": "^6.1.3",
-        "jest": "^27.5.1",
-        "ts-jest": "^27.1.4",
-        "@types/jest": "^27.4.1",
-        "@testing-library/react": "^13.1.1",
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0",
+        "jest": "^28.1.3",
+        "jest-environment-jsdom": "^28.1.3",
+        "ts-jest": "^28.0.7",
+        "@types/jest": "^28.1.6",
+        "@testing-library/react": "^13.3.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
         "json": "^11.0.0"
     }
 }

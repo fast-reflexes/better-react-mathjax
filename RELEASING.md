@@ -29,10 +29,11 @@
 ## Create a new version as a series of instructions
 
 1. Do work in the main branch
-2. Set package version
+2. Update the package version where necessary in the documentation (not in `package.json` as this will be done from 
+   command line).
 3. Run npm scripts `lint`, `test` and `build` to make sure that you have arrived to a code state which is functional 
-   correct and with everything in order. Here is also a good place to test the new package by exporting it with 
-   `npm package` and install it in some other test app.
+   correct and with everything in order. Here is also a good place to test the new package by going to the `build` 
+   folder and exporting it with `npm pack` and install it in some other test app.
 4. When you are done, run `npm run release <VERSION on form MAJOR.MINOR.PATCH(-beta)?>`. This will update versions in 
    relevant files to update the version and also create a commit and push the project to Github along with a version 
    tag.
