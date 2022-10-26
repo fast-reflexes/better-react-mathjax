@@ -153,6 +153,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                             // renderMode "post"
                                             mathJax.startup.promise
                                                 .then(() => {
+                                                    mathJax.texReset() // reset equation numbers.
                                                     mathJax.typesetClear([ref.current])
                                                     return mathJax.typesetPromise([ref.current])
                                                 })
