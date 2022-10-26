@@ -9,8 +9,11 @@ export interface MathJaxProps extends MathJaxOverrideableProps {
     dynamic?: boolean
 }
 
-const typesettingFailed = (err: any) =>
+const typesettingFailed = (err: any): string =>
     `Typesetting failed: ${typeof err.message !== "undefined" ? err.message : err.toString()}`
+
+// validator for text input with renderMode = "pre"
+const validText = (inputText?: string): boolean => typeof inputText === "string" && inputText.length > 0
 
 const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     inline = false,
@@ -46,7 +49,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     const typesetting = useRef(false)
 
     // handler for initial loading
-    const checkInitLoad = () => {
+    const checkInitLoad = (): void => {
         if(!initLoad.current) {
             if(usedHideUntilTypeset === "first" && ref.current !== null) {
                 ref.current.style.visibility = "visible"
@@ -57,7 +60,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     }
 
     // callback for when typesetting is done
-    const onTypesetDone = () => {
+    const onTypesetDone = (): void => {
         if(usedHideUntilTypeset === "every" && usedDynamic && usedRenderMode === "post" && ref.current !== null) {
             ref.current.style.visibility = rest.style?.visibility ?? "visible"
         }
@@ -65,9 +68,6 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
         if(onTypeset) onTypeset()
         typesetting.current = false
     }
-
-    // validator for text input with renderMode = "pre"
-    const validText = (inputText?: string) => typeof inputText === "string" && inputText.length > 0
 
     // guard which resets the visibility to hidden when hiding the content between every typesetting
     if(
@@ -116,7 +116,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                 mjPromise.promise
                                     .then((mathJax) => {
                                         if(usedRenderMode === "pre") {
-                                            const updateFn = (output: HTMLElement) => {
+                                            const updateFn = (output: HTMLElement): void => {
                                                 lastChildren.current = text!
                                                 mathJax.startup.document.clear()
                                                 mathJax.startup.document.updateDocument()
