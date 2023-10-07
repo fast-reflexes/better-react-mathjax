@@ -1,4 +1,5 @@
-const { promises } = require('fs')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { promises} = require("fs")
 
 const getContent = dirParts => {
     const doubleDots = dirParts.map(_ => "..").join("/")

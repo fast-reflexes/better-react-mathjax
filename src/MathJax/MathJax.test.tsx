@@ -1,4 +1,3 @@
-// @ts-ignore
 import React, { ReactElement } from "react"
 import { render } from "@testing-library/react"
 import { MathJaxBaseContext } from "../MathJaxContext"

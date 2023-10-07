@@ -32,7 +32,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 Add this library manually as a dependency to `package.json`...
 ```
 dependencies: {
-    "better-react-mathjax": "^2.0.2"
+    "better-react-mathjax": "^2.0.3"
 }
 ```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
@@ -114,15 +114,15 @@ style
 <br/>
 
 These styles can be set on individual instances of math in Latex and MathML by the use of different pre-configured 
-delimiters, but in AsciiMath, all the math in an app has to use the same style which is set in the configuration 
-(display math by default). On top of this, the `MathJax` component has a property `inline` which controls whether the 
-wrapper element added by the `MathJax` component uses `inline` or `block` display. Since a `MathJax` component can 
-contain a lot of other things than just a single portion of math, it is important to understand that the `inline` prop 
-is NOT synonymous with inline math since the former controls an element which may contain a lot of things whereas the 
-latter always controls the typesetting of a specific string of math. Therefore, always use configuration and delimiters 
-to control whether to use display math or inline math and use the `inline` prop to coordinate with the previous setting 
-and control the appearance of the `MathJax` component itself. Study the elaborate examples below for more 
-insights.
+delimiters (Latex) and tag attributes (MathML), but in AsciiMath, all the math in an app has to use the same style which 
+is set in the configuration (display math by default). On top of this, the `MathJax` component has a property `inline` 
+which controls whether the wrapper element added by the `MathJax` component uses `inline` or `block` display. Since a 
+`MathJax` component can contain a lot of other things than just a single portion of math, it is important to understand 
+that the `inline` prop is NOT synonymous with inline math since the former controls an element which may contain a lot 
+of things whereas the latter always controls the typesetting of a specific string of math. Therefore, always use 
+configuration and delimiters to control whether to use display math or inline math and use the `inline` prop to 
+coordinate with the previous setting and control the appearance of the `MathJax` component itself. Study the elaborate 
+examples below for more insights.
 
 Exceptions to the above rule is when the `MathJax` component prop `renderMode` has the value `pre` in which case one 
 `MathJax` component becomes synonymous with a single piece of math (given as the `text` prop) whereby the `inline` 
@@ -389,7 +389,7 @@ MathJax version to use. Must be synced with any `config` passed.
 Version of MathJax to use. If set, make sure that any configuration and url to MathJax uses the same version. If `src`
 is not specified, setting `version`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.2.0.
 
-### `onStartUp((mathJax: MathJax2Object | MathJax3Object) => void) | undefined` ###
+### `onStartUp: (mathJax: MathJax2Object | MathJax3Object) => void) | undefined` ###
 
 Callback to be called when MathJax has loaded successfully but before the MathJax object has been made available
 to wrapped `MathJax` components. The MathJax object is handed as an argument to this callback which is a good place
@@ -397,7 +397,7 @@ to do any further configuration which cannot be done through the `config` object
 
 **Default**: `undefined`
 
-### `onLoad(() => void) | undefined` ###
+### `onLoad: () => void) | undefined` ###
 
 Callback to be called when MathJax has loaded successfully and after the MathJax object has been made available to the
 wrapped `MathJax` components. This marks the last step of the startup phase in the `MathJaxContext` component when
@@ -405,7 +405,7 @@ MathJax is loaded. Can be used to sync page loading state along with `onInitType
 
 **Default**: `undefined`
 
-### `onError((error: any) => void) | undefined` ###
+### `onError: (error: any) => void) | undefined` ###
 
 Callback to handle errors in the startup phase when MathJax is loaded.
 
@@ -427,14 +427,14 @@ the wrapper nonetheless.
 
 **Default**: `false`
 
-### `onInitTypeset(() => void) | undefined` ###
+### `onInitTypeset: () => void) | undefined` ###
 
 Callback for when the content has been typeset for the first time. Can typically be used for hiding content or showing
 a loading spinner in a coordinated way across different elements until all are in a representative state.
 
 **Default**: `undefined`
 
-### `onTypeset(() => void) | undefined` ###
+### `onTypeset: () => void) | undefined` ###
 
 Callback for when the content has been typeset (not only initially). Can typically be used for hiding content  or showing
 a loading spinner in a coordinated way across different elements until all are in a representative state. Only used when 
@@ -646,9 +646,13 @@ Tested with:
   to React's virtual DOM is a good idea. MathJax's litedom adaptor is probably fairly close already.
 * Investigate SSR rendering with `mathjax-full` (e.g. send preprocessed MathJax nodes to the frontend).
 * Test and upgrade list of tested browsers
-* Perhaps create some ready-configured mathjax contexts (such as Latex2SVGMathJax3Context, Latex2HTMLMathJax3Context etc..)
+* Perhaps create some ready-configured mathjax contexts (such as Latex2SVGMathJax3Context, Latex2HTMLMathJax3Context etc ...)
 * Check whether we could refrain from downloading mathjax and use the bundled mathjax instead? COULD require significant 
   negative impact on production bundle for all other use cases.
+* Check if switching MathJax version during hot reload development with SSR is possible (now it throws error and we have 
+  to restart the dev server).
+* Investigate if the wrapper element can take a callback ref
+* Investigate eslint rules and usage of require in tests
 
 ## MathJax documentation ##
 
@@ -704,6 +708,9 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
   * Updated default MathJax 3 version provided by CDN to using v. 3.2.2.
   * Project maintenance.
   * Added documentation on how to turn off automatic typesetting on startup.
+* v. 2.0.3
+  * Improvements and typos in documentation
+  * Project maintenance
 
 ## Migration guides
 

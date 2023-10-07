@@ -1,10 +1,7 @@
-// @ts-ignore
-import React, { FC, ReactElement, useContext } from "react"
+import React, { FC, useContext } from "react"
 import { render } from "@testing-library/react"
 import MathJaxContext, { MathJaxBaseContext } from "./MathJaxContext"
-import MathJax from "../MathJax"
-
-jest.mock('react', () => jest.requireActual('react'));
+jest.mock("react", () => jest.requireActual("react"));
 
 const math = "\\frac{10}{5}"
 let originalConsoleError: (data: any[]) => void
@@ -32,7 +29,7 @@ afterEach(() => {
  *     * Need to use isolateModules to reset state in MathJaxContext
  *     * require() needs to be used instead of dynamic import() for isolateModules to work as intended
  *     * Since React is also imported in these files, we need to make sure that even though the modules are
- *       different in every tests, they use the same React, e.g. the jest.mock at the top is needed
+ *       different in every test, they use the same React, e.g. the jest.mock at the top is needed
  *     * Because the callback to isolateModules is run asynchronously, we need to wrap it in a Promise, otherwise
  *       the tests might complain about not handling errors in the callback to isolateModules
  *     * When in a Promise, expect() works a bit differently and in some cases, work-arounds have been
@@ -46,7 +43,9 @@ afterEach(() => {
 it("only fetches MathJax once despite nested contexts", () => {
     new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const { default: MathJaxContext } = require("./MathJaxContext")
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
@@ -77,7 +76,9 @@ it("only fetches MathJax once despite nested contexts", () => {
 it("only fetches MathJax once despite mounting and unmounting several times", () => {
     return new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const { default: MathJaxContext } = require("./MathJaxContext")
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
@@ -88,7 +89,7 @@ it("only fetches MathJax once despite mounting and unmounting several times", ()
                 </MathJaxContext>
             )
             renderedFirst.unmount()
-            const _renderedSecond = render(
+            render(
                 <MathJaxContext version={3}>
                     <MathJax>{`\\$${math}$`}</MathJax>
                 </MathJaxContext>
@@ -110,7 +111,9 @@ it("only fetches MathJax once despite mounting and unmounting several times", ()
 it("mounting with one version, unmounting and then mounting with a different version throws", () => {
     return new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const { default: MathJaxContext } = require("./MathJaxContext")
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
@@ -122,7 +125,7 @@ it("mounting with one version, unmounting and then mounting with a different ver
             )
             renderedFirst.unmount()
             try {
-                const _renderedSecond = render(
+                render(
                     <MathJaxContext version={2}>
                         <MathJax>{`\\$${math}$`}</MathJax>
                     </MathJaxContext>

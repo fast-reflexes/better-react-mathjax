@@ -34,7 +34,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 Add this library manually as a dependency to `package.json`...
 ```
 dependencies: {
-    "better-react-mathjax": "^2.0.2"
+    "better-react-mathjax": "^2.0.3"
 }
 ```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
@@ -269,7 +269,7 @@ MathJax version to use. Must be synced with any `config` passed.
 Version of MathJax to use. If set, make sure that any configuration and url to MathJax uses the same version. If `src`
 is not specified, setting `version`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.2.0.
 
-### `onStartUp((mathJax: MathJax2Object | MathJax3Object) => void) | undefined` ###
+### `onStartUp: (mathJax: MathJax2Object | MathJax3Object) => void) | undefined` ###
 
 Callback to be called when MathJax has loaded successfully but before the MathJax object has been made available
 to wrapped `MathJax` components. The MathJax object is handed as an argument to this callback which is a good place
@@ -277,14 +277,14 @@ to do any further configuration which cannot be done through the `config` object
 
 **Default**: `undefined`
 
-### `onLoad(() => void) | undefined` ###
+### `onLoad: () => void) | undefined` ###
 
 Callback to be called when MathJax has loaded successfully and after the MathJax object has been made available to the
 wrapped `MathJax` components.
 
 **Default**: `undefined`
 
-### `onError((error: any) => void) | undefined` ###
+### `onError: (error: any) => void) | undefined` ###
 
 Callback to handle errors in the startup phase when MathJax is loaded.
 
@@ -303,13 +303,13 @@ the wrapper nonetheless.
 
 **Default**: `false`
 
-### `onInitTypeset(() => void) | undefined` ###
+### `onInitTypeset: () => void) | undefined` ###
 
 Callback for when the content has been typeset for the first time.
 
 **Default**: `undefined`
 
-### `onTypeset(() => void) | undefined` ###
+### `onTypeset: () => void) | undefined` ###
 
 Callback for when the content has been typeset (not only initially).
 
