@@ -51,6 +51,8 @@ yarn add better-react-mathjax
 
 1. Wrap your entire app in a `MathJaxContext` component (***only use one in your app***).
 ```js
+import { MathJaxContext } from 'better-react-mathjax';
+
 const App = () => {
 
    return (
@@ -62,6 +64,8 @@ const App = () => {
 ```
 2. Then simply use `MathJax` components at different levels for the actual math. 
 ```js
+import { MathJax } from 'better-react-mathjax';
+
 const Component = () => {
 
    return (
