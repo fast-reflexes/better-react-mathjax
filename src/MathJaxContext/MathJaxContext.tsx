@@ -105,7 +105,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
         const script = document.createElement("script")
         script.type = "text/javascript"
         script.src = usedSrc
-        script.async = false
+        script.async = true
 
         script.addEventListener("load", () => {
             const mathJax = (window as any).MathJax
@@ -130,7 +130,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
                     v2Promise = new Promise<MathJax2Object>(scriptInjector)
                     v2Promise.catch((e) => {
                         if(onError) onError(e)
-                        else throw Error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${e}`)
+                        else throw Error(`Failed to download MathJax version 2 from '${usedSrc}' due to: ${JSON.stringify(e)}`)
                     })
                 } else {
                     // for server side rendering

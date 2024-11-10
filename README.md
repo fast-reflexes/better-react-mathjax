@@ -653,6 +653,14 @@ Tested with:
   to restart the dev server).
 * Investigate if the wrapper element can take a callback ref
 * Investigate eslint rules and usage of require in tests
+* Use locked dependencies for MathJax
+* Make it clear in docs that hideUntilTypeset=every requires dynamic as well
+* Make the rules for how to add math in the DONT'S and DO'S more clear.. I think it's not necessary to wrap it in its own 
+  expression e.g. {"---"} and it would be nice to give an even simpler explanation to how to do and don't.
+* Think about how to handle the case where ppl use multiple MathJaxContexts regarding what to do with `onLoad` handlers. 
+  Currently they don't fire other than on the first.
+* Make sure to clearly explain that dynamic is automatically enabled on dev server
+* Make sure to explain that in nextjs both context and mathjax element must be in client components
 
 ## MathJax documentation ##
 

@@ -10,7 +10,7 @@ export interface MathJaxProps extends MathJaxOverrideableProps {
 }
 
 const typesettingFailed = (err: any) =>
-    `Typesetting failed: ${typeof err.message !== "undefined" ? err.message : err.toString()}`
+    `Typesetting failed: ${typeof err.message !== "undefined" ? err.message : JSON.stringify(err)}`
 
 const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
     inline = false,
