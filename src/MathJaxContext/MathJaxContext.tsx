@@ -1,3 +1,5 @@
+"use client"
+
 import React, { createContext, FC, ReactNode, useContext, useRef } from "react"
 import type { MathJax2Config, MathJax2Object } from "../MathJax2"
 import type { MathJax3Config, MathJax3Object, OptionList } from "../MathJax3"
