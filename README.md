@@ -397,7 +397,7 @@ to do any further configuration which cannot be done through the `config` object
 
 **Default**: `undefined`
 
-### `onLoad: () => void) | undefined` ###
+### `onLoad: () => void | undefined` ###
 
 Callback to be called when MathJax has loaded successfully and after the MathJax object has been made available to the
 wrapped `MathJax` components. This marks the last step of the startup phase in the `MathJaxContext` component when
@@ -405,7 +405,13 @@ MathJax is loaded. Can be used to sync page loading state along with `onInitType
 
 **Default**: `undefined`
 
-### `onError: (error: any) => void) | undefined` ###
+### `asyncLoad: boolean | undefined` ###
+
+Value to use for the `async` property of the MathJax `script` tag.
+
+**Default**: `false`
+
+### `onError: (error: any) => void | undefined` ###
 
 Callback to handle errors in the startup phase when MathJax is loaded.
 
@@ -661,6 +667,7 @@ Tested with:
   Currently they don't fire other than on the first.
 * Make sure to clearly explain that dynamic is automatically enabled on dev server
 * Make sure to explain that in nextjs both context and mathjax element must be in client components
+* Why are there build folders in the Mathjax and MathjaxContext folders?
 
 ## MathJax documentation ##
 
@@ -719,6 +726,8 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
 * v. 2.0.3
   * Improvements and typos in documentation
   * Project maintenance
+* v. 2.1.0
+  * Opt-in async script loading in `MathJaxBaseContext`
 
 ## Migration guides
 

@@ -277,14 +277,20 @@ to do any further configuration which cannot be done through the `config` object
 
 **Default**: `undefined`
 
-### `onLoad: () => void) | undefined` ###
+### `onLoad: () => void | undefined` ###
 
 Callback to be called when MathJax has loaded successfully and after the MathJax object has been made available to the
 wrapped `MathJax` components.
 
 **Default**: `undefined`
 
-### `onError: (error: any) => void) | undefined` ###
+### `asyncLoad: boolean | undefined` ###
+
+Value to use for the `async` property of the MathJax `script` tag.
+
+**Default**: `false`
+
+### `onError: (error: any) => void | undefined` ###
 
 Callback to handle errors in the startup phase when MathJax is loaded.
 

@@ -40,6 +40,7 @@ export const MathJaxBaseContext = createContext<MathJaxSubscriberProps | undefin
 
 interface MathJaxContextStaticProps extends MathJaxOverrideableProps {
     src?: string
+    asyncLoad?: boolean
     onLoad?: () => void
     onError?: (error: any) => void
     children?: ReactNode
@@ -69,6 +70,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
     src = version === 2 ? DEFAULT_V2_SRC : DEFAULT_V3_SRC,
     onStartup,
     onLoad,
+    asyncLoad = false,
     onError,
     typesettingOptions,
     renderMode = "post",
@@ -105,7 +107,7 @@ const MathJaxContext: FC<MathJaxContextProps> = ({
         const script = document.createElement("script")
         script.type = "text/javascript"
         script.src = usedSrc
-        script.async = true
+        script.async = asyncLoad
 
         script.addEventListener("load", () => {
             const mathJax = (window as any).MathJax
