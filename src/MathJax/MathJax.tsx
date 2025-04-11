@@ -1,3 +1,5 @@
+"use client";
+
 import React, { ComponentPropsWithoutRef, FC, useContext, useEffect, useLayoutEffect, useRef } from "react"
 import { MathJaxBaseContext, MathJaxOverrideableProps } from "../MathJaxContext"
 

@@ -34,7 +34,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 Add this library manually as a dependency to `package.json`...
 ```
 dependencies: {
-    "better-react-mathjax": "^2.0.3"
+    "better-react-mathjax": "^2.2.0"
 }
 ```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
@@ -94,6 +94,9 @@ with [MathJax version 2](https://docs.mathjax.org/en/v2.7-latest/config-files.ht
 Latex and MathML with the default [MathJax version 3](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
 HTML output for both. If you need something else or want to host your own copy of MathJax, read more about the `src`
 attribute of the `MathJaxContext` below.
+
+Note that both `MathJax` and `MathJaxContext` components ship with `"use client"` directives and are thus client 
+components in contexts where this is taken into account.
 
 ## Examples
 
@@ -332,7 +335,7 @@ Requires `typesettingOptions` to be set and version to be `3`. If `renderMode` i
 
 Indicates whether the content of the `MathJax` component may change after initial rendering.
 
-**Default**: `false`
+**Default**: `false` (**note**: is `true` by default in development environment for hot reload to work)
 
 ***
 

@@ -32,7 +32,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 Add this library manually as a dependency to `package.json`...
 ```
 dependencies: {
-    "better-react-mathjax": "^2.0.3"
+    "better-react-mathjax": "^2.2.0"
 }
 ```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
@@ -92,6 +92,9 @@ with [MathJax version 2](https://docs.mathjax.org/en/v2.7-latest/config-files.ht
 Latex and MathML with the default [MathJax version 3](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
 HTML output for both. If you need something else or want to host your own copy of MathJax, read more about the `src`
 attribute of the `MathJaxContext` below.
+
+Note that both `MathJax` and `MathJaxContext` components ship with `"use client"` directives and are thus client 
+components in contexts where this is taken into account.
 
 ## Display math and inline math
 
@@ -465,7 +468,7 @@ typesetting should be done repeatedly (every render with `renderMode` set to `po
 `text` property changes with `renderMode` set to `pre`). With this property set to `false`, only initial typesetting will
 take place and any changes of the content will not get typeset.
 
-**Default**: `false`
+**Default**: `false` (**note**: is `true` by default in development environment for hot reload to work)
 
 ***
 
@@ -665,9 +668,6 @@ Tested with:
   expression e.g. {"---"} and it would be nice to give an even simpler explanation to how to do and don't.
 * Think about how to handle the case where ppl use multiple MathJaxContexts regarding what to do with `onLoad` handlers. 
   Currently they don't fire other than on the first.
-* Make sure to clearly explain that dynamic is automatically enabled on dev server
-* Make sure to explain that in nextjs both context and mathjax element must be in client components
-* Why are there build folders in the Mathjax and MathjaxContext folders?
 
 ## MathJax documentation ##
 
@@ -727,7 +727,10 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
   * Improvements and typos in documentation
   * Project maintenance
 * v. 2.1.0
-  * Opt-in async script loading in `MathJaxBaseContext`
+  * Opt-in async script loading in `MathJaxContext`
+* v. 2.2.0
+  * Add "use client" directives to `MathJax` and `MathJaxContext` components
+  * Improvements in documentation
 
 ## Migration guides
 
