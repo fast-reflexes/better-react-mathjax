@@ -43,9 +43,9 @@ afterEach(() => {
 it("only fetches MathJax once despite nested contexts", () => {
     new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { default: MathJaxContext } = require("./MathJaxContext")
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
@@ -76,9 +76,9 @@ it("only fetches MathJax once despite nested contexts", () => {
 it("only fetches MathJax once despite mounting and unmounting several times", () => {
     return new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { default: MathJaxContext } = require("./MathJaxContext")
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName
@@ -111,9 +111,9 @@ it("only fetches MathJax once despite mounting and unmounting several times", ()
 it("mounting with one version, unmounting and then mounting with a different version throws", () => {
     return new Promise<void>((res, rej) => {
         jest.isolateModules(async () => {
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { default: MathJaxContext } = require("./MathJaxContext")
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const { default: MathJax } = require("../MathJax")
             const addFn = jest.fn()
             const originalGetElementsByTagName = document.getElementsByTagName

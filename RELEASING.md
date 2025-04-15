@@ -37,7 +37,8 @@
 4. When you are done, run `npm run release <VERSION on form MAJOR.MINOR.PATCH(-beta)?>`. This will update versions in 
    relevant files to update the version and also create a commit and push the project to Github along with a version 
    tag.
-5. Final release the new version on npm repository by running `npm run upload`
+5. Final release the new version on npm repository by running `npm run upload` (may have to run `npm login` prior to
+   this command).
 6. You're done
 ## Useful links ##
 

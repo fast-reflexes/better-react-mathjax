@@ -1,6 +1,6 @@
 {
     "name": "better-react-mathjax",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "description": "Up-to-date component for using MathJax in latest React (using functional components and hooks API). Focuses on being versatile and making the use of MathJax in React a pleasant experience without flashes of non-typeset content, both with respect to initial rendering as well as dynamic updates. Simple to use but with many configuration options.",
     "main": "index.js",
     "module": "esm/index.js",
@@ -14,7 +14,7 @@
         "lint": "eslint .",
         "prebuild": "rm -rf ./build",
         "minify-with-source-maps": "find ./build -iname \"*.js\" -execdir uglifyjs --source-map \"includeSources,content='{}.map',url='{}.map'\" --compress --mangle -o {} -- {} \\;",
-        "minify": "find ./build -iname \"*.js\" -execdir uglifyjs --compress --mangle -o {} -- {} \\;",
+        "minify": "find ./build -iname \"*.js\" -execdir uglifyjs --compress directives=false --mangle -o {} -- {} \\;",
         "postbuild": "npm run build-package-json && node build-post-process.js && cp README-min.md ./build/README.md && npm run minify",
         "build-package-json": "cat package.json | json -e \"delete this.scripts;delete this.devDependencies\" > ./build/package.json",
         "preupload": "npm run build",
@@ -48,18 +48,18 @@
     },
     "devDependencies": {
         "uglify-js": "^3.17.4",
-        "@types/react": "^18.2.22",
-        "typescript": "^5.2.2",
+        "@types/react": "^19.1.1",
+        "typescript": "^5.8.3",
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
         "ts-jest": "^29.1.1",
         "@types/jest": "^29.5.5",
-        "@testing-library/react": "^14.0.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
+        "@testing-library/react": "^16.3.0",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
         "json": "^11.0.0",
-        "@typescript-eslint/parser": "^6.7.2",
-        "@typescript-eslint/eslint-plugin": "^6.7.2",
+        "@typescript-eslint/parser": "^8.29.1",
+        "@typescript-eslint/eslint-plugin": "^8.29.1",
         "eslint": "^8.49.0"
     }
 }

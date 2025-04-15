@@ -32,7 +32,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 Add this library manually as a dependency to `package.json`...
 ```
 dependencies: {
-    "better-react-mathjax": "^2.2.0"
+    "better-react-mathjax": "^2.3.0"
 }
 ```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
@@ -721,8 +721,8 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
     prop instead)
 * v. 2.0.2
   * Updated default MathJax 3 version provided by CDN to using v. 3.2.2.
-  * Project maintenance.
-  * Added documentation on how to turn off automatic typesetting on startup.
+  * Project maintenance
+  * Added documentation on how to turn off automatic typesetting on startup
 * v. 2.0.3
   * Improvements and typos in documentation
   * Project maintenance
@@ -731,6 +731,9 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
 * v. 2.2.0
   * Add "use client" directives to `MathJax` and `MathJaxContext` components
   * Improvements in documentation
+* v. 2.3.0
+  * Bugfix for "use client" directives being stripped from the source code after build process
+  * Update dependencies
 
 ## Migration guides
 
