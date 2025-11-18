@@ -91,8 +91,8 @@ text in a long paragraph. If you have a lot of math, try to wrap as much as poss
 The `MathJaxContext` is responsible for downloading MathJax and providing it to all wrapped `MathJax` components that 
 typeset math. By default, `MathJaxContext` imports MathJax from a CDN which allows for use of Latex, AsciiMath and MathML 
 with [MathJax version 2](https://docs.mathjax.org/en/v2.7-latest/config-files.html#the-tex-mml-am-chtml-configuration-file) and 
-Latex and MathML with the default [MathJax version 3](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
-HTML output for both. If you need something else or want to host your own copy of MathJax, read more about the `src`
+Latex and MathML with [MathJax version 3](https://docs.mathjax.org/en/v3.2/web/components/combined.html#tex-mml-chtml) and the default [MathJax version 4](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
+HTML output for all three. If you need something else or want to host your own copy of MathJax, read more about the `src`
 attribute of the `MathJaxContext` below.
 
 Note that both `MathJax` and `MathJaxContext` components ship with `"use client"` directives and are thus client 

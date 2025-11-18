@@ -14,6 +14,12 @@
 * Run `npm pack`
 * Run `npm install <PATH TO RESULTING TAR>` when used
 
+You can also add it to `package.json` with `"better-react-mathjax" : "file:<SYSTEM PATH TO PACK OUTPUT FILE>"`. Note that subsequent
+attempts here might resolve to the same package (via some cache) so remove the `node_modules` entry and add some suffix number to the 
+package to ensure that the new package is installed.
+
+To troubleshoot a local distribution, remove the minification step in the `postbuild` target temporarily.
+
 ## To make a new version ##
 
 `npm run release <VERSION on form MAJOR.MINOR.PATCH(-beta)?>`

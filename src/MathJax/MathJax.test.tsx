@@ -17,7 +17,7 @@ afterEach(() => {
 })
 
 const getComponent = (
-    version: 2 | 3,
+    version: 2 | 3 | 4,
     renderMode?: "pre" | "post",
     text?: string,
     typeSettingOptions?: { fn: "tex2chtml"; options?: OptionList },
@@ -27,7 +27,9 @@ const getComponent = (
         value={
             version === 2
                 ? { version: 2, promise: Promise.resolve({ Hub: { Queue: jest.fn() } } as any) }
-                : { version: 3, promise: Promise.resolve({ startup: { promise: Promise.resolve() } } as any) }
+                : version === 3
+                ? { version: 3, promise: Promise.resolve({ startup: { promise: Promise.resolve() } } as any) }
+                : { version: 4, promise: Promise.resolve({ startup: { promise: Promise.resolve() } } as any) }
         }
     >
         <MathJax renderMode={renderMode} text={text} typesettingOptions={typeSettingOptions}>
@@ -41,12 +43,22 @@ it("throws when renderMode = pre set with version 2", async () => {
     expect(componentGetter).toThrow("version 2")
 }, 15000)
 
-it("throws when renderMode = pre set with no text prop", async () => {
+it("throws when renderMode = pre set with no text prop (version 3)", async () => {
     const componentGetter = () => render(getComponent(3, "pre", undefined, { fn: "tex2chtml" }))
     expect(componentGetter).toThrow("text")
 }, 15000)
 
-it("throws when renderMode = pre set with no typesettingOptions prop", async () => {
+it("throws when renderMode = pre set with no text prop (version 4)", async () => {
+    const componentGetter = () => render(getComponent(4, "pre", undefined, { fn: "tex2chtml" }))
+    expect(componentGetter).toThrow("text")
+}, 15000)
+
+it("throws when renderMode = pre set with no typesettingOptions prop (version 3)", async () => {
     const componentGetter = () => render(getComponent(3, "pre", math))
+    expect(componentGetter).toThrow("typesettingOptions")
+}, 15000)
+
+it("throws when renderMode = pre set with no typesettingOptions prop (version 4)", async () => {
+    const componentGetter = () => render(getComponent(4, "pre", math))
     expect(componentGetter).toThrow("typesettingOptions")
 }, 15000)

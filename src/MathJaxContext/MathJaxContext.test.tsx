@@ -6,7 +6,7 @@ jest.mock("react", () => jest.requireActual("react"));
 const math = "\\frac{10}{5}"
 let originalConsoleError: (data: any[]) => void
 
-const Wrapped: FC<{ version: 2 | 3 }> = ({ version }) => {
+const Wrapped: FC<{ version: 2 | 3 | 4 }> = ({ version }) => {
     const mjPromise = useContext(MathJaxBaseContext)
     if(mjPromise && mjPromise.version !== version) throw Error("Wrong version")
     return <></>
@@ -133,7 +133,7 @@ it("mounting with one version, unmounting and then mounting with a different ver
                 rej("Expected Error but test passed")
             }
             catch(e: any) {
-                if(e?.toString().includes("Cannot use MathJax versions 2 and 3 simultaneously"))
+                if(e?.toString().includes("Cannot use two MathJax versions simultaneously"))
                     res()
                 else
                     rej(e)
@@ -146,28 +146,222 @@ it("mounting with one version, unmounting and then mounting with a different ver
 }, 15000)
 
 it("first context determines version if contexts are nested", async () => {
-    const rendered = () =>
-        render(
-            <MathJaxContext version={3}>
-                <MathJaxContext version={2}>
-                    <MathJaxContext version={2} />
-                </MathJaxContext>
-            </MathJaxContext>
-        )
-    expect(rendered).toThrow(/^Cannot nest MathJaxContexts with different versions/)
+    return new Promise<void>((res, rej) => {
+        jest.isolateModules(() => {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
+                const { default: MathJaxContext } = require("./MathJaxContext")
+                const rendered = () =>
+                    render(
+                        <MathJaxContext version={3}>
+                            <MathJaxContext version={2}>
+                                <MathJaxContext version={2} />
+                            </MathJaxContext>
+                        </MathJaxContext>
+                    )
+                expect(rendered).toThrow(/^Cannot nest MathJaxContexts with different versions/)
+                res()
+            } catch(e) {
+                rej(e)
+            }
+        })
+    })
 }, 15000)
 
 it("contexts with different versions are not allowed", async () => {
+    return new Promise<void>((res, rej) => {
+        jest.isolateModules(() => {
+            try {
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
+                const { default: MathJaxContext } = require("./MathJaxContext")
+                const rendered = () =>
+                    render(
+                        <>
+                            <MathJaxContext version={2}>
+                                <Wrapped version={2} />
+                            </MathJaxContext>
+                            <MathJaxContext version={3}>
+                                <Wrapped version={3} />
+                            </MathJaxContext>
+                        </>
+                    )
+                expect(rendered).toThrow(/^Cannot use two MathJax versions simultaneously/)
+                res()
+            } catch(e) {
+                rej(e)
+            }
+        })
+    })
+}, 15000)
+
+it("only fetches MathJax once despite nested contexts (version 4)", () => {
+    new Promise<void>((res, rej) => {
+        jest.isolateModules(async () => {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: MathJaxContext } = require("./MathJaxContext")
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: MathJax } = require("../MathJax")
+            const addFn = jest.fn()
+            const originalGetElementsByTagName = document.getElementsByTagName
+            document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
+            render(
+                <MathJaxContext version={4}>
+                    <MathJaxContext version={4}>
+                        <MathJaxContext version={4}>
+                            <MathJax>{`\\$${math}$`}</MathJax>
+                        </MathJaxContext>
+                    </MathJaxContext>
+                </MathJaxContext>
+            )
+            try {
+                expect(addFn).toHaveBeenCalledTimes(1)
+                res()
+            }
+            catch(e) {
+                rej(e)
+            }
+            finally {
+                document.getElementsByTagName = originalGetElementsByTagName
+            }
+        })
+    })
+}, 15000)
+
+it("only fetches MathJax once despite mounting and unmounting several times (version 4)", () => {
+    return new Promise<void>((res, rej) => {
+        jest.isolateModules(async () => {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: MathJaxContext } = require("./MathJaxContext")
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: MathJax } = require("../MathJax")
+            const addFn = jest.fn()
+            const originalGetElementsByTagName = document.getElementsByTagName
+            document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
+            const renderedFirst = render(
+                <MathJaxContext version={4}>
+                    <MathJax>{`\\$${math}$`}</MathJax>
+                </MathJaxContext>
+            )
+            renderedFirst.unmount()
+            render(
+                <MathJaxContext version={4}>
+                    <MathJax>{`\\$${math}$`}</MathJax>
+                </MathJaxContext>
+            )
+            try {
+                expect(addFn).toHaveBeenCalledTimes(1)
+                res()
+            }
+            catch(e) {
+                rej(e)
+            }
+            finally {
+                document.getElementsByTagName = originalGetElementsByTagName
+            }
+        })
+    })
+}, 15000)
+
+it("mounting with version 4, unmounting and then mounting with version 2 throws", () => {
+    return new Promise<void>((res, rej) => {
+        jest.isolateModules(async () => {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: MathJaxContext } = require("./MathJaxContext")
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: MathJax } = require("../MathJax")
+            const addFn = jest.fn()
+            const originalGetElementsByTagName = document.getElementsByTagName
+            document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
+            const renderedFirst = render(
+                <MathJaxContext version={4}>
+                    <MathJax>{`\\$${math}$`}</MathJax>
+                </MathJaxContext>
+            )
+            renderedFirst.unmount()
+            try {
+                render(
+                    <MathJaxContext version={2}>
+                        <MathJax>{`\\$${math}$`}</MathJax>
+                    </MathJaxContext>
+                )
+                rej("Expected Error but test passed")
+            }
+            catch(e: any) {
+                if(e?.toString().includes("Cannot use two MathJax versions simultaneously"))
+                    res()
+                else
+                    rej(e)
+            }
+            finally {
+                document.getElementsByTagName = originalGetElementsByTagName
+            }
+        })
+    })
+}, 15000)
+
+it("mounting with version 4, unmounting and then mounting with version 3 throws", () => {
+    return new Promise<void>((res, rej) => {
+        jest.isolateModules(async () => {
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: MathJaxContext } = require("./MathJaxContext")
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            const { default: MathJax } = require("../MathJax")
+            const addFn = jest.fn()
+            const originalGetElementsByTagName = document.getElementsByTagName
+            document.getElementsByTagName = (_tagName: string) => [{ appendChild: addFn }] as any
+            const renderedFirst = render(
+                <MathJaxContext version={4}>
+                    <MathJax>{`\\$${math}$`}</MathJax>
+                </MathJaxContext>
+            )
+            renderedFirst.unmount()
+            try {
+                render(
+                    <MathJaxContext version={3}>
+                        <MathJax>{`\\$${math}$`}</MathJax>
+                    </MathJaxContext>
+                )
+                rej("Expected Error but test passed")
+            }
+            catch(e: any) {
+                if(e?.toString().includes("Cannot use two MathJax versions simultaneously"))
+                    res()
+                else
+                    rej(e)
+            }
+            finally {
+                document.getElementsByTagName = originalGetElementsByTagName
+            }
+        })
+    })
+}, 15000)
+
+it("contexts with version 2 and version 4 are not allowed", async () => {
     const rendered = () =>
         render(
             <>
                 <MathJaxContext version={2}>
                     <Wrapped version={2} />
                 </MathJaxContext>
-                <MathJaxContext version={3}>
-                    <Wrapped version={3} />
+                <MathJaxContext version={4}>
+                    <Wrapped version={4} />
                 </MathJaxContext>
             </>
         )
-    expect(rendered).toThrow(/^Cannot use MathJax versions 2 and 3 simultaneously/)
+    expect(rendered).toThrow(/^Cannot use two MathJax versions simultaneously/)
+}, 15000)
+
+it("contexts with version 3 and version 4 are not allowed", async () => {
+    const rendered = () =>
+        render(
+            <>
+                <MathJaxContext version={3}>
+                    <Wrapped version={3} />
+                </MathJaxContext>
+                <MathJaxContext version={4}>
+                    <Wrapped version={4} />
+                </MathJaxContext>
+            </>
+        )
+    expect(rendered).toThrow(/^Cannot use two MathJax versions simultaneously/)
 }, 15000)

@@ -89,8 +89,8 @@ text in a long paragraph. If you have a lot of math, try to wrap as much as poss
 The `MathJaxContext` is responsible for downloading MathJax and providing it to all wrapped `MathJax` components that 
 typeset math. By default, `MathJaxContext` imports MathJax from a CDN which allows for use of Latex, AsciiMath and MathML 
 with [MathJax version 2](https://docs.mathjax.org/en/v2.7-latest/config-files.html#the-tex-mml-am-chtml-configuration-file) and 
-Latex and MathML with the default [MathJax version 3](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
-HTML output for both. If you need something else or want to host your own copy of MathJax, read more about the `src`
+Latex and MathML with [MathJax version 3](https://docs.mathjax.org/en/v3.2/web/components/combined.html#tex-mml-chtml) and the default [MathJax version 4](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
+HTML output for all three. If you need something else or want to host your own copy of MathJax, read more about the `src`
 attribute of the `MathJaxContext` below.
 
 Note that both `MathJax` and `MathJaxContext` components ship with `"use client"` directives and are thus client 
@@ -663,7 +663,9 @@ Tested with:
 * Investigate if the wrapper element can take a callback ref
 * Investigate eslint rules and usage of require in tests
 * Use locked dependencies for MathJax
-* Make it clear in docs that hideUntilTypeset=every requires dynamic as well
+* Make it clear in docs that hideUntilTypeset=every requires dynamic as well. Because this implies hiding the content
+  everytime it is rerendered to cover up for un typeset content, and this only happens if the content CHANGES, not if
+  it remains the same (no reason to hide it then because it's already typeset)
 * Make the rules for how to add math in the DONT'S and DO'S more clear.. I think it's not necessary to wrap it in its own 
   expression e.g. {"---"} and it would be nice to give an even simpler explanation to how to do and don't.
 * Think about how to handle the case where ppl use multiple MathJaxContexts regarding what to do with `onLoad` handlers. 
@@ -671,7 +673,8 @@ Tested with:
 
 ## MathJax documentation ##
 
-* Version 3: https://docs.mathjax.org/en/latest/
+* Version 4: https://docs.mathjax.org/en/latest/
+* Version 3: https://docs.mathjax.org/en/v3.2/
 * Version 2: https://docs.mathjax.org/en/v2.7-latest/
 
 ## Github ##

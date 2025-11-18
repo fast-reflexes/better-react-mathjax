@@ -108,13 +108,13 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                             )
                         if(mjPromise.version === 2)
                             throw Error(
-                                "Render mode 'pre' only available with MathJax 3, and version 2 is currently in use"
+                                "Render mode 'pre' only available with MathJax 3 and 4, and version 2 is currently in use"
                             )
                     }
                     if(usedRenderMode === "post" || text !== lastChildren.current) {
                         if(!typesetting.current) {
                             typesetting.current = true
-                            if(mjPromise.version === 3) {
+                            if(mjPromise.version === 3 || mjPromise.version === 4) {
                                 mjPromise.promise
                                     .then((mathJax) => {
                                         if(usedRenderMode === "pre") {
