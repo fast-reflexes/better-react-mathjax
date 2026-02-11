@@ -7,7 +7,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 
 ## Features
 
-* Supports both MathJax version 2 and 3.
+* Supports both MathJax version 2, 3 and 4.
 * Supports local copy of MathJax or copy supplied via CDN.
 * Small imprint on production bundle with dependencies only for types (image shows a size of 6.18 KB and 2.3 KB gzipped in a NextJS project analyzed with their bundle analyzer).
 
@@ -19,8 +19,8 @@ well as dynamic updates. Simple to use but with many configuration options.
 
 * Built in a modular fashion on top of MathJax with direct access to MathJax via the MathJax configuration.
 * Use MathJax functionality either through the `MathJax` component or by yourself through the `MathJaxBaseContext`.
-* Either put your math into the DOM with React first and let MathJax typeset afterwards (v. 2 and 3), or typeset with MathJax
-  first and add it to the DOM afterwards (v. 3 only).
+* Either put your math into the DOM with React first and let MathJax typeset afterwards (v. 2, 3 and 4), or typeset with MathJax
+  first and add it to the DOM afterwards (v. 3 and 4 only).
 * Hide your components before they are typeset to avoid flashes of non-typeset content and make the use of MathJax a
   pleasant experience.
 * Complete - no other dependencies related to MathJax are needed to enable the use of MathJax in your React app.
@@ -32,7 +32,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 Add this library manually as a dependency to `package.json`...
 ```
 dependencies: {
-    "better-react-mathjax": "^2.3.0"
+    "better-react-mathjax": "^3.0.0"
 }
 ```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
@@ -89,7 +89,8 @@ text in a long paragraph. If you have a lot of math, try to wrap as much as poss
 The `MathJaxContext` is responsible for downloading MathJax and providing it to all wrapped `MathJax` components that 
 typeset math. By default, `MathJaxContext` imports MathJax from a CDN which allows for use of Latex, AsciiMath and MathML 
 with [MathJax version 2](https://docs.mathjax.org/en/v2.7-latest/config-files.html#the-tex-mml-am-chtml-configuration-file) and 
-Latex and MathML with [MathJax version 3](https://docs.mathjax.org/en/v3.2/web/components/combined.html#tex-mml-chtml) and the default [MathJax version 4](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
+Latex and MathML with [MathJax version 3](https://docs.mathjax.org/en/v3.2/web/components/combined.html#tex-mml-chtml) 
+and the default [MathJax version 4](https://docs.mathjax.org/en/latest/web/components/combined.html#tex-mml-chtml) with 
 HTML output for all three. If you need something else or want to host your own copy of MathJax, read more about the `src`
 attribute of the `MathJaxContext` below.
 
@@ -134,12 +135,12 @@ if a style that overrides `display` is added to a `MathJax` component.
 
 ## Examples
 
-The first 3 are basic examples with zero configuration standard setup using MathJax version 3 with default MathJax config
+The first 3 are basic examples with zero configuration standard setup using MathJax version 4 with default MathJax config
 and no extra options. Note that sandboxes tend to be slower than use in a real environment.
 
 ### Example 1: Basic example with Latex ####
 
-Standard setup using MathJax version 3 with default MathJax config and no extra options.
+Standard setup using MathJax version 4 with default MathJax config and no extra options.
 ```js
 export default function App() {
 
@@ -156,7 +157,7 @@ Sandbox: https://codesandbox.io/s/better-react-mathjax-basic-example-latex-bj8gd
 
 ### Example 2: Basic example with AsciiMath ####
 
-Using AsciiMath with the default version 3 import requires adding an extra loader (see the [MathJax documentation](http://docs.mathjax.org/en/latest/input/asciimath.html) 
+Using AsciiMath with the default version 4 import requires adding an extra loader (see the [MathJax documentation](http://docs.mathjax.org/en/latest/input/asciimath.html) 
 for further information). AsciiMath uses the same display mode on the entire page, which is display math by default. 
 It can be changed to inline math by adding `asciimath: { displaystyle: false }` to the input config.
 ```js
@@ -243,8 +244,8 @@ the UI if it has a lot to typeset, the typesetting taking place before the brows
 In most situations however, it should.
 
 The MathJax library by default typesets the entire page when it has been downloaded, unless instructed explicitly not to 
-do so (check instructions on how to do this for version 2 [here](https://docs.mathjax.org/en/v2.7-latest/options/hub.html) 
-and for version 3 [here](https://docs.mathjax.org/en/latest/options/startup/startup.html)). However, given React and its 
+do so (check instructions on how to do this for version 2 [here](https://docs.mathjax.org/en/v2.7-latest/options/hub.html), for version 3 [here](https://docs.mathjax.org/en/v3.2/options/startup/startup.html)
+and for version 4 [here](https://docs.mathjax.org/en/latest/options/startup/startup.html)). However, given React and its 
 dynamic nature, with existing content being rerendered and new content being added, math likely needs to be typeset more 
 often than that; at a minimum when a component is mounted and sometimes also as a result of dynamic updates of an 
 existing component. Since this often doesn't coincide with initial page load, math rerendered or added after this moment 
@@ -255,23 +256,25 @@ important part by explicitly typesetting its content whenever a change might hav
 # TypeScript types #
 This project has both its own types and MathJax types included in the package. For MathJax version 2, a refactored and updated
 version of [`@types/mathjax`](https://www.npmjs.com/package/@types/mathjax) is used whereas for MathJax version 3, this package
-depends on the types from [`mathjax-full`](https://www.npmjs.com/package/mathjax-full). Nonetheless, none of the logic from
+depends on the types from [`mathjax-full`](https://www.npmjs.com/package/mathjax-full). Finally for version 4, the types 
+are taken from [`@mathjax/src`](https://www.npmjs.com/package/@mathjax/src). Nonetheless, none of the logic from
 these are used in this project so after building production code and tree-shaking, these dependencies will not affect the
 size of the final bundle. If you would prefer a separate `@types` package for this project, please make a suggestion about this in an issue on the
 project Github page. Note also that issues with the MathJax 2 types can be addressed and updated within this project whereas
-the types from `mathjax-full` are used unaltered. You can import the configurations and types of the MathJax objects from 
-versions 2 and 3 as `MathJax2Config`, `MathJax2Object`, `MathJax3Config` and `MathJax3Object`.
+the types from `mathjax-full` and `@mathjax/src` are used unaltered. You can import the configurations and types of the 
+MathJax objects from versions 2, 3 and 4 as `MathJax2Config`, `MathJax2Object`, `MathJax3Config`, `MathJax3Object`, 
+`MathJax4Config` and `MathJax4Object`.
 
 The MathJax types are not always helpful and the user should pay attention even if the compiler does not
-complain. First of all, several of the types from `mathjax-full` contain catch-all properties of the form
+complain. First of all, several of the types from `mathjax-full` and `@mathjax/src` contain catch-all properties of the form
 `[s: string]: any` which effectively allows any props to be passed in. Hence, adding a MathJax 2 configuration to a `MathJaxContext`
-using MathJax version 3 will not result in a compile error but instead be accepted even though most of the props won't
-have the desired effect in MathJax 3. 
+using MathJax version 4 will not result in a compile error but instead be accepted even though most of the props won't
+have the desired effect in MathJax 4. 
 
 Also, due to [how TypeScript handles excess properties](https://www.typescriptlang.org/docs/handbook/interfaces.html#excess-property-checks),
 if a configuration is given in a variable (as opposed to in a literal) where any property matches a property of the required type, 
 the remaining props will be silently ignored. Since MathJax versions share a few configuration properties, it is therefore
-also possible that a MathJax 3 configuration may be given to a `MathJaxContext` using MathJax 2 without compiler errors. This
+also possible that a MathJax 4 configuration may be given to a `MathJaxContext` using MathJax 2 without compiler errors. This
 can however be avoided by always using literals in which case excess properties are handled differently.
 
 # API #
@@ -325,7 +328,7 @@ it might be desirable to use `pre` for performance reasons or to handle very spe
   In this `renderMode`, MathJax only typesets when the `text` property changes. Since MathJax cannot look at the context 
   (in the DOM) of the math, limited automatic adaptation to surrounding content can be accomplished and fine-tuning might have to 
   be done via the optional `options` object of the `typesettingOptions` property. **Note**: The `pre` value can only be 
-  used with MathJax version 3.
+  used with MathJax versions 3 and 4.
 
 ### `typesettingOptions: { fn: TypesettingFunction, options: OptionList | undefined } | undefined` ###
 
@@ -373,24 +376,25 @@ Local or remote url to fetch MathJax from. More information about hosting your o
 
 A source url may contain both some specific file and some query parameters corresponding to a configuration which, in turn, governs
 which additional assets MathJax fetches. The default sources used when this property is omitted are the same as those 
-listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN). This means
+listed in the [MathJax instruction](https://www.mathjax.org/#gettingstarted) (however from a different CDN in some cases). This means
 that for version 2, the fetched resource (`MathJax.js?config=TeX-MML-AM_CHTML`) includes support for Latex, MML
-and AsciiMath with HTML output by default, and for version 3, the fetched resource (`tex-mml-chtml.js`) supports
+and AsciiMath with HTML output by default, and for version 3 and 4, the fetched resource (`tex-mml-chtml.js`) supports
 MML and Latex with HTML output. These correspond to some typical and broad use of MathJax in the browser. If you have a 
 use case where you, using standalone MathJax, would have to use a different source url, then you have to manually supply 
 such a url (local or remote) here. This, in analogy to how you would modify the script import to adjust to your needs in 
-a plain HTML environment with direct use of MathJax. Read more about different configurations 
-[here](https://docs.mathjax.org/en/latest/web/components/combined.html) (for MathJax 3) and 
+a plain HTML environment with direct use of MathJax. Read more about different configurations
+[here](https://docs.mathjax.org/en/latest/web/components/combined.html) (for MathJax 4),  
+[here](https://docs.mathjax.org/en/v3.2/web/components/combined.html) (for MathJax 3) and 
 [here](https://docs.mathjax.org/en/v2.7-latest/config-files.html#common-configurations) (for MathJax 2).
 
-### `version: 2 | 3 | undefined` ###
+### `version: 2 | 3 | 4 | undefined` ###
 
 MathJax version to use. Must be synced with any `config` passed.
 
-**Default**: `3`
+**Default**: `4`
 
 Version of MathJax to use. If set, make sure that any configuration and url to MathJax uses the same version. If `src`
-is not specified, setting `version`to `2` currently makes use of version 2.7.9 and setting it to `3` uses 3.2.0.
+is not specified, setting `version`to `2` currently makes use of version 2.7.9, setting it to `3` uses 3.2.0 and setting it to `4` uses 4.1.0.
 
 ### `onStartUp: (mathJax: MathJax2Object | MathJax3Object) => void) | undefined` ###
 
@@ -457,7 +461,7 @@ when the `text` prop changes when `renderMode` is set to `pre`.
 ### `text: string | undefined` ###
 
 *Required* and *only* used when `renderMode` is set to `pre`. Should be the math string to convert without any delimiters.
-Requires `typesettingOptions` to be set and version to be `3`. If `renderMode` is `post`, this property is ignored.
+Requires `typesettingOptions` to be set and version to be `3` or `4`. If `renderMode` is `post`, this property is ignored.
 
 **Default**: `undefined`
 
@@ -525,21 +529,6 @@ than to show content that is not typeset. Try to put your `MathJax` components o
 the DOM which should remove any flashes of non-typeset content in some scenarios, however not in all as indicated below. One 
 downside with this setting is that MathJax cannot access the context of the math and so it cannot adapt generated content
 to it; manual fine-tuning might be necessary even though this is not always the case.
-  
-### General considerations regarding flashes of non-typeset content ###
-
-* Currently, MathJax version 3 might give rise to subtle flickering in both Chrome and Safari on dynamic updates. 
-  This is not connected to this package and does not seem to be related to the actual typesetting but how the CSS is 
-  injected into and applied by the browser. Alas, flickering may in some cases be visible despite described methods. 
-  In this case, the remedy is to use version 2, where seamless typesetting is still possible in all attempted browsers.
-  Note that this kind of flickering is not a flash of non-typeset content but merely some styling adjustment that is done
-  after typesetting.
-* The best cross-browser experience for normal use cases at this time is achieved with version 2, with disabled 
-  `fast-preview` and `processSectionDelay` set to `0` for a smooth experience. This is done by including 
-  `"fast-preview": { disabled: true }` in the MathJax config object given to the `MathJaxContext` and adding 
-  `mathJax => mathJax.Hub.processSectionDelay = 0` as the `onStartup` callback to the same. Coordinate initial typesetting 
-  with `hideUntilTypeset` set to `first`  and / or `onInitTypeset` callbacks. Feel free to check out Example 7
-  above where this is shown, but remember, don't use it if you dont need to.
 
 ## General Considerations (don't skip) ##
 
@@ -574,9 +563,9 @@ to it; manual fine-tuning might be necessary even though this is not always the 
   hierarchy they are kept. You can always replace a larger (more complex) content wrapped in a `MathJax` component with 
   one or several smaller parts of it wrapped in several `MathJax` components.
   
-* Remember that MathJax automatically does initial typesetting on the whole document both in version 2 and 3. This can 
-  be turned off (check instructions on how to do this for version 2 [here](https://docs.mathjax.org/en/v2.7-latest/options/hub.html) 
-  and for version 3 [here](https://docs.mathjax.org/en/latest/options/startup/startup.html)) but with it, a document can 
+* Remember that MathJax automatically does initial typesetting on the whole document both in version 2, 3 and 4. This can 
+  be turned off (check instructions on how to do this for version 2 [here](https://docs.mathjax.org/en/v2.7-latest/options/hub.html), for version 3 [here](https://docs.mathjax.org/en/v3.2/options/startup/startup.html)
+  and for version 4 [here](https://docs.mathjax.org/en/latest/options/startup/startup.html)) but with it, a document can 
   be typeset with only a `MathJaxContext` component. This, however, is not the intended use of the `better-react-mathjax` 
   library and removes many of the additional options as well as the possibility to typeset content that is not present 
   on the page on initial load; it is therefore recommended to always use `MathJax` components as well.
@@ -737,6 +726,9 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
 * v. 2.3.0
   * Bugfix for "use client" directives being stripped from the source code after build process
   * Update dependencies
+* v. 3.0.0
+  * **Breaking change**: add support for MathJax version 4 which is now also the default version. Custom configs which 
+    depend on the default version used might in rare cases now be incompatible. 
 
 ## Migration guides
 
@@ -746,7 +738,11 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
     same version both times. If you load a new page context (e.g. not just change page in a SPA (single-page application))
     the version can be determined anew. If you need to use both versions side by side, file an issue on the project 
     Github page.
-
+* v2 to v3:
+  * For a very few and specific use cases where the default version (3) was previously used, the config might have to be 
+    updated or the version has to be set to 3. Check [the MathJax migration guide](https://docs.mathjax.org/en/stable/upgrading/v3.html) 
+    to see the relevant config settings. 
+ 
 ## License
 
 This project is licensed under the terms of the

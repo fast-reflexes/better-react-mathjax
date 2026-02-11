@@ -70,7 +70,7 @@ even listed in the docs. The below config is the same config as the default CDN 
 parameter */
 const DEFAULT_V2_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"
 const DEFAULT_V3_SRC = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"
-const DEFAULT_V4_SRC = "https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"
+const DEFAULT_V4_SRC = "https://cdn.jsdelivr.net/npm/mathjax@4.1.0/tex-mml-chtml.js"
 let v2Promise: Promise<MathJax2Object>
 let v3Promise: Promise<MathJax3Object>
 let v4Promise: Promise<MathJax4Object>
