@@ -102,7 +102,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                             throw Error(
                                 `Render mode 'pre' requires text prop to be set and non-empty, which was currently "${text}"`
                             )
-                        if(!typesettingOptions || !typesettingOptions.fn)
+                        if(!usedConversionOptions || !usedConversionOptions.fn)
                             throw Error(
                                 "Render mode 'pre' requires 'typesettingOptions' prop with 'fn' property to be set on MathJax element or in the MathJaxContext"
                             )
@@ -125,7 +125,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                                 if(ref.current !== null) ref.current.innerHTML = output.outerHTML
                                                 onTypesetDone()
                                             }
-                                            if(typesettingOptions!.fn.endsWith("Promise"))
+                                            if(usedConversionOptions!.fn.endsWith("Promise"))
                                                 mathJax.startup.promise
                                                     .then(() =>
                                                         mathJax[usedConversionOptions!.fn](text, {

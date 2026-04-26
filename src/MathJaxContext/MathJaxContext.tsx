@@ -28,6 +28,8 @@ export interface MathJaxOverrideableProps {
     hideUntilTypeset?: "first" | "every"
     typesettingOptions?: {
         fn: TypesettingFunction
+        // the below is ok because both option lists are [key: string]: any and we guard 
+        // programatically for these props for v2
         options?: Omit<MathJax3OptionList | MathJax4OptionList, "display">
     }
     renderMode?: "pre" | "post"
