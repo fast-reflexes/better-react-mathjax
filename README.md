@@ -32,7 +32,7 @@ well as dynamic updates. Simple to use but with many configuration options.
 Add this library manually as a dependency to `package.json`...
 ```
 dependencies: {
-    "better-react-mathjax": "^3.0.1"
+    "better-react-mathjax": "^3.0.2"
 }
 ```
 ... and then run `npm install` **or** let `npm` or `yarn` do it for you, depending on which package manager you have
@@ -730,7 +730,9 @@ File problems or contribute on Github: https://github.com/fast-reflexes/better-r
   * **Breaking change**: add support for MathJax version 4 which is now also the default version. Custom configs which 
     depend on the default version used might in rare cases now be incompatible. 
 * v. 3.0.1
-  * Bugfix for inheriting typesettingOptions from `MathJaxContext`
+  * Bugfix for inheriting `typesettingOptions` from `MathJaxContext`.
+* v. 3.0.2
+  * Bugfix for attempts to typeset already unmounted `MathJax` components on slow load of MathJax itself. 
 
 ## Migration guides
 

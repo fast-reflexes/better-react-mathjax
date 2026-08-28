@@ -119,10 +119,15 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                     .then((mathJax) => {
                                         if(usedRenderMode === "pre") {
                                             const updateFn = (output: HTMLElement) => {
+                                                // skip if the component has unmounted while MathJax was loading
+                                                if(ref.current === null) {
+                                                    typesetting.current = false
+                                                    return
+                                                }
                                                 lastChildren.current = text!
                                                 mathJax.startup.document.clear()
                                                 mathJax.startup.document.updateDocument()
-                                                if(ref.current !== null) ref.current.innerHTML = output.outerHTML
+                                                ref.current.innerHTML = output.outerHTML
                                                 onTypesetDone()
                                             }
                                             if(usedConversionOptions!.fn.endsWith("Promise"))
@@ -155,10 +160,14 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                             // renderMode "post"
                                             mathJax.startup.promise
                                                 .then(() => {
+                                                    // skip if the component has unmounted while MathJax was loading
+                                                    if(ref.current === null) {
+                                                        typesetting.current = false
+                                                        return
+                                                    }
                                                     mathJax.typesetClear([ref.current])
-                                                    return mathJax.typesetPromise([ref.current])
+                                                    return mathJax.typesetPromise([ref.current]).then(onTypesetDone)
                                                 })
-                                                .then(onTypesetDone)
                                                 .catch((err) => {
                                                     onTypesetDone()
                                                     throw Error(typesettingFailed(err))
@@ -173,6 +182,11 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                 // version 2
                                 mjPromise.promise
                                     .then((mathJax) => {
+                                        // skip if the component has unmounted while MathJax was loading
+                                        if(ref.current === null) {
+                                            typesetting.current = false
+                                            return
+                                        }
                                         mathJax.Hub.Queue(["Typeset", mathJax.Hub, ref.current])
                                         mathJax.Hub.Queue(onTypesetDone)
                                     })
