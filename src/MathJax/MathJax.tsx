@@ -60,12 +60,28 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
 
     // callback for when typesetting is done
     const onTypesetDone = () => {
-        if(usedHideUntilTypeset === "every" && usedDynamic && usedRenderMode === "post" && ref.current !== null) {
+        // if the component unmounted while typesetting was in progress, only release the mutex (no callbacks)
+        if(ref.current === null) {
+            typesetting.current = false
+            return
+        }
+        if(usedHideUntilTypeset === "every" && usedDynamic && usedRenderMode === "post") {
             ref.current.style.visibility = rest.style?.visibility ?? "visible"
         }
         checkInitLoad()
         if(onTypeset) onTypeset()
         typesetting.current = false
+    }
+
+    // callback for when typesetting fails; typesetting a node whose component has unmounted mid-typesetting is
+    // expected to be able to fail (MathJax may choke on the detached node) so such errors are silently swallowed
+    const onTypesetFailed = (err: any) => {
+        if(ref.current === null) {
+            typesetting.current = false
+            return
+        }
+        onTypesetDone()
+        throw Error(typesettingFailed(err))
     }
 
     // validator for text input with renderMode = "pre"
@@ -139,10 +155,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                                         })
                                                     )
                                                     .then(updateFn)
-                                                    .catch((err) => {
-                                                        onTypesetDone()
-                                                        throw Error(typesettingFailed(err))
-                                                    })
+                                                    .catch(onTypesetFailed)
                                             else
                                                 mathJax.startup.promise
                                                     .then(() => {
@@ -152,10 +165,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                                         })
                                                         updateFn(output)
                                                     })
-                                                    .catch((err) => {
-                                                        onTypesetDone()
-                                                        throw Error(typesettingFailed(err))
-                                                    })
+                                                    .catch(onTypesetFailed)
                                         } else {
                                             // renderMode "post"
                                             mathJax.startup.promise
@@ -168,16 +178,10 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                                     mathJax.typesetClear([ref.current])
                                                     return mathJax.typesetPromise([ref.current]).then(onTypesetDone)
                                                 })
-                                                .catch((err) => {
-                                                    onTypesetDone()
-                                                    throw Error(typesettingFailed(err))
-                                                })
+                                                .catch(onTypesetFailed)
                                         }
                                     })
-                                    .catch((err) => {
-                                        onTypesetDone()
-                                        throw Error(typesettingFailed(err))
-                                    })
+                                    .catch(onTypesetFailed)
                             } else {
                                 // version 2
                                 mjPromise.promise
@@ -190,10 +194,7 @@ const MathJax: FC<MathJaxProps & ComponentPropsWithoutRef<"span">> = ({
                                         mathJax.Hub.Queue(["Typeset", mathJax.Hub, ref.current])
                                         mathJax.Hub.Queue(onTypesetDone)
                                     })
-                                    .catch((err) => {
-                                        onTypesetDone()
-                                        throw Error(typesettingFailed(err))
-                                    })
+                                    .catch(onTypesetFailed)
                             }
                         }
                     }

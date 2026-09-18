@@ -124,3 +124,67 @@ it("typesets normally when still mounted when MathJax has loaded (version 3, ren
     expect(typesetClear).toHaveBeenCalledTimes(1)
     expect(typesetPromise).toHaveBeenCalledTimes(1)
 }, 15000)
+
+it("swallows typesetting errors when unmounted during typesetting (version 3, renderMode = post)", async () => {
+    let rejectTypesetting: (err: any) => void = () => undefined
+    const typesetPromise = jest.fn(() => new Promise((_, reject) => (rejectTypesetting = reject)))
+    const onTypeset = jest.fn()
+    const unhandledRejection = jest.fn()
+    process.on("unhandledRejection", unhandledRejection)
+    try {
+        const { unmount } = render(
+            <MathJaxBaseContext.Provider
+                value={{
+                    version: 3,
+                    promise: Promise.resolve({
+                        startup: { promise: Promise.resolve() },
+                        typesetClear: jest.fn(),
+                        typesetPromise
+                    } as any)
+                }}
+            >
+                <MathJax onTypeset={onTypeset}>{math}</MathJax>
+            </MathJaxBaseContext.Provider>
+        )
+        await flushPromises()
+        expect(typesetPromise).toHaveBeenCalledTimes(1)
+        // unmount while MathJax is busy typesetting, then let the typesetting fail (as it may on a detached node)
+        unmount()
+        rejectTypesetting(new TypeError("Cannot read properties of null"))
+        await flushPromises()
+        expect(onTypeset).not.toHaveBeenCalled()
+        expect(unhandledRejection).not.toHaveBeenCalled()
+    } finally {
+        process.off("unhandledRejection", unhandledRejection)
+    }
+}, 15000)
+
+it("does not fire callbacks when unmounted during typesetting that succeeds (version 3, renderMode = post)", async () => {
+    let resolveTypesetting: () => void = () => undefined
+    const typesetPromise = jest.fn(() => new Promise<void>((resolve) => (resolveTypesetting = resolve)))
+    const onTypeset = jest.fn()
+    const onInitTypeset = jest.fn()
+    const { unmount } = render(
+        <MathJaxBaseContext.Provider
+            value={{
+                version: 3,
+                promise: Promise.resolve({
+                    startup: { promise: Promise.resolve() },
+                    typesetClear: jest.fn(),
+                    typesetPromise
+                } as any)
+            }}
+        >
+            <MathJax onTypeset={onTypeset} onInitTypeset={onInitTypeset}>
+                {math}
+            </MathJax>
+        </MathJaxBaseContext.Provider>
+    )
+    await flushPromises()
+    expect(typesetPromise).toHaveBeenCalledTimes(1)
+    unmount()
+    resolveTypesetting()
+    await flushPromises()
+    expect(onTypeset).not.toHaveBeenCalled()
+    expect(onInitTypeset).not.toHaveBeenCalled()
+}, 15000)
