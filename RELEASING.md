@@ -44,7 +44,8 @@ To troubleshoot a local distribution, remove the minification step in the `postb
    relevant files to update the version and also create a commit and push the project to Github along with a version 
    tag.
 5. Final release the new version on npm repository by running `npm run upload` (may have to run `npm login` prior to
-   this command).
+   this command). Also note that to release a beta version (such as `3.0.3-beta`) you must add `--tag beta` after the
+   command.
 6. You're done
 ## Useful links ##
 
